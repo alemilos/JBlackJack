@@ -4,6 +4,7 @@ import model.global.User;
 
 import java.io.*;
 
+import static model.global.Constants.FIRST_ACCESS;
 import static model.global.Constants.STARTING_BALANCE;
 
 /* The Database's scope is to provide a simple way to access User information.
@@ -12,6 +13,7 @@ import static model.global.Constants.STARTING_BALANCE;
 *
 *  The fields are:
 *  - username
+*  - first access (1)
 *  - wallet count
 *  - ...games -> Each game field is separated by a "|" ()
 */
@@ -19,6 +21,12 @@ public class Database {
 
     private static Database instance;
     private File db;
+
+    // Fields Indexes
+    private final int UNAME_IDX= 0;
+    private final int ACCESS_FLAG_IDX= 1;
+    private final int BALANCE_IDX= 2;
+    private final int GAMES_IDX= 2;
 
     private Database(){
         createRequiredFiles();
@@ -63,10 +71,9 @@ public class Database {
         try {
             BufferedReader br = new BufferedReader(new FileReader(this.db.toString()));
 
-            String line;
-            while ((line = br.readLine()) != null) {
-                String dbUsername = getUsername(line);
-                if (username.equals(dbUsername)) return true;
+            String entry;
+            while ((entry= br.readLine()) != null) {
+                if (username.equals(getUsername(entry))) return true;
             }
         }catch(IOException ioe){
             // Database does not exist
@@ -83,7 +90,8 @@ public class Database {
     public void addUser(String username){
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(this.db.toString(),true));
-            String dbEntry = username + "," + STARTING_BALANCE + "," + System.lineSeparator();
+
+            String dbEntry = username.trim() + "," + FIRST_ACCESS + "," + STARTING_BALANCE + "," + System.lineSeparator();
             bw.write(dbEntry);
 
             bw.close();
@@ -101,12 +109,11 @@ public class Database {
         try{
             BufferedReader br = new BufferedReader(new FileReader(this.db.toString()));
 
-            String line;
+            String entry;
             StringBuilder updatedFile = new StringBuilder();
-            while((line = br.readLine()) != null){
-                String dbUsername = getUsername(line);
-                if (!username.equals(dbUsername)){
-                    updatedFile.append(line).append(System.lineSeparator());
+            while((entry= br.readLine()) != null){
+                if (!username.equals(getUsername(entry))){
+                    updatedFile.append(entry).append(System.lineSeparator());
                 }
             }
             br.close();
@@ -126,13 +133,12 @@ public class Database {
         try {
             BufferedReader br = new BufferedReader(new FileReader(this.db.toString()));
 
-            String line;
-            while((line = br.readLine()) != null){
-                String[] fields = line.split(",", -1);
-                String dbUsername = fields[0];
+            String entry;
+            while((entry= br.readLine()) != null){
+                String[] fields = entry.split(",", -1);
 
-                if (dbUsername.equals(username)){
-                    int dbBalance = Integer.parseInt(fields[1]);
+                if (getUsername(entry).equals(username)){
+                    int dbBalance = Integer.parseInt(fields[BALANCE_IDX]);
                     return new User(username, dbBalance);
                 }
             }
@@ -156,6 +162,51 @@ public class Database {
      * @return
      */
     private String getUsername(String entry){
-        return entry.split(",")[0].trim();
+        return entry.split(",")[UNAME_IDX].trim();
+    }
+
+    /**
+     * Check if the access is
+     * @param entry
+     * @return
+     */
+    public boolean isFirstAccess(String entry){
+       return Integer.parseInt(entry.split(",")[ACCESS_FLAG_IDX].trim()) == FIRST_ACCESS ;
+    }
+
+    /**
+     * Update the access flag. (values are defined in global Constants)
+     * FIRST_ACCESS == 1
+     * ANOTHER_ACCESS == 0
+      * @param username
+      * @param accessFlag
+     */
+    public void updateAccess(String username, int accessFlag){
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(this.db.toString()));
+
+            String entry;
+            StringBuilder updatedFile = new StringBuilder();
+            while((entry = br.readLine()) != null) {
+                if (!getUsername(entry).equals(username)){
+                    updatedFile.append(entry).append(System.lineSeparator());
+                }else{
+                    // Update the access for the matching username
+                    System.out.println(entry);
+                    String[] fields = entry.split(",", -1);
+                    fields[ACCESS_FLAG_IDX] = accessFlag+"";
+
+                    updatedFile.append(String.join(",", fields)).append(System.lineSeparator());
+                }
+            }
+
+            BufferedWriter bw = new BufferedWriter(new FileWriter(this.db.toString()));
+            bw.write(updatedFile.toString());
+
+            bw.close();
+            br.close();
+        }catch(IOException ioe){
+            System.exit(1);
+        }
     }
 }

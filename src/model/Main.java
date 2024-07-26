@@ -1,10 +1,11 @@
 package model;
 
+import controller.AuthController;
 import model.authentication.Authentication;
 import model.db.Database;
 import model.global.User;
+import view.AuthPage;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -12,11 +13,10 @@ public class Main {
         // Init the Database
         Database db = Database.getInstance();
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Type a username: ");
-        String username = scanner.nextLine();
+        // Manage the Authentication flow
+        AuthController authController = AuthController.getInstance(new AuthPage());
+        User user = authController.getUser();
+        System.out.println(user);
 
-        Authentication auth = new Authentication();
-        auth.loginOrRegister(username);
     }
 }
