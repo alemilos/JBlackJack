@@ -31,7 +31,7 @@ public class AuthController {
                         // Redirect to Home Page
                         System.out.println("Redirecting to home page");
                         authPage.dispose();
-                        new HomePage();
+                        new HomeController();
                 }
             }
         });

@@ -22,8 +22,7 @@ public class AuthPage extends JFrame {
 
 
         try {
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            double width = screenSize.getWidth();
+            double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
             BufferedImage bi = ImageIO.read(new File("./assets/backgrounds/auth.png"));
 
             setContentPane(new BackgroundPanel(bi, width));
