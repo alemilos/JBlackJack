@@ -14,9 +14,7 @@ public class Main {
         Database db = Database.getInstance();
 
         // Manage the Authentication flow
-        AuthController authController = AuthController.getInstance(new AuthPage());
-        User user = authController.getUser();
-        System.out.println(user);
+        AuthController authController = AuthController.getInstance();
 
     }
 }

@@ -87,7 +87,10 @@ public class Database {
      * Add a User with given username to the DB file.
      * @param username
      */
-    public void addUser(String username){
+    public void addUser(String username) throws InvalidUsernameException {
+        if (username == null || username.length() < 1){
+            throw new InvalidUsernameException();
+        }
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(this.db.toString(),true));
 
@@ -106,6 +109,9 @@ public class Database {
      * @param username
      */
     public void deleteUser(String username){
+        if (username == null || username.length()<1){
+            return;
+        }
         try{
             BufferedReader br = new BufferedReader(new FileReader(this.db.toString()));
 
@@ -139,7 +145,8 @@ public class Database {
 
                 if (getUsername(entry).equals(username)){
                     int dbBalance = Integer.parseInt(fields[BALANCE_IDX]);
-                    return new User(username, dbBalance);
+                    boolean isFirstAccess = Integer.parseInt(fields[ACCESS_FLAG_IDX]) == FIRST_ACCESS;
+                    return new User(username, dbBalance, isFirstAccess);
                 }
             }
 

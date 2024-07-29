@@ -1,6 +1,7 @@
 package model.authentication;
 
 import model.db.Database;
+import model.db.InvalidUsernameException;
 import model.global.User;
 
 import java.util.List;
@@ -14,7 +15,6 @@ public class Authentication {
 
     public User loginOrRegister(String username) {
         if (!isAuthenticated) {
-            System.out.println("Exectuing Authentication");
             Database db = Database.getInstance();
             // Login if the username already exists
             if (db.usernameExists(username)) {
@@ -23,13 +23,18 @@ public class Authentication {
 
                 isAuthenticated = true;
                 currentUser = db.getUser(username);
-                return this.currentUser;
+                return currentUser;
             }
-
+            // Register otherwise (create a new user entry in the DB)
+            // Make sure the username can be added to DB.
+            try {
+                db.addUser(username);
+            }catch(InvalidUsernameException iue){
+                System.out.println("Invalid Username");
+                return null;
+            }
             System.out.println(username + " registered");
 
-            // Register otherwise (create a new user entry in the DB)
-            db.addUser(username);
             isAuthenticated = true;
             currentUser = db.getUser(username);
             return currentUser;
