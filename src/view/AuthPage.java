@@ -12,7 +12,6 @@ public class AuthPage extends JFrame {
         setTitle("Authentication");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
 
         JPanel panel = new JPanel();
