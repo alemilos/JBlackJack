@@ -1,7 +1,6 @@
 package view;
 
 import view.components.ProfileButton;
-import view.ui.StretchIcon;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +21,7 @@ public class HomePage extends JFrame{
 
         // Page Background
         JLabel bgHolder = new JLabel();
-        bgHolder.setIcon(new StretchIcon("./assets/backgrounds/home.png"));
+        bgHolder.setIcon(new ImageIcon("./assets/backgrounds/home.png"));
         bgHolder.setBounds(0, 0, getContentPane().getWidth(), getContentPane().getHeight());
 
         JPanel container = new JPanel(new BorderLayout());

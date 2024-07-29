@@ -1,7 +1,5 @@
 package view;
 
-import view.ui.StretchIcon;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -20,7 +18,7 @@ public class AuthPage extends JFrame {
 
         // Page Background
         JLabel bgHolder = new JLabel();
-        bgHolder.setIcon(new StretchIcon("./assets/backgrounds/auth.png"));
+        bgHolder.setIcon(new ImageIcon("./assets/backgrounds/auth.png"));
         bgHolder.setBounds(0, 0, getContentPane().getWidth(), getContentPane().getHeight());
 
         // Game Title
