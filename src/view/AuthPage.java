@@ -1,7 +1,13 @@
 package view;
 
+import view.ui.BackgroundPanel;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class AuthPage extends JFrame {
 
@@ -14,12 +20,17 @@ public class AuthPage extends JFrame {
         setResizable(false);
         setVisible(true);
 
-        JPanel panel = new JPanel();
 
-        // Page Background
-        JLabel bgHolder = new JLabel();
-        bgHolder.setIcon(new ImageIcon("./assets/backgrounds/auth.png"));
-        bgHolder.setBounds(0, 0, getContentPane().getWidth(), getContentPane().getHeight());
+        try {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            double width = screenSize.getWidth();
+            BufferedImage bi = ImageIO.read(new File("./assets/backgrounds/auth.png"));
+
+            setContentPane(new BackgroundPanel(bi, width));
+        }catch(IOException ioe){
+            System.out.println("Background Not Found");
+            System.exit(1);
+        }
 
         // Game Title
         JLabel gameTitle = new JLabel("JBlackJack");
@@ -67,10 +78,7 @@ public class AuthPage extends JFrame {
         flexContainer.add(submitBtn);
 
         container.add(flexContainer);
-        bgHolder.add(gameTitle);
-        bgHolder.add(container);
-        panel.add(bgHolder);
-        add(panel);
+        add(container);
 
         setVisible(true);
     }

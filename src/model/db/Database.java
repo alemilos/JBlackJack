@@ -13,7 +13,6 @@ import static model.global.Constants.STARTING_BALANCE;
 *
 *  The fields are:
 *  - username
-*  - first access (1)
 *  - wallet count
 *  - ...games -> Each game field is separated by a "|" ()
 */
@@ -24,8 +23,7 @@ public class Database {
 
     // Fields Indexes
     private final int UNAME_IDX= 0;
-    private final int ACCESS_FLAG_IDX= 1;
-    private final int BALANCE_IDX= 2;
+    private final int BALANCE_IDX= 1;
     private final int GAMES_IDX= 2;
 
     private Database(){
@@ -145,8 +143,7 @@ public class Database {
 
                 if (getUsername(entry).equals(username)){
                     int dbBalance = Integer.parseInt(fields[BALANCE_IDX]);
-                    boolean isFirstAccess = Integer.parseInt(fields[ACCESS_FLAG_IDX]) == FIRST_ACCESS;
-                    return new User(username, dbBalance, isFirstAccess);
+                    return new User(username, dbBalance);
                 }
             }
 
@@ -172,48 +169,5 @@ public class Database {
         return entry.split(",")[UNAME_IDX].trim();
     }
 
-    /**
-     * Check if the access is
-     * @param entry
-     * @return
-     */
-    public boolean isFirstAccess(String entry){
-       return Integer.parseInt(entry.split(",")[ACCESS_FLAG_IDX].trim()) == FIRST_ACCESS ;
-    }
 
-    /**
-     * Update the access flag. (values are defined in global Constants)
-     * FIRST_ACCESS == 1
-     * ANOTHER_ACCESS == 0
-      * @param username
-      * @param accessFlag
-     */
-    public void updateAccess(String username, int accessFlag){
-        try{
-            BufferedReader br = new BufferedReader(new FileReader(this.db.toString()));
-
-            String entry;
-            StringBuilder updatedFile = new StringBuilder();
-            while((entry = br.readLine()) != null) {
-                if (!getUsername(entry).equals(username)){
-                    updatedFile.append(entry).append(System.lineSeparator());
-                }else{
-                    // Update the access for the matching username
-                    System.out.println(entry);
-                    String[] fields = entry.split(",", -1);
-                    fields[ACCESS_FLAG_IDX] = accessFlag+"";
-
-                    updatedFile.append(String.join(",", fields)).append(System.lineSeparator());
-                }
-            }
-
-            BufferedWriter bw = new BufferedWriter(new FileWriter(this.db.toString()));
-            bw.write(updatedFile.toString());
-
-            bw.close();
-            br.close();
-        }catch(IOException ioe){
-            System.exit(1);
-        }
-    }
 }

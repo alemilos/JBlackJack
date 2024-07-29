@@ -5,27 +5,20 @@ import model.game.models.standalones.Elo;
 public class User {
     private String username;
     private Wallet wallet;
-    private boolean isFirstAccess;
     // TODO: private Elo elo;
 
-    public User(String username, boolean isFirstAccess){
+    public User(String username ){
         this.username = username;
         this.wallet = new Wallet();
-        this.isFirstAccess = isFirstAccess;
     }
 
-    public User(String username, int balance, boolean isFirstAccess) {
+    public User(String username, int balance) {
         this.username = username;
         this.wallet = new Wallet(balance);
-        this.isFirstAccess = isFirstAccess;
     }
 
     public String getUsername() {
         return username;
-    }
-
-    public boolean isFirstAccess(){
-       return this.isFirstAccess;
     }
 
     @Override

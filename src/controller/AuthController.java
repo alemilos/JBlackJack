@@ -3,7 +3,6 @@ package controller;
 import model.authentication.Authentication;
 import model.global.User;
 import view.AuthPage;
-import view.ExplanationPage;
 import view.HomePage;
 
 import java.awt.event.ActionEvent;
@@ -29,19 +28,10 @@ public class AuthController {
             public void actionPerformed(ActionEvent e) {
                 user =  new Authentication().loginOrRegister(authPage.getUsernameInput().getText());
                 if (user != null){
-                    if (user.isFirstAccess()){
-                        // Redirect to Game Info pages
-                        System.out.println("Redirecting to info pages");
-
-                        authPage.dispose();
-                        new ExplanationController();
-                    }
-                    else{
                         // Redirect to Home Page
                         System.out.println("Redirecting to home page");
                         authPage.dispose();
                         new HomePage();
-                    }
                 }
             }
         });

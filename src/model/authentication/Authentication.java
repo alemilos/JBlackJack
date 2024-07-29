@@ -11,7 +11,7 @@ import static model.global.Constants.ANOTHER_ACCESS;
 public class Authentication {
 
     private User currentUser;
-    private static boolean isAuthenticated;
+    private boolean isAuthenticated;
 
     public User loginOrRegister(String username) {
         if (!isAuthenticated) {
@@ -19,7 +19,6 @@ public class Authentication {
             // Login if the username already exists
             if (db.usernameExists(username)) {
                 System.out.println(username + " logged in");
-                db.updateAccess(username, ANOTHER_ACCESS); // this is not the first access to the app.
 
                 isAuthenticated = true;
                 currentUser = db.getUser(username);

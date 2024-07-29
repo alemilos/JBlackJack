@@ -17,12 +17,6 @@ public class HomePage extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
 
-        JPanel panel = new JPanel();
-
-        // Page Background
-        JLabel bgHolder = new JLabel();
-        bgHolder.setIcon(new ImageIcon("./assets/backgrounds/home.png"));
-        bgHolder.setBounds(0, 0, getContentPane().getWidth(), getContentPane().getHeight());
 
         JPanel container = new JPanel(new BorderLayout());
 
@@ -35,7 +29,6 @@ public class HomePage extends JFrame{
 
         container.add(northContainer, BorderLayout.NORTH);
         container.add(southContainer, BorderLayout.SOUTH);
-        panel.add(bgHolder);
-        add(panel);
+        add(container);
     }
 }
