@@ -37,6 +37,7 @@ public class GameController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Leaving Game");
+                gamePage.dispose();
                 resetInstance();
                 Controller.getInstance().goToHome();
             }
