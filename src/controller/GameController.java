@@ -1,11 +1,16 @@
 package controller;
 
 import model.game.Game;
+import model.game.enums.Actions;
+import model.game.enums.Chips;
 import view.pages.GamePage;
 import view.pages.ProfilePage;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GameController {
 
@@ -16,7 +21,10 @@ public class GameController {
     private GameController(){
         gamePage = new GamePage();
 
-        // TODO: retrieve chips / actions from model and call gamePage.drawUserInterface(actions, chips);
+        List actions = new ArrayList<>(Arrays.asList(Actions.values()));
+        List chips = new ArrayList<>(Arrays.asList(Chips.values()));
+
+        gamePage.drawUserInterface(actions, chips);
 
         addActionListeners();
     }

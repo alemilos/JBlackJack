@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.List;
 import java.io.File;
 import java.io.IOException;
 
@@ -12,6 +13,9 @@ public class GamePage extends JFrame {
 
     private JButton leaveBtn;
     private JButton musicBtn;
+
+    private JPanel actionsContainer;
+    private JPanel chipsContainer;
 
     public GamePage(){
         drawGameAmbient();
@@ -79,6 +83,19 @@ public class GamePage extends JFrame {
         gamePanel.setBorder(new LineBorder(Color.darkGray));
         gamePanel.setBackground(Color.black);
 
+
+        JPanel userInterfaceContainer = new JPanel(new BorderLayout());
+        userInterfaceContainer.setBackground(Color.yellow);
+
+        actionsContainer = new JPanel(new BorderLayout());
+        actionsContainer.setBackground(Color.pink);
+        chipsContainer = new JPanel(new BorderLayout());
+        chipsContainer.setBackground(Color.red);
+
+        userInterfaceContainer.add(actionsContainer, BorderLayout.NORTH);
+        userInterfaceContainer.add(chipsContainer, BorderLayout.SOUTH);
+
+        gamePanel.add(userInterfaceContainer, BorderLayout.SOUTH);
         background.add(gameTitle);
         background.add(leaveBtn);
         background.add(musicBtn);
@@ -98,11 +115,26 @@ public class GamePage extends JFrame {
     }
 
     private void drawUserActions(List actions){
-        // TODO: For each action, create a button with given action.
+        JPanel container = new JPanel(new FlowLayout());
+
+        actions.forEach( action -> {
+                    JButton actionBtn = new JButton(action.toString());
+                    container.add(actionBtn);
+        });
+
+        actionsContainer.add(container, BorderLayout.CENTER);
     }
 
     private void drawUserChips(List chips){
-        // TODO: For each chip value, create a chip with given value
+        JPanel container = new JPanel(new FlowLayout());
+
+        chips.forEach(chip -> {
+            System.out.println(chip);
+           JButton chipBtn = new JButton(chip.toString());
+           container.add(chipBtn);
+        });
+
+        chipsContainer.add(container, BorderLayout.CENTER);
     }
 
 }
