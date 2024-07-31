@@ -2,8 +2,7 @@ package controller;
 
 import model.authentication.Authentication;
 import model.global.User;
-import view.AuthPage;
-import view.HomePage;
+import view.pages.AuthPage;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,15 +29,13 @@ public class AuthController {
                 if (user != null){
                         // Redirect to Home Page
                         System.out.println("Redirecting to home page");
+                        Controller.setUser(user);
+
                         authPage.dispose();
-                        new HomeController();
+                        Controller.getInstance().goToHome();
                 }
             }
         });
-    }
-
-    public boolean isAuthenticating() {
-        return this.isAuthenticating;
     }
 
     public static AuthController getInstance(){

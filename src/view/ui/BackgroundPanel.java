@@ -10,6 +10,7 @@ public class BackgroundPanel extends JComponent{
     public BackgroundPanel(Image image, double width) {
         this.image = image;
         this.width = width;
+
     }
 
     @Override

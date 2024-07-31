@@ -1,4 +1,4 @@
-package view;
+package view.pages;
 
 import view.ui.BackgroundPanel;
 
@@ -21,11 +21,12 @@ public class AuthPage extends JFrame {
         setVisible(true);
 
 
+        Dimension screenSize= Toolkit.getDefaultToolkit().getScreenSize();
+
         try {
-            double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
             BufferedImage bi = ImageIO.read(new File("./assets/backgrounds/auth.png"));
 
-            setContentPane(new BackgroundPanel(bi, width));
+            setContentPane(new BackgroundPanel(bi, screenSize.getWidth()));
         }catch(IOException ioe){
             System.out.println("Background Not Found");
             System.exit(1);
@@ -76,7 +77,9 @@ public class AuthPage extends JFrame {
         flexContainer.add(Box.createRigidArea(new Dimension(0, 10))); // Gap
         flexContainer.add(submitBtn);
 
+        add(gameTitle);
         container.add(flexContainer);
+
         add(container);
 
         setVisible(true);
