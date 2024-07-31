@@ -11,7 +11,5 @@ public class Main {
 
         // Init Controller
         Controller controller = Controller.getInstance();
-
-
     }
 }

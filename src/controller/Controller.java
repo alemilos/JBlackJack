@@ -24,6 +24,10 @@ public class Controller {
         return instance;
     }
 
+    /**********************************************************************
+     * NAVIGATION MANAGEMENT
+     **********************************************************************/
+
     public void goToHome(){
         homeController = HomeController.getInstance();
     }

@@ -13,24 +13,8 @@ public class HomeController {
 
     private HomeController(){
         User user = Controller.getUser();
-
         this.homePage = new HomePage(user.getUsername(), user.getElo().toString(),  user.getWallet().getBalance());
-
-        homePage.getPlayBtn().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                homePage.dispose();
-                Controller.getInstance().goToGame();
-            }
-        });
-
-        homePage.getProfileButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                homePage.dispose();
-                Controller.getInstance().goToProfile();
-            }
-        });
+        addActionListeners();
     }
 
     public static HomeController getInstance() {
@@ -39,4 +23,29 @@ public class HomeController {
         }
         return instance;
     }
+
+    private void resetInstance(){
+        instance = null;
+    }
+
+    private void addActionListeners(){
+        homePage.getPlayBtn().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                homePage.dispose();
+                resetInstance();
+                Controller.getInstance().goToGame();
+            }
+        });
+
+        homePage.getProfileButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                homePage.dispose();
+                resetInstance();
+                Controller.getInstance().goToProfile();
+            }
+        });
+    }
+
 }

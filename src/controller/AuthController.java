@@ -16,26 +16,10 @@ public class AuthController {
 
     private User user;
 
-    /**
-     * The Controller manages the Model and the View.
-     * */
     private AuthController(){
         this.authPage = new AuthPage();
 
-        authPage.getSubmitBtn().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                user =  new Authentication().loginOrRegister(authPage.getUsernameInput().getText());
-                if (user != null){
-                        // Redirect to Home Page
-                        System.out.println("Redirecting to home page");
-                        Controller.setUser(user);
-
-                        authPage.dispose();
-                        Controller.getInstance().goToHome();
-                }
-            }
-        });
+        addActionListeners();
     }
 
     public static AuthController getInstance(){
@@ -45,7 +29,26 @@ public class AuthController {
         return instance;
     }
 
+    private void resetInstance(){
+        instance = null;
+    }
+
     public User getUser(){
         return this.user;
+    }
+
+    private void addActionListeners(){
+        authPage.getSubmitBtn().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                user =  new Authentication().loginOrRegister(authPage.getUsernameInput().getText().trim());
+                if (user != null){
+                    Controller.setUser(user);
+                    authPage.dispose();
+                    resetInstance();
+                    Controller.getInstance().goToHome();
+                }
+            }
+        });
     }
 }

@@ -21,6 +21,7 @@ public class HomePage extends JFrame{
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setResizable(false);
         setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // Game Title
         JLabel gameTitle = new JLabel("JBlackJack");

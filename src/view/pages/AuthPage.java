@@ -19,6 +19,7 @@ public class AuthPage extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setResizable(false);
         setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 
         Dimension screenSize= Toolkit.getDefaultToolkit().getScreenSize();

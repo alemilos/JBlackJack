@@ -18,4 +18,11 @@ public class ProfileController {
         }
         return instance;
     }
+
+    public void resetInstance(){instance = null;}
+
+    private void addActionListeners(){
+
+    }
+
 }
