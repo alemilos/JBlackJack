@@ -85,12 +85,9 @@ public class GamePage extends JFrame {
 
 
         JPanel userInterfaceContainer = new JPanel(new BorderLayout());
-        userInterfaceContainer.setBackground(Color.yellow);
 
         actionsContainer = new JPanel(new BorderLayout());
-        actionsContainer.setBackground(Color.pink);
         chipsContainer = new JPanel(new BorderLayout());
-        chipsContainer.setBackground(Color.red);
 
         userInterfaceContainer.add(actionsContainer, BorderLayout.NORTH);
         userInterfaceContainer.add(chipsContainer, BorderLayout.SOUTH);
@@ -116,6 +113,7 @@ public class GamePage extends JFrame {
 
     private void drawUserActions(List actions){
         JPanel container = new JPanel(new FlowLayout());
+        container.setBackground(Color.black);
 
         actions.forEach( action -> {
                     JButton actionBtn = new JButton(action.toString());
@@ -127,10 +125,16 @@ public class GamePage extends JFrame {
 
     private void drawUserChips(List chips){
         JPanel container = new JPanel(new FlowLayout());
+        container.setBackground(Color.black);
 
         chips.forEach(chip -> {
-            System.out.println(chip);
-           JButton chipBtn = new JButton(chip.toString());
+           JButton chipBtn = new JButton();
+           chipBtn.setIcon(new ImageIcon("./assets/icons/chips/" + chip.toString().toLowerCase() + ".png"));
+           chipBtn.setOpaque(false);
+           chipBtn.setFocusPainted(false);
+           chipBtn.setContentAreaFilled(false);
+           chipBtn.setBorderPainted(false);
+           chipBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
            container.add(chipBtn);
         });
 
