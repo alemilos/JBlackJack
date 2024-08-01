@@ -6,7 +6,6 @@ import model.global.User;
 
 import java.util.List;
 
-import static model.global.Constants.ANOTHER_ACCESS;
 
 public class Authentication {
 

@@ -8,10 +8,11 @@ public class Elo {
     private Leagues league;
 
     public Elo(int balance){
-        if (balance < 2000){
+        System.out.println(balance);
+        if (balance < 3000){
             league = Leagues.BROKE;
         }
-        else if(balance < 5000){
+        else if(balance < 6000){
             league = Leagues.DREAMER;
         }
         else if(balance < 10000){

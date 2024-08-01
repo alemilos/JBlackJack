@@ -4,7 +4,6 @@ import model.global.User;
 
 import java.io.*;
 
-import static model.global.Constants.FIRST_ACCESS;
 import static model.global.Constants.STARTING_BALANCE;
 
 /* The Database's scope is to provide a simple way to access User information.
@@ -92,7 +91,7 @@ public class Database {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(this.db.toString(),true));
 
-            String dbEntry = username.trim() + "," + FIRST_ACCESS + "," + STARTING_BALANCE + "," + System.lineSeparator();
+            String dbEntry = username.trim() +  "," + STARTING_BALANCE + "," + System.lineSeparator();
             bw.write(dbEntry);
 
             bw.close();

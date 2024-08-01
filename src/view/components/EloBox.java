@@ -21,7 +21,7 @@ public class EloBox extends JPanel{
         eloText.setForeground(Color.white);
 
         imageHolder = new JLabel();
-        imageHolder.setIcon(icon);
+        imageHolder.setIcon(new ImageIcon(icon.getImage().getScaledInstance(160,160,Image.SCALE_SMOOTH)));
 
         eloText.setHorizontalAlignment(JLabel.CENTER);
         add(eloText, BorderLayout.NORTH);

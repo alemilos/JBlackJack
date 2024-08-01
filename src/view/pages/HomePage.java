@@ -1,5 +1,6 @@
 package view.pages;
 
+import view.components.BalanceDisplay;
 import view.components.EloBox;
 import view.components.ProfileButton;
 import view.ui.BackgroundPanel;
@@ -62,6 +63,9 @@ public class HomePage extends JFrame{
         container.add(northContainer, BorderLayout.NORTH);
         container.add(southContainer, BorderLayout.SOUTH);
 
+        BalanceDisplay balanceDisplay = new BalanceDisplay(balance);
+        balanceDisplay.setBounds((int)((dim.getWidth() - 300) /2), 20, 300, 100);
+
         northContainer.add(profileBtn, BorderLayout.EAST);
 
         southContainer.add(elobox, BorderLayout.WEST);
@@ -69,6 +73,7 @@ public class HomePage extends JFrame{
         container.setVisible(true);
 
         add(gameTitle);
+        add(balanceDisplay);
         add(playBtn);
         add(container);
         setVisible(true);
