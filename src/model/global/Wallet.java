@@ -1,6 +1,6 @@
 package model.global;
 
-import static model.global.Constants.STARTING_BALANCE;
+import static misc.Constants.STARTING_BALANCE;
 
 public class Wallet {
     private int balance;

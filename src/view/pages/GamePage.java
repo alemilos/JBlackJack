@@ -1,10 +1,13 @@
 package view.pages;
 
+import misc.Constants;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 import java.io.IOException;
@@ -17,8 +20,13 @@ public class GamePage extends JFrame {
     private JPanel actionsContainer;
     private JPanel chipsContainer;
 
+    private List<JButton> actionButtons;
+    private List<JButton> chipButtons;
+
     public GamePage(){
         drawGameAmbient();
+        actionButtons = new ArrayList<>();
+        chipButtons = new ArrayList<>();
     }
 
     public JButton getLeaveBtn() {
@@ -111,12 +119,15 @@ public class GamePage extends JFrame {
         drawUserChips(chips);
     }
 
-    private void drawUserActions(List actions){
+    private void drawUserActions(List<String> actions){
         JPanel container = new JPanel(new FlowLayout());
         container.setBackground(Color.black);
 
         actions.forEach( action -> {
-                    JButton actionBtn = new JButton(action.toString());
+                    JButton actionBtn = new JButton(action);
+                    actionBtn.setFont(new Font(Constants.FONT_FAMILY, Font.BOLD, 16));
+
+                    actionButtons.add(actionBtn);
                     container.add(actionBtn);
         });
 
@@ -135,10 +146,19 @@ public class GamePage extends JFrame {
            chipBtn.setContentAreaFilled(false);
            chipBtn.setBorderPainted(false);
            chipBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+           chipButtons.add(chipBtn);
            container.add(chipBtn);
         });
 
         chipsContainer.add(container, BorderLayout.CENTER);
     }
 
+    public List<JButton> getChipButtons() {
+        return chipButtons;
+    }
+
+    public List<JButton> getActionButtons() {
+        return actionButtons;
+    }
 }

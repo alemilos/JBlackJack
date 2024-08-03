@@ -4,7 +4,7 @@ import model.global.User;
 
 import java.io.*;
 
-import static model.global.Constants.STARTING_BALANCE;
+import static misc.Constants.STARTING_BALANCE;
 
 /* The Database's scope is to provide a simple way to access User information.
 *  Each line is assigned to a different user.

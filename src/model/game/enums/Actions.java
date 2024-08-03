@@ -5,5 +5,6 @@ public enum Actions {
     STAND,
     DOUBLE_DOWN,
     SPLIT,
-    INSURANCE
+    INSURANCE;
+
 }

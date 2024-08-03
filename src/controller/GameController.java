@@ -1,16 +1,16 @@
 package controller;
 
-import model.game.Game;
 import model.game.enums.Actions;
 import model.game.enums.Chips;
 import view.pages.GamePage;
-import view.pages.ProfilePage;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import misc.Utils;
 
 public class GameController {
 
@@ -21,7 +21,7 @@ public class GameController {
     private GameController(){
         gamePage = new GamePage();
 
-        List actions = new ArrayList<>(Arrays.asList(Actions.values()));
+        List<String> actions = Arrays.stream(Actions.values()).map(action->Utils.toCapitalizedString(action.toString(), "_", " ")).collect(Collectors.toList());
         List chips = new ArrayList<>(Arrays.asList(Chips.values()));
 
         gamePage.drawUserInterface(actions, chips);
@@ -49,6 +49,24 @@ public class GameController {
                 resetInstance();
                 Controller.getInstance().goToHome();
             }
+        });
+
+        gamePage.getActionButtons().forEach(actionBtn-> {
+            actionBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Action clicked");
+                }
+            });
+        });
+
+        gamePage.getChipButtons().forEach(chipBtn-> {
+            chipBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Chip clicked");
+                }
+            });
         });
     }
 }

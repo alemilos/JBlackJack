@@ -53,6 +53,7 @@ public class HomePage extends JFrame{
         playBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 
+
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         playBtn.setBounds((int)((dim.getWidth()-400) / 2),(int)(dim.getHeight() - 150 - 80), 400,150);
 
@@ -72,6 +73,13 @@ public class HomePage extends JFrame{
 
         container.setVisible(true);
 
+        // Cards Image
+        JLabel cardsImageHolder = new JLabel();
+        ImageIcon icon = new ImageIcon(new ImageIcon("./assets/ui/cards.png").getImage().getScaledInstance(400,300,Image.SCALE_SMOOTH));
+        cardsImageHolder.setIcon(icon);
+        cardsImageHolder.setBounds((int)((dim.getWidth() - 400) / 2), (int)((dim.getHeight() - 520 ) / 2), 400,300);
+
+        add(cardsImageHolder);
         add(gameTitle);
         add(balanceDisplay);
         add(playBtn);
