@@ -13,15 +13,12 @@ import model.game.models.standalones.Card;
 
 import java.util.*;
 
-public abstract class Player implements Observer {
+public abstract class Player {
     protected String name;
     protected Hand hand;
     protected SplitHand splitHand;
     protected Bankroll bankroll; // For each chip, how many does the user have.
     protected Bet bet;
-
-    // For Observable
-    protected boolean isBetAvailable;
 
     // Split Logic
     protected boolean isSplitTurn;
@@ -36,17 +33,6 @@ public abstract class Player implements Observer {
         this.splitType = SplitType.NOT_SPLIT;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        if (arg instanceof BetNotification){
-            BetNotification betNotification = (BetNotification) arg;
-            if (betNotification == BetNotification.BETTING_STARTS){
-                isBetAvailable = true;
-            }else{
-                isBetAvailable = false;
-            }
-        }
-    }
 
     /**
      * Create the splitHand
@@ -62,6 +48,15 @@ public abstract class Player implements Observer {
     }
 
     /**
+     * Can the player make a bet with given chip?
+     * @param chip
+     * @return
+     */
+    public boolean canBet(Chips chip) {
+        return bankroll.canPay(chip.getValue());
+    }
+
+    /**
      * If the Player has a Chip, add it to the Bet.
      */
     public void addToBet(Chips chip){
@@ -71,23 +66,11 @@ public abstract class Player implements Observer {
         }
     }
 
-    /**
-     * Remove a Chip from the Bet if there is one.
-      */
-    public void removeFromBet(Chips chip){
-        if (bet.containsChip(chip)){
-            bankroll.receive(chip.getValue());
-            bet.remove(chip);
-        }
-    }
 
-    /**
-     * If the Player has available chips, double the Bet.
-     */
-    public void doubleBet() {
-        if (bet.total() <= bankroll.getChipsLeft()){
-            bankroll.pay(bet.total());
-            bet.x2();
+    public void popBet(){
+        Chips removedChip = bet.pop();
+        if(removedChip != null){
+            bankroll.receive(removedChip.getValue());
         }
     }
 

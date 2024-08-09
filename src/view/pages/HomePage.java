@@ -1,16 +1,11 @@
 package view.pages;
 
-import view.components.BalanceDisplay;
-import view.components.EloBox;
-import view.components.ProfileButton;
-import view.ui.BackgroundPanel;
+import view.components.home.BalanceDisplay;
+import view.components.home.EloBox;
+import view.components.home.ProfileButton;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class HomePage extends JFrame{
 

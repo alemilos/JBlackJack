@@ -2,19 +2,20 @@ package model.game.models.standalones;
 
 import model.game.enums.Chips;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Bet {
 
     private Map<Chips, Integer> chips;
+    private List<Chips> chipAddedQueue;
 
     /**
      * The Bet is composed of all the bet chips, along with the count of each.
      */
     public Bet(){
         this.chips = new HashMap<>();
+        chipAddedQueue = new ArrayList<>();
     }
 
     /**
@@ -22,6 +23,8 @@ public class Bet {
      * @param chip
      */
     public void add(Chips chip){
+
+        chipAddedQueue.add(chip);
         if (containsChip(chip)){
             chips.replace(chip, chips.get(chip)  +1);
         }else {
@@ -30,17 +33,29 @@ public class Bet {
     }
 
     /**
-     * Decrement the chip or remove it if there is not one.
-     * @param chip
+     * Pop the last added chip to the bet
+     * @return
      */
-    public void remove(Chips chip){
-        if (containsChip(chip)){
-            if (chips.get(chip) > 1){
-                chips.replace(chip, chips.get(chip) -1);
-            }else{
-                chips.remove(chip);
-            }
+    public Chips pop(){
+        if(!chipAddedQueue.isEmpty()){
+            System.out.println(chipAddedQueue.size());
+        Chips removedChip = chipAddedQueue.remove(chipAddedQueue.size()-1);
+
+        if (chips.get(removedChip) > 1){
+            chips.replace(removedChip, chips.get(removedChip) -1);
+        }else{
+            chips.remove(removedChip);
         }
+        return  removedChip;
+        }
+        return null;
+    }
+
+    public Chips peek(){
+        if (!chipAddedQueue.isEmpty()){
+            return chipAddedQueue.get(chipAddedQueue.size()-1);
+        }
+        return null;
     }
 
     /**
@@ -48,16 +63,7 @@ public class Bet {
      */
     public void delete(){
         this.chips = new HashMap<>();
-    }
-
-    /**
-     * Double the Bet (x2)
-     */
-    public void x2(){
-        chips = chips.entrySet().stream().collect(Collectors.toMap(
-                Map.Entry::getKey,
-                entry -> entry.getValue() * 2
-        ));
+        chipAddedQueue = new ArrayList<>();
     }
 
     /**
@@ -84,7 +90,6 @@ public class Bet {
     public int total(){
         int total = 0;
 
-        // TODO: refactor with streams
         for (Map.Entry<Chips, Integer> entry: chips.entrySet()){
             Chips chip = entry.getKey();
             int chipCount = entry.getValue();

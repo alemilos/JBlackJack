@@ -1,6 +1,7 @@
 package model.game.models.player;
 
 
+import model.game.Game;
 import model.game.enums.Actions;
 import model.game.enums.Chips;
 
@@ -9,8 +10,6 @@ import java.util.*;
 import static model.game.utils.Constants.DEALER_STANDS_AT;
 
 public class AIPlayer extends Player{
-
-
 
     /**
      * The AIPlayer will make decisions based on probability and other factors.
@@ -21,17 +20,11 @@ public class AIPlayer extends Player{
         super(name, buyIn);
     }
 
-
-    public void update(Observable o, Object arg){
-        super.update(o, arg);
-        simulateBet();
-    }
-
     /**
      * Make a simulated Bet.
      */
     public void simulateBet() {
-        if (isBetAvailable){
+        if (Game.getInstance().isBetPhase()){
             // TODO: make this based on wins/loss
 
             Random rand = new Random();

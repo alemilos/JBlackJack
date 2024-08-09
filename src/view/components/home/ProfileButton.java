@@ -1,4 +1,4 @@
-package view.components;
+package view.components.home;
 
 import view.ui.BackgroundPanel;
 

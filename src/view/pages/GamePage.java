@@ -1,11 +1,13 @@
 package view.pages;
 
 import misc.Constants;
+import view.components.game.TablePanel;
+import view.components.game.PlayerPanel;
+import view.ui.IconButton;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +21,16 @@ public class GamePage extends JFrame {
 
     private JPanel actionsContainer;
     private JPanel chipsContainer;
+    private JPanel notificationsPanel;
+
+    private TablePanel tablePanel;
 
     private List<JButton> actionButtons;
     private List<JButton> chipButtons;
+
+    // Actions on chips btns
+    private JButton undoBtn;
+    private JButton deleteBetBtn;
 
     public GamePage(){
         drawGameAmbient();
@@ -87,24 +96,22 @@ public class GamePage extends JFrame {
         background.setBackground(Color.black);
         background.setBorder(new EmptyBorder(60,60,60,60));
 
-        JPanel gamePanel = new JPanel(new BorderLayout());
-        gamePanel.setBorder(new LineBorder(Color.darkGray));
-        gamePanel.setBackground(Color.black);
-
-
-        JPanel userInterfaceContainer = new JPanel(new BorderLayout());
+        tablePanel= new TablePanel();
 
         actionsContainer = new JPanel(new BorderLayout());
         chipsContainer = new JPanel(new BorderLayout());
 
-        userInterfaceContainer.add(actionsContainer, BorderLayout.NORTH);
-        userInterfaceContainer.add(chipsContainer, BorderLayout.SOUTH);
+        tablePanel.getUserInterfacePanel().add(actionsContainer, BorderLayout.NORTH);
+        tablePanel.getUserInterfacePanel().add(chipsContainer, BorderLayout.SOUTH);
 
-        gamePanel.add(userInterfaceContainer, BorderLayout.SOUTH);
+        notificationsPanel = new JPanel(new BorderLayout());
+        notificationsPanel.setBackground(Color.red);
+
         background.add(gameTitle);
+        background.add(notificationsPanel);
         background.add(leaveBtn);
         background.add(musicBtn);
-        background.add(gamePanel);
+        background.add(tablePanel);
         add(background);
 
         setVisible(true);
@@ -139,19 +146,37 @@ public class GamePage extends JFrame {
         container.setBackground(Color.black);
 
         chips.forEach(chip -> {
-           JButton chipBtn = new JButton();
-           chipBtn.setIcon(new ImageIcon("./assets/icons/chips/" + chip.toString().toLowerCase() + ".png"));
-           chipBtn.setOpaque(false);
-           chipBtn.setFocusPainted(false);
-           chipBtn.setContentAreaFilled(false);
-           chipBtn.setBorderPainted(false);
-           chipBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
+           IconButton chipBtn = new IconButton(new ImageIcon("./assets/icons/chips/" + chip.toString().toLowerCase() + ".png"));
            chipButtons.add(chipBtn);
            container.add(chipBtn);
         });
 
+        // Draw Undo Button
+        undoBtn = new JButton();
+        undoBtn.setIcon(new ImageIcon(new ImageIcon("./assets/icons/undo.png").getImage().getScaledInstance(24,24,Image.SCALE_SMOOTH)));
+
+        deleteBetBtn = new JButton();
+        deleteBetBtn.setIcon(new ImageIcon(new ImageIcon("./assets/icons/bin.png").getImage().getScaledInstance(24,24,Image.SCALE_SMOOTH)));
+
+        container.add(undoBtn);
+        container.add(deleteBetBtn);
+
         chipsContainer.add(container, BorderLayout.CENTER);
+    }
+
+    /**
+     * Draw the sabot, the users.
+     */
+    public void drawInitialGameState(List<PlayerPanel> playerPanels) {
+        JLabel sabot = new JLabel();
+        sabot.setIcon(new ImageIcon(new ImageIcon("./assets/cards/deckblack1.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH)));
+        tablePanel.getDealerPanel().add(sabot, BorderLayout.EAST);
+
+        playerPanels.forEach(playerPanel -> drawPlayerPanel(playerPanel));
+    }
+
+    public void drawPlayerPanel(PlayerPanel playerPanel){
+        tablePanel.getUsersPanel().add(playerPanel);
     }
 
     public List<JButton> getChipButtons() {
@@ -160,5 +185,21 @@ public class GamePage extends JFrame {
 
     public List<JButton> getActionButtons() {
         return actionButtons;
+    }
+
+    public TablePanel getTablePanel() {
+        return tablePanel;
+    }
+
+    public JButton getUndoBtn() {
+        return undoBtn;
+    }
+
+    public JButton getDeleteBetBtn() {
+        return deleteBetBtn;
+    }
+
+    public JPanel getNotificationsPanel() {
+        return notificationsPanel;
     }
 }

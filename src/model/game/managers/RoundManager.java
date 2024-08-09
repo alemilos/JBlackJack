@@ -12,14 +12,12 @@ public class RoundManager{
     private Dealer dealer;
     private List<Round> rounds;
 
-    private BetManager betManager;
     private TurnManager turnManager;
 
     public RoundManager(List<Player> players, Dealer dealer){
         this.players = players;
         this.dealer = dealer;
         this.rounds = new ArrayList<>();
-        this.betManager= new BetManager(players);
         this.turnManager = new TurnManager(players);
     }
 
@@ -34,18 +32,18 @@ public class RoundManager{
     public void playRound(){
         rounds.add(new Round());
 
-        betManager.manage();
+       // betManager.manage();
 
-        // Proceed only if somebody made a Bet.
-        if (betManager.betsCount() > 0){
-            dealer.distributeCards(players);
+       // // Proceed only if somebody made a Bet.
+       // if (betManager.betsCount() > 0){
+       //     dealer.distributeCards(players);
 
-            for (Player player: players){
-                System.out.println(player);
-            }
+       //     for (Player player: players){
+       //         System.out.println(player);
+       //     }
 
-            turnManager.manage();
-        }
+       //     turnManager.manage();
+       // }
 
         // TODO: FOR each player play Turn;
         // TODO: Play Dealer turn

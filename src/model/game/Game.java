@@ -1,7 +1,7 @@
 package model.game;
 
+import model.db.Database;
 import model.global.User;
-import model.game.managers.RoundManager;
 import model.game.models.standalones.Dealer;
 import model.game.models.standalones.Sabot;
 import model.game.utils.Utils;
@@ -14,38 +14,48 @@ import java.util.Date;
 import java.util.List;
 
 public class Game {
+    private static Game instance;
+
     private final int AI_PLAYERS_NUM= 4;
     private final int BUY_IN_AI_PLAYERS = 1000;
 
     private User user;
 
     private List<Player> players;
+    private HumanPlayer humanPlayer;
+
     private Dealer dealer;
     private Sabot sabot;
 
     private Date startedAt;
     private Date endedAt;
 
-    private RoundManager roundManager;
+    private boolean isBetPhase;
 
     /**
      * Create a Game with given AI Players Number.
      * A Game is made up of players, dealer.
      */
-    public Game(User user, int userBuyIn){
+    private Game(){
+    }
+
+    public static Game getInstance(){
+        if (instance == null){
+           instance = new Game();
+        }
+
+        return instance;
+    }
+
+    public void init(User user, int userBuyIn){
         this.user = user;
         this.players= initializePlayers(user,  userBuyIn);
         this.dealer = Dealer.getInstance();
-        this.sabot = Sabot.getInstance(6); // TODO: the sabot k must depend on the Game Difficulty.
-        this.roundManager = new RoundManager(players, dealer);
+        this.sabot = Sabot.getInstance(6);
     }
 
     public void startGame(){
         this.startedAt = new Date();
-
-        // TODO: call the playRound() each time the previous ends.
-
-        roundManager.playRound();
     }
 
     private void finishGame(){
@@ -67,9 +77,25 @@ public class Game {
         }
 
         // Add the human player
-        players.add(AI_PLAYERS_NUM / 2, new HumanPlayer(user, userBuyIn));
+        humanPlayer = new HumanPlayer(user, userBuyIn);
+        players.add(AI_PLAYERS_NUM / 2, humanPlayer);
 
         return players;
     }
 
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public HumanPlayer getHumanPlayer() {
+        return humanPlayer;
+    }
+
+    public void setBetPhase(boolean betPhase) {
+        isBetPhase = betPhase;
+    }
+
+    public boolean isBetPhase(){
+        return this.isBetPhase;
+    }
 }
