@@ -15,7 +15,10 @@ public enum Ranks {
     QUEEN(10),
     KING(10);
 
+    /** The card value, independent of the game logic*/
     private int value;
+
+    /** The blackjack related value (for ace only)*/
     private int softValue;
 
     Ranks(int value){

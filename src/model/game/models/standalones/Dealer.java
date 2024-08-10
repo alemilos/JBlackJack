@@ -1,5 +1,6 @@
 package model.game.models.standalones;
 
+import model.game.Game;
 import model.game.models.hand.Hand;
 import model.game.models.player.Player;
 
@@ -56,9 +57,10 @@ public class Dealer {
 
     /**
      * Distribute 2 cards to each player that has made a Bet.
-     * @param players
      */
-    public void distributeCards(List<Player> players){
+    public void distributeCards(){
+        List<Player> players = Game.getInstance().getPlayers();
+
         // First Distribution
        for (Player player: players) {
             if (!player.getBet().isEmpty()){
@@ -80,4 +82,12 @@ public class Dealer {
        dealDealerCard(true);
     }
 
+    public Hand getHand() {
+        return hand;
+    }
+
+    public void resetInstance(){
+        instance = null;
+        sabot.resetInstance();
+    }
 }

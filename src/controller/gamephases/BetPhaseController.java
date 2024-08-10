@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
+import static misc.Constants.BET_TIME_MS;
+
 public class BetPhaseController extends GamePhaseManager implements Manageable{
 
     private GameController gameController;
@@ -34,12 +36,12 @@ public class BetPhaseController extends GamePhaseManager implements Manageable{
         };
 
         // Add Timer to View
-        gameController.getGamePage().getNotificationsPanel().addTimer("Scommetti", 10000, onTimerEnds);
+        gameController.getGamePage().getNotificationsPanel().addTimer("Scommetti", BET_TIME_MS, onTimerEnds);
 
         game.getPlayers().forEach(player -> {
             if (!(player instanceof HumanPlayer)) {
                 ((AIPlayer) player).simulateBet();
-                int randomDelay = (int) (Math.random() * 9000) + 1000; // Random delay between 1 and 10 seconds
+                int randomDelay = (int) (Math.random() * BET_TIME_MS - 1000) + 1000; // Random delay between 1 and bet time
                 Timer aiTimer = new Timer(randomDelay, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {

@@ -12,5 +12,7 @@ public class GamePhaseManager implements Manageable{
         nextPhase.manage();
     }
 
-    public void manage(){}
+    public void manage(){
+
+    }
 }

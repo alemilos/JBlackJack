@@ -12,6 +12,7 @@ import model.game.models.player.Player;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Game {
     private static Game instance;
@@ -58,8 +59,11 @@ public class Game {
         this.startedAt = new Date();
     }
 
-    private void finishGame(){
+    public void finishGame(){
         // TODO: save game information to the user DB
+
+        this.getDealer().resetInstance();
+        instance = null;
         this.endedAt = new Date();
     }
 
@@ -87,8 +91,16 @@ public class Game {
         return players;
     }
 
+    public List<Player> getPlayingPlayers(){
+        return players.stream().filter(player-> !player.getBet().isEmpty()).collect(Collectors.toList());
+    }
+
     public HumanPlayer getHumanPlayer() {
         return humanPlayer;
+    }
+
+    public Dealer getDealer() {
+        return dealer;
     }
 
     public void setBetPhase(boolean betPhase) {

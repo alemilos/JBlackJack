@@ -45,6 +45,10 @@ public class Hand {
         cards.add(card);
     }
 
+    public List<Card> getCards() {
+        return cards;
+    }
+
     /**
      * Count the hand total, adding the soft value if an Ace is present and doesn't exceed the BLACKJACK 21
      * @return
@@ -87,4 +91,10 @@ public class Hand {
         }
         return total;
     }
+
+    @Override
+    public String toString() {
+        return cards.toString();
+    }
+
 }

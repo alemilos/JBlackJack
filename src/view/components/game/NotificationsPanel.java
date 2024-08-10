@@ -47,7 +47,7 @@ public class NotificationsPanel extends JPanel {
                 progressBar.setValue(counter);
                 if (counter < 1) {
                     timer.stop();
-                    clearTimer();
+                    clearNotificationBar();
                     callback.run();
                 }
             }
@@ -61,8 +61,14 @@ public class NotificationsPanel extends JPanel {
         timerContainer.add(progressBar);
     }
 
-    private void clearTimer(){
+    public void addTextNotification(String text){
+        if(progressBar != null) timerContainer.remove(progressBar);
+        notificationTitle.setText(text);
+    }
+
+    private void clearNotificationBar(){
         notificationTitle.setText("");
         timerContainer.remove(progressBar);
+
     }
 }

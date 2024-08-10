@@ -3,12 +3,16 @@ package controller;
 import controller.gamephases.BetPhaseController;
 import controller.gamephases.CardsDistributionController;
 import controller.gamephases.GamePhaseManager;
+import controller.gamephases.UsersActionsController;
 import model.game.Game;
 import model.game.enums.Actions;
 import model.game.enums.Chips;
+import model.game.enums.Ranks;
+import model.game.enums.Suits;
 import model.game.models.player.AIPlayer;
 import model.game.models.player.HumanPlayer;
 import model.game.models.player.Player;
+import model.game.models.standalones.Dealer;
 import model.global.User;
 import view.components.game.PlayerPanel;
 import view.pages.GamePage;
@@ -65,12 +69,14 @@ public class GameController {
         /** CARDS DISTRIBUTIONS PHASE **/
         CardsDistributionController cardsDistributionController = new CardsDistributionController(this);
         /** USERS ACTIONS PHASE **/
+        UsersActionsController usersActionsController = new UsersActionsController(this);
+
         /** PAYMENTS PHASE **/
 
         /** Create the game flow */
         gamePhaseManager.setNextPhase(betPhaseController);
         betPhaseController.setNextPhase(cardsDistributionController);
-        cardsDistributionController.setNextPhase(null);
+        cardsDistributionController.setNextPhase(usersActionsController);
 
         gamePhaseManager.manageNextPhase(); // Start the flow
     }
@@ -118,6 +124,8 @@ public class GameController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.err.println("Should save game state to DB");
+
+                game.finishGame();
                 gamePage.dispose();
                 resetInstance();
                 Controller.getInstance().goToHome();
@@ -174,20 +182,31 @@ public class GameController {
         });
     }
 
-    public void addChipsListeners(){
-
-    }
-
-    public void removeChipsListeners(){
-
-    }
-
     public void drawAIBet(Player player){
         PlayerPanel playerPanel = mapPlayerToPanel.get(player);
         playerPanel.updateTotalChipsPanel(player.getBet().total());
         Chips chip = player.getBet().peek();
         if (chip != null)
         playerPanel.updateLastChipPanel(chip.name().toLowerCase());
+    }
+
+    public void drawDealerCards(){
+        Dealer dealer = Dealer.getInstance();
+
+        dealer.getHand().getCards().forEach(card -> {
+            Suits suit = card.lookupSuit();
+            gamePage.getTablePanel().addDealerCard(card.lookupValue(), suit != null ? suit.toString() : null);
+        });
+    }
+
+    public void drawPlayerCards(Player player){
+       PlayerPanel playerPanel = mapPlayerToPanel.get(player);
+
+       player.getHand().getCards().forEach(card -> {
+           playerPanel.addCard(card.lookupValue(), card.lookupSuit().toString());
+       });
+
+       playerPanel.updateCardsTotalValue(player.getHand().softTotal());
     }
 
     /***********************

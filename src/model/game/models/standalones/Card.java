@@ -12,7 +12,6 @@ public class Card {
     public Card(Ranks rank, Suits suit){
         this.rank = rank;
         this.suit = suit;
-        this.isHidden = true;
     }
 
     public void setHidden(boolean hidden) {
@@ -24,7 +23,22 @@ public class Card {
      * @return
      */
     public Ranks lookupRank(){
-        return isHidden ? rank : null;
+        return !isHidden ? rank : null;
+    }
+
+    /** The value can be 1,...,10,J,Q,K */
+    public String lookupValue(){
+        if (!isHidden){
+            if (rank.getValue() < 10) return ""+rank.getValue();
+
+            char rankFirstLetter =  rank.toString().toUpperCase().charAt(0);
+
+            if (rankFirstLetter == 'T') return 10+"";
+
+            return rankFirstLetter+"";
+        }
+
+        return null;
     }
 
     /**
@@ -32,7 +46,7 @@ public class Card {
      * @return
      */
     public Suits lookupSuit() {
-        return isHidden ? suit : null;
+        return !isHidden ? suit : null;
     }
 
     @Override

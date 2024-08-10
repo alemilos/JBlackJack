@@ -190,6 +190,7 @@ public class GamePage extends JFrame {
         tablePanel.getUsersPanel().add(playerPanel);
     }
 
+
     /**
      *
      */

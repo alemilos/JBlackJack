@@ -47,7 +47,6 @@ public class Sabot {
      */
     public Card dealCard(){
        Card card = cards.remove(cards.size()-1);
-       card.setHidden(false);
         return card;
     }
 
@@ -57,10 +56,15 @@ public class Sabot {
      */
     public Card dealHiddenCard(){
         Card hiddenCard = cards.remove(cards.size()-1); // Card is Hidden by Default
+        hiddenCard.setHidden(true);
         return hiddenCard;
     }
 
     public int size(){
         return cards.size();
+    }
+
+    public void resetInstance(){
+        instance = null;
     }
 }
