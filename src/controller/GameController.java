@@ -1,6 +1,8 @@
 package controller;
 
 import controller.gamephases.BetPhaseController;
+import controller.gamephases.CardsDistributionController;
+import controller.gamephases.GamePhaseManager;
 import model.game.Game;
 import model.game.enums.Actions;
 import model.game.enums.Chips;
@@ -16,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import misc.Utils;
 
@@ -37,6 +40,7 @@ public class GameController {
         gamePage = new GamePage();
 
         User user = Controller.getUser();
+
         // Game Model initialization
         game = Game.getInstance();
         game.init(user, 2000);
@@ -50,17 +54,25 @@ public class GameController {
         List chips = new ArrayList<>(Arrays.asList(Chips.values()));
 
         gamePage.drawUserInterface(actions, chips);
-
-
         gamePage.drawInitialGameState(getPlayerPanels());
 
-        /**
-         * BET PHASE
-         */
         addActionListeners();
-        BetPhaseController betPhase = new BetPhaseController(this);
-        betPhase.manage();
 
+        GamePhaseManager gamePhaseManager = new GamePhaseManager();
+
+        /** BET PHASE **/
+        BetPhaseController betPhaseController = new BetPhaseController(this);
+        /** CARDS DISTRIBUTIONS PHASE **/
+        CardsDistributionController cardsDistributionController = new CardsDistributionController(this);
+        /** USERS ACTIONS PHASE **/
+        /** PAYMENTS PHASE **/
+
+        /** Create the game flow */
+        gamePhaseManager.setNextPhase(betPhaseController);
+        betPhaseController.setNextPhase(cardsDistributionController);
+        cardsDistributionController.setNextPhase(null);
+
+        gamePhaseManager.manageNextPhase(); // Start the flow
     }
 
     public static GameController getInstance() {
@@ -165,6 +177,7 @@ public class GameController {
     public void addChipsListeners(){
 
     }
+
     public void removeChipsListeners(){
 
     }
@@ -177,8 +190,12 @@ public class GameController {
         playerPanel.updateLastChipPanel(chip.name().toLowerCase());
     }
 
-    public void drawToNotificationsPanel(Component component){
-        JPanel notificationsPanel = gamePage.getNotificationsPanel();
+    /***********************
+     * GETTERS
+     * *********************/
+
+    public GamePage getGamePage() {
+        return gamePage;
     }
 }
 

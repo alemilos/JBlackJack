@@ -41,11 +41,16 @@ public class PlayerPanel extends JPanel{
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.setBackground(null);
 
+        JLabel nameLabel =  new JLabel(player.getName());
+        nameLabel.setAlignmentX(CENTER_ALIGNMENT);
+        nameLabel.setFont(new Font("Arial", 0, 16));
+        nameLabel.setForeground(Color.white);
+
         container.add(totalChipsPanel);
         container.add(Box.createRigidArea(new Dimension(0,5)));
         container.add(chipContainer);
         container.add(Box.createRigidArea(new Dimension(0,5)));
-        container.add(new JLabel(player.getName()));
+        container.add(nameLabel);
 
         add(container, BorderLayout.SOUTH);
     }

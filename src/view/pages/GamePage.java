@@ -1,6 +1,7 @@
 package view.pages;
 
 import misc.Constants;
+import view.components.game.NotificationsPanel;
 import view.components.game.TablePanel;
 import view.components.game.PlayerPanel;
 import view.ui.IconButton;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.io.File;
 import java.io.IOException;
 
+import static misc.Constants.PRIMARY_COLOR;
+
 public class GamePage extends JFrame {
 
     private JButton leaveBtn;
@@ -21,7 +24,7 @@ public class GamePage extends JFrame {
 
     private JPanel actionsContainer;
     private JPanel chipsContainer;
-    private JPanel notificationsPanel;
+    private NotificationsPanel notificationsPanel;
 
     private TablePanel tablePanel;
 
@@ -55,8 +58,8 @@ public class GamePage extends JFrame {
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
+        // Leave Button
         leaveBtn = new JButton();
-        leaveBtn.setBounds((int)(dim.getWidth() - 100), 10, 40, 40);
         leaveBtn.setOpaque(false);
         leaveBtn.setContentAreaFilled(false);
         leaveBtn.setFocusPainted(false);
@@ -70,9 +73,8 @@ public class GamePage extends JFrame {
             System.exit(1);
         }
 
-
+        // Music Button
         musicBtn = new JButton();
-        musicBtn.setBounds((int)(dim.getWidth() - 150), 10, 40, 40);
         musicBtn.setOpaque(false);
         musicBtn.setFocusPainted(false);
         musicBtn.setContentAreaFilled(false);
@@ -90,11 +92,11 @@ public class GamePage extends JFrame {
         JLabel gameTitle = new JLabel("JBlackJack");
         gameTitle.setFont(new Font("Arial", Font.BOLD, 32));
         gameTitle.setForeground(Color.white);
-        gameTitle.setBounds(60, 10, 200, 40);
+        gameTitle.setBackground(null);
 
         JPanel background = new JPanel(new BorderLayout());
-        background.setBackground(Color.black);
-        background.setBorder(new EmptyBorder(60,60,60,60));
+        background.setBackground(PRIMARY_COLOR);
+        background.setBorder(new EmptyBorder(10,60,60,60));
 
         tablePanel= new TablePanel();
 
@@ -104,14 +106,21 @@ public class GamePage extends JFrame {
         tablePanel.getUserInterfacePanel().add(actionsContainer, BorderLayout.NORTH);
         tablePanel.getUserInterfacePanel().add(chipsContainer, BorderLayout.SOUTH);
 
-        notificationsPanel = new JPanel(new BorderLayout());
-        notificationsPanel.setBackground(Color.red);
+        notificationsPanel= new NotificationsPanel();
 
-        background.add(gameTitle);
-        background.add(notificationsPanel);
-        background.add(leaveBtn);
-        background.add(musicBtn);
-        background.add(tablePanel);
+        JPanel buttonsContainer = new JPanel(new FlowLayout());
+        buttonsContainer.setBackground(null);
+        buttonsContainer.add(musicBtn);
+        buttonsContainer.add(leaveBtn);
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(null);
+        topPanel.add(gameTitle, BorderLayout.WEST);
+        topPanel.add(notificationsPanel, BorderLayout.CENTER);
+        topPanel.add(buttonsContainer, BorderLayout.EAST);
+
+        background.add(topPanel, BorderLayout.NORTH);
+        background.add(tablePanel, BorderLayout.CENTER);
         add(background);
 
         setVisible(true);
@@ -131,8 +140,8 @@ public class GamePage extends JFrame {
         container.setBackground(Color.black);
 
         actions.forEach( action -> {
-                    JButton actionBtn = new JButton(action);
-                    actionBtn.setFont(new Font(Constants.FONT_FAMILY, Font.BOLD, 16));
+                    IconButton actionBtn = new IconButton(new ImageIcon("./assets/buttons/actions/"+action.toLowerCase() + ".png"));
+                    actionBtn.setEnabled(false); // Disabled by default
 
                     actionButtons.add(actionBtn);
                     container.add(actionBtn);
@@ -147,6 +156,8 @@ public class GamePage extends JFrame {
 
         chips.forEach(chip -> {
            IconButton chipBtn = new IconButton(new ImageIcon("./assets/icons/chips/" + chip.toString().toLowerCase() + ".png"));
+           chipBtn.setEnabled(false); // default disabled
+
            chipButtons.add(chipBtn);
            container.add(chipBtn);
         });
@@ -179,6 +190,25 @@ public class GamePage extends JFrame {
         tablePanel.getUsersPanel().add(playerPanel);
     }
 
+    /**
+     *
+     */
+    public void disableBetButtons(){
+        chipButtons.forEach(chipBtn -> chipBtn.setEnabled(false));
+        deleteBetBtn.setEnabled(false);
+        undoBtn.setEnabled(false);
+    }
+
+    /**
+     *
+     */
+    public void enableBetButtons(){
+        chipButtons.forEach(chipBtn -> chipBtn.setEnabled(true));
+        deleteBetBtn.setEnabled(true);
+        undoBtn.setEnabled(true);
+    }
+
+
     public List<JButton> getChipButtons() {
         return chipButtons;
     }
@@ -199,7 +229,8 @@ public class GamePage extends JFrame {
         return deleteBetBtn;
     }
 
-    public JPanel getNotificationsPanel() {
+    public NotificationsPanel getNotificationsPanel() {
         return notificationsPanel;
     }
+
 }
