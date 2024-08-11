@@ -23,7 +23,6 @@ public class Bet {
      * @param chip
      */
     public void add(Chips chip){
-
         chipAddedQueue.add(chip);
         if (containsChip(chip)){
             chips.replace(chip, chips.get(chip)  +1);
@@ -58,6 +57,7 @@ public class Bet {
         return null;
     }
 
+
     /**
      * Delete the Bet, all the chips are nullified.
      */
@@ -72,6 +72,16 @@ public class Bet {
      */
     public boolean isEmpty(){
         return chips.isEmpty();
+    }
+
+    /**
+     * Double the bet.
+     */
+    public void x2(){
+        for (Map.Entry<Chips, Integer> entry: chips.entrySet()){
+            Chips chip = entry.getKey();
+            chips.put(chip, chips.get(chip) * 2);
+        }
     }
 
     /**

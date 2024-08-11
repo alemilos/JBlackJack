@@ -6,23 +6,25 @@ import model.game.enums.Chips;
 import model.game.enums.SplitType;
 import model.game.managers.ActionManager;
 import model.game.models.hand.Hand;
-import model.game.models.hand.SplitHand;
 import model.game.models.standalones.Bankroll;
 import model.game.models.standalones.Bet;
 import model.game.models.standalones.Card;
+import model.game.utils.Utils;
 
 import java.util.*;
 
-public abstract class Player {
+import static misc.Updates.BET_UPDATE;
+import static misc.Updates.CARD_ADD;
+import static model.game.utils.Constants.*;
+
+public abstract class Player extends Observable{
     protected String name;
     protected Hand hand;
-    protected SplitHand splitHand;
     protected Bankroll bankroll; // For each chip, how many does the user have.
     protected Bet bet;
 
     // Split Logic
     protected boolean isSplitTurn;
-    private SplitType splitType;
 
 
     public Player(String name, int buyIn){
@@ -30,18 +32,26 @@ public abstract class Player {
         this.hand = new Hand();// Empty Hand to get started.
         this.bankroll= new Bankroll(buyIn);
         this.bet = new Bet();
-        this.splitType = SplitType.NOT_SPLIT;
     }
 
+    public List<Actions> getAvailableActions(){
+        List<Actions> availableActions = new ArrayList<>();
 
-    /**
-     * Create the splitHand
-     * @param card
-     */
-    public void createSplitHand(Card card) {
-        this.splitHand = new SplitHand();
-        splitHand.receive(card);
+        if (hand.softTotal() >= BLACKJACK){
+            return availableActions;
+        }
+
+        // Can player double its bet ?  Has the player only 2 cards ? Is cards total value between 9 and 11 included ?
+        if (canDoubleDown()){
+            availableActions.add(Actions.DOUBLE_DOWN);
+        }
+
+        availableActions.add(Actions.STAND);
+        availableActions.add(Actions.HIT);
+
+        return availableActions;
     }
+
 
     public Bet getBet() {
         return bet;
@@ -57,22 +67,37 @@ public abstract class Player {
     }
 
     /**
+     * Can the player double down ?
+     * - does he have enough bankrool to double ?
+     * - are only the first 2 cards dealt ?
+     * - is the card total value between 9 and 11 ?
+     * @return
+     */
+    public boolean canDoubleDown(){
+        return bankroll.canPay(bet.total() * 2) && hand.size() == 2 && Utils.between(hand.softTotal(), DOUBLE_DOWN_MIN,DOUBLE_DOWN_MAX);
+    }
+
+    /**
      * If the Player has a Chip, add it to the Bet.
      */
     public void addToBet(Chips chip){
         if (bankroll.canPay(chip.getValue())){
             bet.add(chip); // Add the chip to the bet
             bankroll.pay(chip.getValue());
+
+            notifyBet();
         }
     }
-
 
     public void popBet(){
         Chips removedChip = bet.pop();
         if(removedChip != null){
             bankroll.receive(removedChip.getValue());
+
+            notifyBet();
         }
     }
+
 
     /**
      * Clear the Bet Chips and get them back on the Bankroll
@@ -86,8 +111,21 @@ public abstract class Player {
         }
 
         bet.delete();
+
+        notifyBet();
     }
 
+    /**
+     * Double the bet by paying again from bankroll and by betting the previous betted value.
+     */
+    public void doubleBet(){
+        if (canDoubleDown()) {
+            bankroll.pay(bet.total());
+            bet.x2();
+
+            notifyBet();
+        }
+    }
 
     /**
      * Perform an action to the current hand
@@ -106,16 +144,10 @@ public abstract class Player {
        return hand;
     }
 
-    /**
-     * If the user is playing in the split, the active hand will be the splitHand,
-     * otherwise it will be the default hand.
-     * @return
-     */
-    public Hand getPlayingHand() {
-        if (isSplitTurn){
-            return splitHand;
-        }
-        return hand;
+    public void receiveCard(Card card){
+        hand.add(card);
+
+        notifyCardAdd();
     }
 
     @Override
@@ -126,21 +158,20 @@ public abstract class Player {
     /**
      * GETTERS
      */
-
-    public SplitType getSplitType() {
-        return splitType;
-    }
-
     public String getName() {
         return name;
     }
 
-    /**
-     * SETTERS
-     */
-
-    public void setSplitType(SplitType splitType){
-        this.splitType = splitType;
+    private void notifyBet(){
+        setChanged();
+        notifyObservers(BET_UPDATE);
     }
+    private void notifyCardAdd(){
+        setChanged();
+        notifyObservers(CARD_ADD);
+    }
+
 }
+
+
 

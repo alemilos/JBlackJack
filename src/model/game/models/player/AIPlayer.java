@@ -41,15 +41,15 @@ public class AIPlayer extends Player{
             if (probability > 85){
                 int isPurple = rand.nextInt(0,1);
                 if (isPurple == 1){
-                    bet.add(Chips.PURPLE);
+                    addToBet(Chips.PURPLE);
                 }else{
-                    bet.add(Chips.PINK);
+                    addToBet(Chips.PINK);
                 }
             }
 
             // Medium Bet
             if (probability > 60){
-                bet.add(Chips.BLUE);
+                addToBet(Chips.BLUE);
             }
 
             // All other cases
@@ -58,13 +58,13 @@ public class AIPlayer extends Player{
                 int whichChip = rand.nextInt(0,3);
                 for (int i = 0; i < kChips; i++) {
                 if (whichChip == 0){
-                    bet.add(Chips.YELLOW);
+                    addToBet(Chips.YELLOW);
                 }else if(whichChip ==1){
-                    bet.add(Chips.GREEN);
+                    addToBet(Chips.GREEN);
                 }else if(whichChip == 2){
-                    bet.add(Chips.RED);
+                    addToBet(Chips.RED);
                 }else if (whichChip == 3){
-                    bet.add(Chips.BLACK);
+                    addToBet(Chips.BLACK);
                 }
             }
             }
@@ -90,6 +90,8 @@ public class AIPlayer extends Player{
                 // Safe play
                 makeAction(Actions.STAND);
             }
+        }else{
+            makeAction(Actions.HIT);
         }
 
 

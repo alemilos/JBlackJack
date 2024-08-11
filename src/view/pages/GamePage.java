@@ -1,6 +1,7 @@
 package view.pages;
 
 import misc.Constants;
+import view.components.game.ActionButton;
 import view.components.game.NotificationsPanel;
 import view.components.game.TablePanel;
 import view.components.game.PlayerPanel;
@@ -28,7 +29,7 @@ public class GamePage extends JFrame {
 
     private TablePanel tablePanel;
 
-    private List<JButton> actionButtons;
+    private List<ActionButton> actionButtons;
     private List<JButton> chipButtons;
 
     // Actions on chips btns
@@ -140,11 +141,10 @@ public class GamePage extends JFrame {
         container.setBackground(Color.black);
 
         actions.forEach( action -> {
-                    IconButton actionBtn = new IconButton(new ImageIcon("./assets/buttons/actions/"+action.toLowerCase() + ".png"));
-                    actionBtn.setEnabled(false); // Disabled by default
+                    ActionButton actionBtn = new ActionButton(action);
 
                     actionButtons.add(actionBtn);
-                    container.add(actionBtn);
+                    container.add(actionBtn.getIconButton());
         });
 
         actionsContainer.add(container, BorderLayout.CENTER);
@@ -183,7 +183,7 @@ public class GamePage extends JFrame {
         sabot.setIcon(new ImageIcon(new ImageIcon("./assets/cards/deckblack1.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH)));
         tablePanel.getDealerPanel().add(sabot, BorderLayout.EAST);
 
-        playerPanels.forEach(playerPanel -> drawPlayerPanel(playerPanel));
+        playerPanels.forEach(this::drawPlayerPanel);
     }
 
     public void drawPlayerPanel(PlayerPanel playerPanel){
@@ -191,30 +191,32 @@ public class GamePage extends JFrame {
     }
 
 
-    /**
-     *
-     */
     public void disableBetButtons(){
         chipButtons.forEach(chipBtn -> chipBtn.setEnabled(false));
         deleteBetBtn.setEnabled(false);
         undoBtn.setEnabled(false);
     }
 
-    /**
-     *
-     */
     public void enableBetButtons(){
         chipButtons.forEach(chipBtn -> chipBtn.setEnabled(true));
         deleteBetBtn.setEnabled(true);
         undoBtn.setEnabled(true);
     }
 
+    /** Enable all action buttons that are in given list. */
+    public void enableActionButtons(List<String> actions){
+        actionButtons.forEach(actionBtn -> {
+            if (actions.contains(actionBtn.getActionName().toLowerCase())){
+                actionBtn.getIconButton().setEnabled(true);
+            }
+        });
+    }
 
     public List<JButton> getChipButtons() {
         return chipButtons;
     }
 
-    public List<JButton> getActionButtons() {
+    public List<ActionButton> getActionButtons() {
         return actionButtons;
     }
 

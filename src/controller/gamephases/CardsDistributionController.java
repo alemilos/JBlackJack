@@ -38,7 +38,6 @@ public class CardsDistributionController extends GamePhaseManager implements Man
             TimerTask task = new TimerTask() {
                 @Override
                 public void run() {
-                    gameController.drawPlayerCards(player);
 
                     // On last player draw the dealer cards and go to the next controller manager
                     if (currentIndex >= game.getPlayingPlayers().size()-1){

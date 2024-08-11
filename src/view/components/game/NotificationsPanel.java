@@ -62,7 +62,7 @@ public class NotificationsPanel extends JPanel {
     }
 
     public void addTextNotification(String text){
-        if(progressBar != null) timerContainer.remove(progressBar);
+        clearNotificationBar();
         notificationTitle.setText(text);
     }
 

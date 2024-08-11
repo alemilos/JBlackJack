@@ -1,16 +1,21 @@
 package view.components.game;
 
+import model.game.enums.Chips;
 import model.game.models.player.AIPlayer;
 import model.game.models.player.Player;
+import model.game.models.standalones.Card;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.Observable;
+import java.util.Observer;
 
 import static misc.Constants.BASE_FONT;
 import static misc.Constants.BOLD_FONT;
+import static misc.Updates.*;
 
-public class PlayerPanel extends JPanel{
+public class PlayerPanel extends JPanel implements Observer{
 
     private JPanel totalChipsPanel;
     private JLayeredPane cardsLayeredPane;
@@ -35,6 +40,7 @@ public class PlayerPanel extends JPanel{
         JPanel chipContainer= new JPanel();
         chipContainer.setBackground(null);
 
+        // Based on Player Type the UI will be bigger or smaller (AI Players)
         if (player instanceof AIPlayer) {
             chipSize= 50;
             cardHeight = 80;
@@ -68,7 +74,7 @@ public class PlayerPanel extends JPanel{
 
         cardsLayeredPane = new JLayeredPane();
         cardsLayeredPane.setOpaque(true);
-        cardsLayeredPane.setPreferredSize(new Dimension(140,cardHeight));
+        cardsLayeredPane.setPreferredSize(new Dimension(200,cardHeight));
 
         cardsTotalValueLabel = new JLabel();
         cardsTotalValueLabel.setFont(BASE_FONT);
@@ -97,14 +103,14 @@ public class PlayerPanel extends JPanel{
             chipLabel.setIcon(chipPlaceholder);
             return;
         }
-        chipLabel.setIcon(new ImageIcon(new ImageIcon("./assets/icons/chips/" + chipName + ".png").getImage().getScaledInstance(chipSize,chipSize,Image.SCALE_SMOOTH)));
+        chipLabel.setIcon(new ImageIcon(new ImageIcon("./assets/icons/chips/" + chipName.toLowerCase() + ".png").getImage().getScaledInstance(chipSize,chipSize,Image.SCALE_SMOOTH)));
     }
 
     public void addCard(String value, String suit){
         JLabel card = new JLabel();
         card.setIcon(new ImageIcon (new ImageIcon("./assets/cards/" + suit + value + ".png").getImage().getScaledInstance(cardWidth,cardHeight, 0)));
         card.setBounds(lastCardX,0,cardWidth,cardHeight);
-        lastCardX+=36;
+        lastCardX+=26;
 
         cardsLayeredPane.add(card, cardsNumber++);
     }
@@ -113,8 +119,21 @@ public class PlayerPanel extends JPanel{
         cardsTotalValueLabel.setText("Tot: " + value);
     }
 
-    public void clearCards(){
-        cardsLayeredPane.removeAll();
-    }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        Player player = (Player)o;
+
+        if (arg == BET_UPDATE){
+            Chips chip = player.getBet().peek();
+            updateLastChipPanel(chip != null ? chip.toString() : null);
+            updateTotalChipsPanel(player.getBet().total());
+        }
+
+        if (arg == CARD_ADD){
+            Card card = player.getHand().peek();
+            addCard(card.lookupValue(), card.lookupSuit().toString());
+            updateCardsTotalValue(player.getHand().softTotal());
+        }
+    }
 }

@@ -38,7 +38,7 @@ public class GameController {
 
     private HumanPlayer humanPlayer;
 
-    private Map<Player, PlayerPanel> mapPlayerToPanel;
+    private List<PlayerPanel> playerPanels;
 
     private GameController(){
         gamePage = new GamePage();
@@ -49,21 +49,23 @@ public class GameController {
         game = Game.getInstance();
         game.init(user, 2000);
 
-        initMapPlayerToPanel();
-
         humanPlayer = game.getHumanPlayer();
-        game.startGame();
+        game.startGame(); // Game starts
+
+        initPlayerPanelsAndAddObservers();
 
         List<String> actions = Arrays.stream(Actions.values()).map(action->Utils.toCapitalizedString(action.toString(), "_", " ")).collect(Collectors.toList());
         List chips = new ArrayList<>(Arrays.asList(Chips.values()));
 
+        // Draw the UI
         gamePage.drawUserInterface(actions, chips);
-        gamePage.drawInitialGameState(getPlayerPanels());
+        gamePage.drawInitialGameState(playerPanels);
 
         addActionListeners();
 
-        GamePhaseManager gamePhaseManager = new GamePhaseManager();
+         /** Assemble the game flow steps */
 
+        GamePhaseManager gamePhaseManager = new GamePhaseManager();
         /** BET PHASE **/
         BetPhaseController betPhaseController = new BetPhaseController(this);
         /** CARDS DISTRIBUTIONS PHASE **/
@@ -93,31 +95,6 @@ public class GameController {
         instance = null;
     }
 
-    private void initMapPlayerToPanel(){
-        mapPlayerToPanel = new HashMap<>();
-        game.getPlayers().forEach(player -> {
-            mapPlayerToPanel.put(player, new PlayerPanel(player));
-        });
-    }
-
-    private List<PlayerPanel> getPlayerPanels(){
-       ArrayList<PlayerPanel> playerPanels = new ArrayList<>();
-       ArrayList<Player> players = new ArrayList<>(mapPlayerToPanel.keySet());
-
-        for (Player player : players) {
-            if (!(player instanceof HumanPlayer)) {
-                playerPanels.add(mapPlayerToPanel.get(player));
-            }
-        }
-
-        for (Player player : players) {
-            if (player instanceof HumanPlayer) {
-                playerPanels.add(2, mapPlayerToPanel.get(player)); // Make sure the human player is always 2nd.
-                break;
-            }
-        }
-       return playerPanels;
-    }
 
     public void addActionListeners(){
         gamePage.getLeaveBtn().addActionListener(new ActionListener() {
@@ -133,15 +110,14 @@ public class GameController {
         });
 
         gamePage.getActionButtons().forEach(actionBtn-> {
-            actionBtn.addActionListener(new ActionListener() {
+            actionBtn.getIconButton().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("Action clicked");
+                    humanPlayer.makeAction(Utils.actionFromString(actionBtn.getActionName()));
                 }
             });
         });
 
-        PlayerPanel playerPanel = (PlayerPanel)gamePage.getTablePanel().getUsersPanel().getComponent(2);
         for (int i = 0; i < gamePage.getChipButtons().size(); i++) {
             JButton chipBtn = gamePage.getChipButtons().get(i);
             Chips chip = Chips.values()[i];
@@ -150,8 +126,6 @@ public class GameController {
                 public void actionPerformed(ActionEvent e) {
                     if(humanPlayer.canBet(chip)){
                         humanPlayer.addToBet(chip);
-                        playerPanel.updateTotalChipsPanel(humanPlayer.getBet().total());
-                        playerPanel.updateLastChipPanel(chip.name().toLowerCase());
                     }
                 }
             });
@@ -161,14 +135,6 @@ public class GameController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 humanPlayer.popBet();
-                playerPanel.updateTotalChipsPanel(humanPlayer.getBet().total());
-
-                Chips chip = humanPlayer.getBet().peek();
-                if (chip != null) {
-                    playerPanel.updateLastChipPanel(chip.name().toLowerCase());
-                }else{
-                    playerPanel.updateLastChipPanel(null);
-                }
             }
         });
 
@@ -176,19 +142,10 @@ public class GameController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 humanPlayer.deleteBet();
-                playerPanel.updateTotalChipsPanel(humanPlayer.getBet().total());
-                playerPanel.updateLastChipPanel(null);
             }
         });
     }
 
-    public void drawAIBet(Player player){
-        PlayerPanel playerPanel = mapPlayerToPanel.get(player);
-        playerPanel.updateTotalChipsPanel(player.getBet().total());
-        Chips chip = player.getBet().peek();
-        if (chip != null)
-        playerPanel.updateLastChipPanel(chip.name().toLowerCase());
-    }
 
     public void drawDealerCards(){
         Dealer dealer = Dealer.getInstance();
@@ -199,14 +156,13 @@ public class GameController {
         });
     }
 
-    public void drawPlayerCards(Player player){
-       PlayerPanel playerPanel = mapPlayerToPanel.get(player);
-
-       player.getHand().getCards().forEach(card -> {
-           playerPanel.addCard(card.lookupValue(), card.lookupSuit().toString());
+    public void initPlayerPanelsAndAddObservers(){
+        playerPanels = new ArrayList<>();
+       game.getPlayers().forEach(player -> {
+           PlayerPanel playerPanel = new PlayerPanel(player);
+            playerPanels.add(playerPanel);
+            player.addObserver(playerPanel);
        });
-
-       playerPanel.updateCardsTotalValue(player.getHand().softTotal());
     }
 
     /***********************

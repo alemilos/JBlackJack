@@ -6,10 +6,11 @@ import model.game.enums.Ranks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Observable;
 
 import static model.game.utils.Constants.BLACKJACK;
 
-public class Hand {
+public class Hand{
 
     protected List<Card> cards;
 
@@ -25,6 +26,10 @@ public class Hand {
         return cards.size();
     }
 
+    public void add(Card card){
+        cards.add(card);
+    }
+
     public Card get(int index) throws IndexOutOfBoundsException{
         try{
             return cards.get(index);
@@ -34,16 +39,14 @@ public class Hand {
         }
     }
 
-    public Card pop() throws NoSuchElementException {
-        if (cards.size() > 0){
-            return cards.remove(cards.size() - 1);
+    /** Peek the last added card to the hand*/
+    public Card peek(){
+        if (!cards.isEmpty()){
+            return cards.get(cards.size()-1);
         }
-        throw new NoSuchElementException();
+        return null;
     }
 
-    public void receive(Card card){
-        cards.add(card);
-    }
 
     public List<Card> getCards() {
         return cards;

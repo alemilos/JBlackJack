@@ -18,7 +18,7 @@ public class Game {
     private static Game instance;
 
     private final int AI_PLAYERS_NUM= 4;
-    private final int BUY_IN_AI_PLAYERS = 1000;
+    private final int BUY_IN_AI_PLAYERS = 2000;
 
     private User user;
 
@@ -26,7 +26,6 @@ public class Game {
     private HumanPlayer humanPlayer;
 
     private Dealer dealer;
-    private Sabot sabot;
 
     private Date startedAt;
     private Date endedAt;
@@ -52,7 +51,6 @@ public class Game {
         this.user = user;
         this.players= initializePlayers(user,  userBuyIn);
         this.dealer = Dealer.getInstance();
-        this.sabot = Sabot.getInstance(6);
     }
 
     public void startGame(){

@@ -22,12 +22,13 @@ public class ActionManager {
     }
 
     public void playAction(Actions action){
+
+        System.out.println(player.getName() + " does: " + action.toString());
+
         switch (action){
             case HIT -> hit();
             case STAND -> stand();
-            case SPLIT -> split();
             case DOUBLE_DOWN -> doubleDown();
-            case INSURANCE -> insurance();
         }
     }
 
@@ -42,30 +43,6 @@ public class ActionManager {
      * Finish the turn.
      */
     private void stand(){
-        System.out.println("Player ends his turn!");
-    }
-
-    /**
-     * If the first 2 dealt cards have the same rank, the split allows to play 2 concurrent hands.
-     * If the initial dealt cards are both Aces, only another card can be asked after the split.
-     */
-    private void split() {
-        Hand hand = player.getHand();
-
-        // Check if the 2 dealt cards have the same rank
-        if (hand.size() == 2 && hand.get(0).lookupRank() == hand.get(1).lookupRank()){
-
-            // If the Cards are both ACES
-            if (hand.get(0).lookupRank() == Ranks.ACE && hand.get(1).lookupRank() == Ranks.ACE){
-                // Set the Split to ACE type
-                player.setSplitType(SplitType.ACE);
-            }else {
-                // ... otherwise a NORMAL split type
-                player.setSplitType(SplitType.NORMAL);
-            }
-
-            player.createSplitHand(player.getHand().pop()); // Create the Split Hand with
-        }
     }
 
     /**
@@ -74,11 +51,10 @@ public class ActionManager {
      * NOTE: The double down action is available also in the split hand.
      */
     private void doubleDown(){
-        Hand hand = player.getPlayingHand();
-        if (    hand.size() == 2 &&
-                Utils.between(hand.total(), DOUBLE_DOWN_MIN, DOUBLE_DOWN_MAX)
-        ){
-            System.out.println("Doubling Down!");
+        if (player.canDoubleDown()){
+
+            player.doubleBet();
+            dealer.dealCard(player);
         }
     }
 

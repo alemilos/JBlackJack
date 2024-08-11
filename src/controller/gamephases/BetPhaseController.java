@@ -40,12 +40,11 @@ public class BetPhaseController extends GamePhaseManager implements Manageable{
 
         game.getPlayers().forEach(player -> {
             if (!(player instanceof HumanPlayer)) {
-                ((AIPlayer) player).simulateBet();
                 int randomDelay = (int) (Math.random() * BET_TIME_MS - 1000) + 1000; // Random delay between 1 and bet time
                 Timer aiTimer = new Timer(randomDelay, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        gameController.drawAIBet(player);
+                        ((AIPlayer) player).simulateBet();
                     }
                 });
                 aiTimer.setRepeats(false);

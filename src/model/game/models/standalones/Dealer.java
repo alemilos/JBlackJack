@@ -5,8 +5,9 @@ import model.game.models.hand.Hand;
 import model.game.models.player.Player;
 
 import java.util.List;
+import java.util.Observable;
 
-public class Dealer {
+public class Dealer extends Observable {
 
     private static Dealer instance;
 
@@ -44,14 +45,14 @@ public class Dealer {
      */
     public void dealCard(Player player){
         Card dealtCard = sabot.dealCard();
-        player.getPlayingHand().receive(dealtCard);
+        player.receiveCard(dealtCard);
     }
 
     public void dealDealerCard(boolean isHidden){
         if (isHidden) {
-           hand.receive(sabot.dealHiddenCard());
+           hand.add(sabot.dealHiddenCard());
         }else{
-            hand.receive(sabot.dealCard());
+            hand.add(sabot.dealCard());
         }
     }
 
