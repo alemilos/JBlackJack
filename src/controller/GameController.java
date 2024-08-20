@@ -5,28 +5,17 @@ import controller.gamephases.CardsDistributionController;
 import controller.gamephases.GamePhaseManager;
 import controller.gamephases.UsersActionsController;
 import model.game.Game;
-import model.game.enums.Actions;
-import model.game.enums.Chips;
-import model.game.enums.Ranks;
 import model.game.enums.Suits;
-import model.game.models.player.AIPlayer;
 import model.game.models.player.HumanPlayer;
-import model.game.models.player.Player;
 import model.game.models.standalones.Dealer;
 import model.global.User;
+import view.components.game.ChipButton;
 import view.components.game.PlayerPanel;
 import view.pages.GamePage;
-
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-import misc.Utils;
-
-import javax.swing.*;
 
 public class GameController {
 
@@ -54,11 +43,6 @@ public class GameController {
 
         initPlayerPanelsAndAddObservers();
 
-        List<String> actions = Arrays.stream(Actions.values()).map(action->Utils.toCapitalizedString(action.toString(), "_", " ")).collect(Collectors.toList());
-        List chips = new ArrayList<>(Arrays.asList(Chips.values()));
-
-        // Draw the UI
-        gamePage.drawUserInterface(actions, chips);
         gamePage.drawInitialGameState(playerPanels);
 
         addActionListeners();
@@ -109,36 +93,35 @@ public class GameController {
             }
         });
 
-        gamePage.getActionButtons().forEach(actionBtn-> {
+        gamePage.getTablePanel().getUserInterfacePanel().getActionButtons().forEach(actionBtn-> {
             actionBtn.getIconButton().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    humanPlayer.makeAction(Utils.actionFromString(actionBtn.getActionName()));
+                    humanPlayer.makeAction(actionBtn.getAction());
                 }
             });
         });
 
-        for (int i = 0; i < gamePage.getChipButtons().size(); i++) {
-            JButton chipBtn = gamePage.getChipButtons().get(i);
-            Chips chip = Chips.values()[i];
-            chipBtn.addActionListener(new ActionListener() {
+        for (int i = 0; i < gamePage.getTablePanel().getUserInterfacePanel().getChipButtons().size(); i++) {
+            ChipButton chipBtn = gamePage.getTablePanel().getUserInterfacePanel().getChipButtons().get(i);
+            chipBtn.getIconBtn().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if(humanPlayer.canBet(chip)){
-                        humanPlayer.addToBet(chip);
+                    if(humanPlayer.canBet(chipBtn.getChip())){
+                        humanPlayer.addToBet(chipBtn.getChip());
                     }
                 }
             });
         }
 
-        gamePage.getUndoBtn().addActionListener(new ActionListener() {
+        gamePage.getTablePanel().getUserInterfacePanel().getUndoBtn().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 humanPlayer.popBet();
             }
         });
 
-        gamePage.getDeleteBetBtn().addActionListener(new ActionListener() {
+        gamePage.getTablePanel().getUserInterfacePanel().getDeleteBetBtn().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 humanPlayer.deleteBet();
@@ -161,8 +144,13 @@ public class GameController {
        game.getPlayers().forEach(player -> {
            PlayerPanel playerPanel = new PlayerPanel(player);
             playerPanels.add(playerPanel);
+
+            // PlayerPanels observe Player models
             player.addObserver(playerPanel);
        });
+
+        // UserInterfacePanel observes HumanPlayer
+        game.getHumanPlayer().addObserver(gamePage.getTablePanel().getUserInterfacePanel());
     }
 
     /***********************

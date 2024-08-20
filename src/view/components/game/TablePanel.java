@@ -1,7 +1,6 @@
 package view.components.game;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
@@ -10,7 +9,7 @@ import static misc.Constants.TABLE_COLOR;
 public class TablePanel extends JPanel {
 
     private JPanel dealerPanel;
-    private JPanel userInterfacePanel;
+    private UserInterfacePanel userInterfacePanel;
     private JPanel usersPanel;
 
     private JPanel dealerCardsPanel;
@@ -24,7 +23,7 @@ public class TablePanel extends JPanel {
         dealerPanel = new JPanel(new BorderLayout());
         dealerPanel.setBackground(null);
 
-        userInterfacePanel= new JPanel(new BorderLayout());
+        userInterfacePanel = new UserInterfacePanel();
 
         usersPanel= new JPanel(new JustifyBetweenFlowLayout());
         usersPanel.setBackground(null);
@@ -42,7 +41,7 @@ public class TablePanel extends JPanel {
         return dealerPanel;
     }
 
-    public JPanel getUserInterfacePanel() {
+    public UserInterfacePanel getUserInterfacePanel() {
         return userInterfacePanel;
     }
 

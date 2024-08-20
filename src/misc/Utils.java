@@ -17,19 +17,6 @@ public class Utils {
         return String.join(newDelim, capitalizedWords);
     }
 
-    public static Actions actionFromString(String actionName){
-        if (actionName.equalsIgnoreCase("HIT")){
-            return Actions.HIT;
-        }
-        if (actionName.equalsIgnoreCase("STAND")){
-            return Actions.STAND;
-        }
-        if (actionName.equalsIgnoreCase("DOUBLE_DOWN")){
-            return Actions.DOUBLE_DOWN;
-        }
-
-        return null;
-    }
 
 
 }

@@ -24,12 +24,8 @@ public class BetPhaseController extends GamePhaseManager implements Manageable{
         Game game = Game.getInstance();
         game.setBetPhase(true);
 
-        // Enable Chips Buttons so that user can make a bet
-        gameController.getGamePage().enableBetButtons();
-
         Runnable onTimerEnds = () -> {
             // Disable chips buttons
-            gameController.getGamePage().disableBetButtons();
 
             game.setBetPhase(false);
             manageNextPhase();

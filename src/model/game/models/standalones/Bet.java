@@ -74,6 +74,10 @@ public class Bet {
         return chips.isEmpty();
     }
 
+    public boolean isChipAddedQueueEmpty(){
+        return chipAddedQueue.isEmpty();
+    }
+
     /**
      * Double the bet.
      */

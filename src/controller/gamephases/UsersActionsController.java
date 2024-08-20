@@ -37,10 +37,8 @@ public class UsersActionsController extends GamePhaseManager implements Manageab
                 @Override
                 public void run() {
                     gameController.getGamePage().getNotificationsPanel().addTextNotification(player.getName() + " turn");
-                   if (player instanceof HumanPlayer){
-                       // Enable available actions on UI
-                        gameController.getGamePage().enableActionButtons(player.getAvailableActions().stream().map(action -> action.toString().toLowerCase()).toList());
 
+                   if (player instanceof HumanPlayer){
 
                    }else {
                        int randomDelay = (int) (Math.random() * USER_TURN_MS - 1000) + 1000; // Random delay between 1 and user turn duration

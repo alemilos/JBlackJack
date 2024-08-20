@@ -23,23 +23,13 @@ public class GamePage extends JFrame {
     private JButton leaveBtn;
     private JButton musicBtn;
 
-    private JPanel actionsContainer;
-    private JPanel chipsContainer;
     private NotificationsPanel notificationsPanel;
 
     private TablePanel tablePanel;
 
-    private List<ActionButton> actionButtons;
-    private List<JButton> chipButtons;
-
-    // Actions on chips btns
-    private JButton undoBtn;
-    private JButton deleteBetBtn;
 
     public GamePage(){
         drawGameAmbient();
-        actionButtons = new ArrayList<>();
-        chipButtons = new ArrayList<>();
     }
 
     public JButton getLeaveBtn() {
@@ -56,8 +46,6 @@ public class GamePage extends JFrame {
         setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
         // Leave Button
         leaveBtn = new JButton();
@@ -101,12 +89,6 @@ public class GamePage extends JFrame {
 
         tablePanel= new TablePanel();
 
-        actionsContainer = new JPanel(new BorderLayout());
-        chipsContainer = new JPanel(new BorderLayout());
-
-        tablePanel.getUserInterfacePanel().add(actionsContainer, BorderLayout.NORTH);
-        tablePanel.getUserInterfacePanel().add(chipsContainer, BorderLayout.SOUTH);
-
         notificationsPanel= new NotificationsPanel();
 
         JPanel buttonsContainer = new JPanel(new FlowLayout());
@@ -127,53 +109,6 @@ public class GamePage extends JFrame {
         setVisible(true);
     }
 
-    /**************
-     * User Interface functions
-     *************/
-
-    public void drawUserInterface(List actions, List chips){
-        drawUserActions(actions);
-        drawUserChips(chips);
-    }
-
-    private void drawUserActions(List<String> actions){
-        JPanel container = new JPanel(new FlowLayout());
-        container.setBackground(Color.black);
-
-        actions.forEach( action -> {
-                    ActionButton actionBtn = new ActionButton(action);
-
-                    actionButtons.add(actionBtn);
-                    container.add(actionBtn.getIconButton());
-        });
-
-        actionsContainer.add(container, BorderLayout.CENTER);
-    }
-
-    private void drawUserChips(List chips){
-        JPanel container = new JPanel(new FlowLayout());
-        container.setBackground(Color.black);
-
-        chips.forEach(chip -> {
-           IconButton chipBtn = new IconButton(new ImageIcon("./assets/icons/chips/" + chip.toString().toLowerCase() + ".png"));
-           chipBtn.setEnabled(false); // default disabled
-
-           chipButtons.add(chipBtn);
-           container.add(chipBtn);
-        });
-
-        // Draw Undo Button
-        undoBtn = new JButton();
-        undoBtn.setIcon(new ImageIcon(new ImageIcon("./assets/icons/undo.png").getImage().getScaledInstance(24,24,Image.SCALE_SMOOTH)));
-
-        deleteBetBtn = new JButton();
-        deleteBetBtn.setIcon(new ImageIcon(new ImageIcon("./assets/icons/bin.png").getImage().getScaledInstance(24,24,Image.SCALE_SMOOTH)));
-
-        container.add(undoBtn);
-        container.add(deleteBetBtn);
-
-        chipsContainer.add(container, BorderLayout.CENTER);
-    }
 
     /**
      * Draw the sabot, the users.
@@ -190,46 +125,8 @@ public class GamePage extends JFrame {
         tablePanel.getUsersPanel().add(playerPanel);
     }
 
-
-    public void disableBetButtons(){
-        chipButtons.forEach(chipBtn -> chipBtn.setEnabled(false));
-        deleteBetBtn.setEnabled(false);
-        undoBtn.setEnabled(false);
-    }
-
-    public void enableBetButtons(){
-        chipButtons.forEach(chipBtn -> chipBtn.setEnabled(true));
-        deleteBetBtn.setEnabled(true);
-        undoBtn.setEnabled(true);
-    }
-
-    /** Enable all action buttons that are in given list. */
-    public void enableActionButtons(List<String> actions){
-        actionButtons.forEach(actionBtn -> {
-            if (actions.contains(actionBtn.getActionName().toLowerCase())){
-                actionBtn.getIconButton().setEnabled(true);
-            }
-        });
-    }
-
-    public List<JButton> getChipButtons() {
-        return chipButtons;
-    }
-
-    public List<ActionButton> getActionButtons() {
-        return actionButtons;
-    }
-
     public TablePanel getTablePanel() {
         return tablePanel;
-    }
-
-    public JButton getUndoBtn() {
-        return undoBtn;
-    }
-
-    public JButton getDeleteBetBtn() {
-        return deleteBetBtn;
     }
 
     public NotificationsPanel getNotificationsPanel() {

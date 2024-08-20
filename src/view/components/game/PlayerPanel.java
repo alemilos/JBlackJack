@@ -6,7 +6,6 @@ import model.game.models.player.Player;
 import model.game.models.standalones.Card;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
