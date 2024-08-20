@@ -25,8 +25,6 @@ public class BetPhaseController extends GamePhaseManager implements Manageable{
         game.setBetPhase(true);
 
         Runnable onTimerEnds = () -> {
-            // Disable chips buttons
-
             game.setBetPhase(false);
             manageNextPhase();
         };

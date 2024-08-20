@@ -12,9 +12,13 @@ import model.game.models.player.Player;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Observable;
 import java.util.stream.Collectors;
 
-public class Game {
+import static misc.Updates.BET_FINISH;
+import static misc.Updates.BET_START;
+
+public class Game extends Observable {
     private static Game instance;
 
     private final int AI_PLAYERS_NUM= 4;
@@ -49,7 +53,8 @@ public class Game {
 
     public void init(User user, int userBuyIn){
         this.user = user;
-        this.players= initializePlayers(user,  userBuyIn);
+
+        initializePlayers(user,  userBuyIn);
         this.dealer = Dealer.getInstance();
     }
 
@@ -68,10 +73,9 @@ public class Game {
     /**
      * Initialize the Human Player and 4 AIPlayers
      * @param user The user to create the HumanPlayer with
-     * @return
      */
-    private List<Player> initializePlayers(User user, int userBuyIn){
-        ArrayList<Player> players = new ArrayList<>();
+    private void initializePlayers(User user, int userBuyIn){
+        players = new ArrayList<>();
 
         // Create
         for (int i = 0; i < AI_PLAYERS_NUM ; i++){
@@ -81,8 +85,6 @@ public class Game {
         // Add the human player
         humanPlayer = new HumanPlayer(user, userBuyIn);
         players.add(AI_PLAYERS_NUM / 2, humanPlayer);
-
-        return players;
     }
 
     public List<Player> getPlayers() {
@@ -101,8 +103,15 @@ public class Game {
         return dealer;
     }
 
+    /**
+     * Update the Bet Phase and notify the observers.
+     * @param betPhase weather the game is in bet state or not.
+     */
     public void setBetPhase(boolean betPhase) {
         isBetPhase = betPhase;
+
+        setChanged();
+        notifyObservers(betPhase ? BET_START : BET_FINISH);
     }
 
     public boolean isBetPhase(){

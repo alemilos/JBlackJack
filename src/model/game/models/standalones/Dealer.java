@@ -7,6 +7,8 @@ import model.game.models.player.Player;
 import java.util.List;
 import java.util.Observable;
 
+import static misc.Updates.CARD_ADD;
+
 public class Dealer extends Observable {
 
     private static Dealer instance;
@@ -54,6 +56,8 @@ public class Dealer extends Observable {
         }else{
             hand.add(sabot.dealCard());
         }
+
+        notifyCardUpdate();
     }
 
     /**
@@ -90,5 +94,10 @@ public class Dealer extends Observable {
     public void resetInstance(){
         instance = null;
         sabot.resetInstance();
+    }
+
+    private void notifyCardUpdate(){
+        setChanged();
+        notifyObservers(CARD_ADD);
     }
 }

@@ -58,11 +58,4 @@ public class ActionManager {
         }
     }
 
-    /**
-     * TODO
-     */
-    private void insurance(){
-
-    }
-
 }

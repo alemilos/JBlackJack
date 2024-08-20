@@ -93,7 +93,7 @@ public class UserInterfacePanel extends JPanel implements Observer {
     }
 
     /** Enable all action buttons that are in given list. */
-    public void enableActionButtons(){
+    private void enableActionButtons(){
         HumanPlayer player = Game.getInstance().getHumanPlayer();
         List<Actions> actions = player.getAvailableActions();
 
@@ -104,6 +104,10 @@ public class UserInterfacePanel extends JPanel implements Observer {
         });
     }
 
+    private void disableActionButtons(){
+        actionButtons.forEach(actionBtn -> actionBtn.getIconButton().setEnabled(false));
+    }
+
     public List<ChipButton> getChipButtons() {
         return chipButtons;
     }
@@ -112,13 +116,13 @@ public class UserInterfacePanel extends JPanel implements Observer {
         return actionButtons;
     }
 
-    public void disableBetButtons(){
+    private void disableBetButtons(){
         chipButtons.forEach(chipBtn -> chipBtn.getIconBtn().setEnabled(false));
         deleteBetBtn.setEnabled(false);
         undoBtn.setEnabled(false);
     }
 
-    public void enableBetButtons(){
+    private void enableBetButtons(){
         HumanPlayer player = Game.getInstance().getHumanPlayer();
 
         chipButtons.forEach(chipBtn -> {
@@ -132,10 +136,11 @@ public class UserInterfacePanel extends JPanel implements Observer {
     @Override
     public void update(Observable o, Object arg) {
 
-        if (arg == BET_UPDATE || arg == BET_START) enableBetButtons();
+        if (arg == BET_START || arg == BET_UPDATE) enableBetButtons();
         if (arg == BET_FINISH) disableBetButtons();
 
-        if (arg == TURN_UPDATE) enableActionButtons();
+        if (arg == TURN_START || arg == TURN_UPDATE) enableActionButtons();
+        if (arg == TURN_FINISH) disableActionButtons();
 
     }
 }

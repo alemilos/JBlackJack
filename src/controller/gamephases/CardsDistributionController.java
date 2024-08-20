@@ -39,9 +39,8 @@ public class CardsDistributionController extends GamePhaseManager implements Man
                 @Override
                 public void run() {
 
-                    // On last player draw the dealer cards and go to the next controller manager
+                    // On last player go to the next controller manager
                     if (currentIndex >= game.getPlayingPlayers().size()-1){
-                        gameController.drawDealerCards();
                         manageNextPhase();
                     }
                 }

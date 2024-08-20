@@ -130,15 +130,6 @@ public class GameController {
     }
 
 
-    public void drawDealerCards(){
-        Dealer dealer = Dealer.getInstance();
-
-        dealer.getHand().getCards().forEach(card -> {
-            Suits suit = card.lookupSuit();
-            gamePage.getTablePanel().addDealerCard(card.lookupValue(), suit != null ? suit.toString() : null);
-        });
-    }
-
     public void initPlayerPanelsAndAddObservers(){
         playerPanels = new ArrayList<>();
        game.getPlayers().forEach(player -> {
@@ -148,6 +139,12 @@ public class GameController {
             // PlayerPanels observe Player models
             player.addObserver(playerPanel);
        });
+
+       // UserInterfacePanel observes the game
+        game.addObserver(gamePage.getTablePanel().getUserInterfacePanel());
+
+        // DealerPanel observes the Dealer
+        Dealer.getInstance().addObserver(gamePage.getTablePanel().getDealerPanel());
 
         // UserInterfacePanel observes HumanPlayer
         game.getHumanPlayer().addObserver(gamePage.getTablePanel().getUserInterfacePanel());
