@@ -100,6 +100,7 @@ public class GameController {
                     // If the turn is played by HumanPlayer, perform the clicked action.
                     if (Game.getInstance().getTurn().getPlayer() instanceof HumanPlayer) {
                         Game.getInstance().getTurn().manageAction(actionBtn.getAction());
+                        restartHumanTimer();
                     }
                 }
             });

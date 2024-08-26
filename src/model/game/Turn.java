@@ -22,9 +22,11 @@ public class Turn extends Observable {
     public Turn(Player player){
         this.player = player;
         this.playedActions = new ArrayList<>();
+
+        start();
     }
 
-    public void start(){
+    private void start(){
         isActive = true;
 
         setChanged();
