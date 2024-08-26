@@ -34,6 +34,8 @@ public class Game extends Observable {
     private Date startedAt;
     private Date endedAt;
 
+    private Turn turn;
+
     private boolean isBetPhase;
 
     /**
@@ -116,5 +118,19 @@ public class Game extends Observable {
 
     public boolean isBetPhase(){
         return this.isBetPhase;
+    }
+
+    /**
+     * Start a new turn if previous doesn't exist or is terminated.
+     * @param player
+     */
+    public void playTurn(Player player){
+        if (turn == null || !turn.isActive()){
+            turn = new Turn(player);
+        }
+    }
+
+    public Turn getTurn() {
+        return turn;
     }
 }

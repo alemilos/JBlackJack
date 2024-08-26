@@ -97,7 +97,10 @@ public class GameController {
             actionBtn.getIconButton().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    humanPlayer.makeAction(actionBtn.getAction());
+                    // If the turn is played by HumanPlayer, perform the clicked action.
+                    if (Game.getInstance().getTurn().getPlayer() instanceof HumanPlayer) {
+                        Game.getInstance().getTurn().manageAction(actionBtn.getAction());
+                    }
                 }
             });
         });

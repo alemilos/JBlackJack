@@ -1,10 +1,7 @@
 package model.game.models.player;
 
 import model.game.enums.Actions;
-import model.game.enums.BetNotification;
 import model.game.enums.Chips;
-import model.game.enums.SplitType;
-import model.game.managers.ActionManager;
 import model.game.models.hand.Hand;
 import model.game.models.standalones.Bankroll;
 import model.game.models.standalones.Bet;
@@ -22,10 +19,6 @@ public abstract class Player extends Observable{
     protected Hand hand;
     protected Bankroll bankroll; // For each chip, how many does the user have.
     protected Bet bet;
-
-    // Split Logic
-    protected boolean isSplitTurn;
-
 
     public Player(String name, int buyIn){
         this.name = name;
@@ -73,8 +66,17 @@ public abstract class Player extends Observable{
      * - is the card total value between 9 and 11 ?
      * @return
      */
-    public boolean canDoubleDown(){
+    private boolean canDoubleDown(){
         return bankroll.canPay(bet.total() * 2) && hand.size() == 2 && Utils.between(hand.softTotal(), DOUBLE_DOWN_MIN,DOUBLE_DOWN_MAX);
+    }
+
+    /**
+     * Check if a player can make a hit.
+     *  True only if the hand soft total is less than Blackjack.
+      * @return
+     */
+    private boolean canHit(){
+        return hand.softTotal() < BLACKJACK;
     }
 
     /**
@@ -127,13 +129,20 @@ public abstract class Player extends Observable{
         }
     }
 
-    /**
-     * Perform an action to the current hand
-     * @param action
-     */
-    public void makeAction(Actions action){
-        ActionManager actionManager = new ActionManager(this);
-        actionManager.playAction(action);
+    public boolean canMakeAction(Actions action){
+        if (action == Actions.HIT){
+            return this.canHit();
+        }
+
+        if (action == Actions.STAND){
+            return true;
+        }
+
+        if (action == Actions.DOUBLE_DOWN){
+            return this.canDoubleDown();
+        }
+
+        return false;
     }
 
     /**
