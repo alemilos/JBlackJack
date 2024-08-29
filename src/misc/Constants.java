@@ -9,6 +9,7 @@ public class Constants {
     // Timers
     public static final int BET_TIME_MS = 10000; // 10 sec
     public static final long USER_TURN_MS = 15000; // 15 sec
+    public static final long AI_TURN_MS = 1000;
 
 
     public static final String FONT_FAMILY = "Arial";

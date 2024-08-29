@@ -5,6 +5,7 @@ import controller.gamephases.CardsDistributionController;
 import controller.gamephases.GamePhaseManager;
 import controller.gamephases.UsersActionsController;
 import model.game.Game;
+import model.game.enums.Actions;
 import model.game.enums.Suits;
 import model.game.models.player.HumanPlayer;
 import model.game.models.standalones.Dealer;
@@ -17,6 +18,8 @@ import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 
+import static model.game.utils.Constants.BLACKJACK;
+
 public class GameController {
 
     private static GameController instance;
@@ -28,6 +31,8 @@ public class GameController {
     private HumanPlayer humanPlayer;
 
     private List<PlayerPanel> playerPanels;
+
+    private GamePhaseManager gamePhaseManager;
 
     private GameController(){
         gamePage = new GamePage();
@@ -49,21 +54,7 @@ public class GameController {
 
          /** Assemble the game flow steps */
 
-        GamePhaseManager gamePhaseManager = new GamePhaseManager();
-        /** BET PHASE **/
-        BetPhaseController betPhaseController = new BetPhaseController(this);
-        /** CARDS DISTRIBUTIONS PHASE **/
-        CardsDistributionController cardsDistributionController = new CardsDistributionController(this);
-        /** USERS ACTIONS PHASE **/
-        UsersActionsController usersActionsController = new UsersActionsController(this);
-
-        /** PAYMENTS PHASE **/
-
-        /** Create the game flow */
-        gamePhaseManager.setNextPhase(betPhaseController);
-        betPhaseController.setNextPhase(cardsDistributionController);
-        cardsDistributionController.setNextPhase(usersActionsController);
-
+        gamePhaseManager = new GamePhaseManager(this);
         gamePhaseManager.manageNextPhase(); // Start the flow
     }
 
@@ -100,7 +91,19 @@ public class GameController {
                     // If the turn is played by HumanPlayer, perform the clicked action.
                     if (Game.getInstance().getTurn().getPlayer() instanceof HumanPlayer) {
                         Game.getInstance().getTurn().manageAction(actionBtn.getAction());
-                        restartHumanTimer();
+                        // System.out.println("Played Actions: " + Game.getInstance().getTurn().getPlayedActions().toString());
+                        // System.out.println("Turn active: " + Game.getInstance().getTurn().isActive());
+                        if (!Game.getInstance().getTurn().isActive()){
+                            gamePhaseManager.getUsersActionsController().terminateHumanTurn();
+
+                            if (humanPlayer.getHand().softTotal() > BLACKJACK){ // Busted
+                                System.out.println("BUSTED (show in the ui)");
+                            }else if(humanPlayer.getHand().softTotal() == BLACKJACK){  // Blackjack
+                                System.out.println("BLACKJACK! (show in the ui)");
+                            }
+                        } else{  // Can make another action
+                            gamePhaseManager.getUsersActionsController().restartHumanTimer();
+                        }
                     }
                 }
             });

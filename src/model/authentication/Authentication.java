@@ -17,8 +17,6 @@ public class Authentication {
             Database db = Database.getInstance();
             // Login if the username already exists
             if (db.usernameExists(username)) {
-                System.out.println(username + " logged in");
-
                 isAuthenticated = true;
                 currentUser = db.getUser(username);
                 return currentUser;
@@ -31,8 +29,6 @@ public class Authentication {
                 System.out.println("Invalid Username");
                 return null;
             }
-            System.out.println(username + " registered");
-
             isAuthenticated = true;
             currentUser = db.getUser(username);
             return currentUser;

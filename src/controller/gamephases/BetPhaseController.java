@@ -13,7 +13,7 @@ import static misc.Constants.BET_TIME_MS;
 
 public class BetPhaseController extends GamePhaseManager implements Manageable{
 
-    private GameController gameController;
+    private final GameController gameController;
 
     public BetPhaseController(GameController gameController){
         this.gameController = gameController;
@@ -26,6 +26,7 @@ public class BetPhaseController extends GamePhaseManager implements Manageable{
 
         Runnable onTimerEnds = () -> {
             game.setBetPhase(false);
+            gameController.getGamePage().getNotificationsPanel().clearNotificationBar();
             manageNextPhase();
         };
 

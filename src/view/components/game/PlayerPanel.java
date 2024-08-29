@@ -123,7 +123,7 @@ public class PlayerPanel extends JPanel implements Observer{
     public void update(Observable o, Object arg) {
         Player player = (Player)o;
 
-        if (arg == BET_UPDATE){
+        if (arg == BET_UPDATE || arg == BET_DOUBLE){
             Chips chip = player.getBet().peek();
             updateLastChipPanel(chip != null ? chip.toString() : null);
             updateTotalChipsPanel(player.getBet().total());

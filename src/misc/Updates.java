@@ -5,9 +5,13 @@ public enum Updates {
     BET_UPDATE,
     BET_FINISH,
 
+    BET_DOUBLE,
+
     TURN_START,
     TURN_UPDATE,
     TURN_FINISH,
 
-    CARD_ADD;
+    CARD_ADD,
+
+    CARD_REVEAL;
 }

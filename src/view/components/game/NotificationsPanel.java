@@ -20,8 +20,7 @@ public class NotificationsPanel extends JPanel {
     public NotificationsPanel(){
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        timerContainer = new JPanel(new BorderLayout());
-        timerContainer.setBackground(null);
+        createTimerContainer();
 
         setBorder(new EmptyBorder(0,300,0,300));
         setBackground(PRIMARY_COLOR);
@@ -36,6 +35,10 @@ public class NotificationsPanel extends JPanel {
     }
 
     public void addTimer(String title, int ms, Runnable callback){
+        clearNotificationBar(); // Make sure to clear previous progress bars if there are.
+        createTimerContainer();
+        add(timerContainer);
+
        progressBar = new JProgressBar(JProgressBar.HORIZONTAL, 0, ms/1000);
        progressBar.setValue(ms/1000);
 
@@ -66,9 +69,25 @@ public class NotificationsPanel extends JPanel {
         notificationTitle.setText(text);
     }
 
-    private void clearNotificationBar(){
+    public void clearNotificationBar(){
         notificationTitle.setText("");
-        timerContainer.remove(progressBar);
-
+        if (progressBar != null) {
+            progressBar.setValue(0);
+            timerContainer.remove(progressBar);
+            remove(timerContainer);
+        }
     }
+
+    private void createTimerContainer(){
+        timerContainer = new JPanel(new BorderLayout());
+        timerContainer.setBackground(null);
+    }
+
+    public void abortTimer(){
+        if (timer.isRunning()) {
+            timer.stop();
+        }
+        clearNotificationBar();
+    }
+
 }

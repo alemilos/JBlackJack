@@ -1,6 +1,7 @@
 package model.game;
 
 import model.db.Database;
+import model.game.enums.Actions;
 import model.global.User;
 import model.game.models.standalones.Dealer;
 import model.game.models.standalones.Sabot;
@@ -127,6 +128,15 @@ public class Game extends Observable {
     public void playTurn(Player player){
         if (turn == null || !turn.isActive()){
             turn = new Turn(player);
+        }
+    }
+
+    /**
+     * Terminate the turn by making a stand.
+     */
+    public void finishTurn(){
+        if (turn != null && turn.isActive()) {
+            turn.manageAction(Actions.STAND);
         }
     }
 

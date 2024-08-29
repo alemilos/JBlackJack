@@ -85,13 +85,13 @@ public class AIPlayer extends Player{
         if(hand.softTotal() > DEALER_STANDS_AT){
             if (probability > 95){
                 // Risky action
-                // makeAction(Actions.HIT);
+                Game.getInstance().getTurn().manageAction(Actions.HIT);
             }else{
                 // Safe play
-                // makeAction(Actions.STAND);
+                Game.getInstance().getTurn().manageAction(Actions.STAND);
             }
         }else{
-            // makeAction(Actions.HIT);
+            Game.getInstance().getTurn().manageAction(Actions.HIT);
         }
 
 

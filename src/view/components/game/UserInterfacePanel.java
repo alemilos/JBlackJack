@@ -135,12 +135,16 @@ public class UserInterfacePanel extends JPanel implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-
         if (arg == BET_START || arg == BET_UPDATE) enableBetButtons();
+
         if (arg == BET_FINISH) disableBetButtons();
 
-        if (arg == TURN_START || arg == TURN_UPDATE) enableActionButtons();
-        if (arg == TURN_FINISH) disableActionButtons();
+        if (arg == TURN_START || arg == TURN_UPDATE) {
+            enableActionButtons();
+        }
+        if (arg == TURN_FINISH) {
+            disableActionButtons();
+        }
 
     }
 }

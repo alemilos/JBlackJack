@@ -10,8 +10,7 @@ import model.game.utils.Utils;
 
 import java.util.*;
 
-import static misc.Updates.BET_UPDATE;
-import static misc.Updates.CARD_ADD;
+import static misc.Updates.*;
 import static model.game.utils.Constants.*;
 
 public abstract class Player extends Observable{
@@ -125,7 +124,7 @@ public abstract class Player extends Observable{
             bankroll.pay(bet.total());
             bet.x2();
 
-            notifyBet();
+            notifyDoubleBet();
         }
     }
 
@@ -178,6 +177,10 @@ public abstract class Player extends Observable{
     private void notifyCardAdd(){
         setChanged();
         notifyObservers(CARD_ADD);
+    }
+    private void notifyDoubleBet(){
+        setChanged();
+        notifyObservers(BET_DOUBLE);
     }
 
 }

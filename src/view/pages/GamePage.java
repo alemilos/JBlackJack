@@ -19,7 +19,6 @@ import java.io.IOException;
 import static misc.Constants.PRIMARY_COLOR;
 
 public class GamePage extends JFrame {
-
     private JButton leaveBtn;
     private JButton musicBtn;
 

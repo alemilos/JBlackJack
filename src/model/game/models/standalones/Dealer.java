@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Observable;
 
 import static misc.Updates.CARD_ADD;
+import static misc.Updates.CARD_REVEAL;
 
 public class Dealer extends Observable {
 
@@ -64,6 +65,8 @@ public class Dealer extends Observable {
      * Distribute 2 cards to each player that has made a Bet.
      */
     public void distributeCards(){
+        System.out.println("Improve game ui by making this manged by controller");
+
         List<Player> players = Game.getInstance().getPlayers();
 
         // First Distribution
@@ -96,8 +99,15 @@ public class Dealer extends Observable {
         sabot.resetInstance();
     }
 
+    public void revealHiddenCard(){
+        hand.get(1).setHidden(false); // The hidden card is always the second dealt
+        setChanged();
+        notifyObservers(CARD_REVEAL);
+    }
+
     private void notifyCardUpdate(){
         setChanged();
         notifyObservers(CARD_ADD);
     }
+
 }

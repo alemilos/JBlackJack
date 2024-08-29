@@ -11,10 +11,10 @@ import java.util.TimerTask;
 
 public class CardsDistributionController extends GamePhaseManager implements Manageable{
 
-    private GameController gameController;
+    private final GameController gameController;
 
     public CardsDistributionController (GameController gameController){
-        this.gameController = gameController;
+        this.gameController =gameController;
     }
 
     @Override

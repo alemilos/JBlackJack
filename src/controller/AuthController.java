@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 public class AuthController {
 
     private AuthPage authPage;
-    private boolean isAuthenticating = true;
 
     private static AuthController instance;
 
@@ -38,16 +37,13 @@ public class AuthController {
     }
 
     private void addActionListeners(){
-        authPage.getSubmitBtn().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                user =  new Authentication().loginOrRegister(authPage.getUsernameInput().getText().trim());
-                if (user != null){
-                    Controller.setUser(user);
-                    authPage.dispose();
-                    resetInstance();
-                    Controller.getInstance().goToHome();
-                }
+        authPage.getSubmitBtn().addActionListener(e -> {
+            user =  new Authentication().loginOrRegister(authPage.getUsernameInput().getText().trim());
+            if (user != null){
+                Controller.setUser(user);
+                authPage.dispose();
+                resetInstance();
+                Controller.getInstance().goToHome();
             }
         });
     }

@@ -2,6 +2,7 @@ package controller.gamephases;
 
 import controller.GameController;
 import model.game.Game;
+import model.game.enums.Actions;
 import model.game.models.player.AIPlayer;
 import model.game.models.player.HumanPlayer;
 import model.game.models.player.Player;
@@ -10,15 +11,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 
-import static misc.Constants.BET_TIME_MS;
+import static misc.Constants.AI_TURN_MS;
 import static misc.Constants.USER_TURN_MS;
+import static model.game.utils.Constants.BLACKJACK;
 
 public class UsersActionsController extends GamePhaseManager implements Manageable{
 
-    private GameController gameController;
+    private final GameController gameController;
     private Timer timer;
-
-    private javax.swing.Timer humanTurnTimer;
 
     private Iterator<Player> playingPlayers;
 
@@ -42,18 +42,20 @@ public class UsersActionsController extends GamePhaseManager implements Manageab
 
         // I calculate all the actions at first and give a random time between each of them.
         // Each action must take at least 2 seconds .
+        gameController.getGamePage().getNotificationsPanel().addTextNotification(player.getName() + " Turn");
 
+        timer = new Timer();
         TimerTask task = new TimerTask() {
 
             @Override
             public void run() {
-                gameController.getGamePage().getNotificationsPanel().addTextNotification(player.getName() + " Turn");
 
-                int randomDelay = (int) (Math.random() * USER_TURN_MS - 1000) + 1000; // Random delay between 1 and user turn duration
+                int randomDelay = (int) (Math.random() * AI_TURN_MS - 1000) + 1000; // Random delay between 1 and ai turn duration
                 javax.swing.Timer aiTimer = new javax.swing.Timer(randomDelay, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         ((AIPlayer) player).simulateActions();
+                        playNextTurnOrManageNextPhase();
                     }
                 });
                 aiTimer.setRepeats(false);
@@ -61,43 +63,70 @@ public class UsersActionsController extends GamePhaseManager implements Manageab
             }
         };
 
-        timer.schedule(task, USER_TURN_MS);
+        timer.schedule(task, AI_TURN_MS);
 
     }
 
-    private void manageHumanPlayerTurn(){
-       HumanPlayer player = Game.getInstance().getHumanPlayer();
-        // If no action is performed after 15 seconds, make a Stand Automatically.
-        // For each played action otherwise, restart a 15 seconds timer if the player can make another action.
-        startHumanTimer();
-
-        playNextTurnOrManageNextPhase();
-    }
 
     /**
      * If another player's turn can be played, play it. Go to the next phase otherwise.
      */
     private void playNextTurnOrManageNextPhase(){
+        // Terminate previous turn.
+        Game.getInstance().finishTurn();
+
         if (playingPlayers.hasNext()){
             Player player = playingPlayers.next();
+            // System.out.println(player.getName() + " TURN");
+
             Game.getInstance().playTurn(player);
 
-            if (player instanceof HumanPlayer){
-                manageHumanPlayerTurn();
-            }else {
-                manageAITurn(player);
+            // Turn could be terminated due to a blackjack.
+            if (Game.getInstance().getTurn().isActive()) {
+                if (player instanceof HumanPlayer) {
+                    Game.getInstance().getTurn().startWithObserver(gameController.getGamePage().getTablePanel().getUserInterfacePanel());
+                    manageHumanPlayerTurn();
+                    // Game.getInstance().deleteObserver(gameController.getGamePage().getTablePanel().getUserInterfacePanel());
+                } else {
+                    manageAITurn(player);
+                }
+            }else{
+                playNextTurnOrManageNextPhase();
             }
-        } else{
+        }
+        else{
             manageNextPhase();
         }
     }
 
-    private void startHumanTimer(){
-       humanTurnTimer = new javax.swing.Timer((int)USER_TURN_MS, );
+    private void manageHumanPlayerTurn(){
+        // If no action is performed after 15 seconds, make a Stand Automatically.
+        // For each played action otherwise, restart a 15 seconds timer if the player can make another action.
+        gameController.getGamePage().getNotificationsPanel().addTimer("Affrattati a compiere la tua azione!", (int)USER_TURN_MS, new Runnable() {
+            @Override
+            public void run() {
+                if (Game.getInstance().getTurn().getPlayer() == Game.getInstance().getHumanPlayer()) {
+                    Game.getInstance().finishTurn();
+                    terminateHumanTurn();
+                }
+            }
+        });
+
     }
 
     public void restartHumanTimer(){
-        humanTurnTimer.restart();
+        gameController.getGamePage().getNotificationsPanel().abortTimer(); // abort previous timer
+        gameController.getGamePage().getNotificationsPanel().addTimer("Affrattati a compiere la tua azione!", (int)USER_TURN_MS, new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+    }
+
+    public void terminateHumanTurn(){
+        gameController.getGamePage().getNotificationsPanel().abortTimer();
+        playNextTurnOrManageNextPhase();
     }
 }
 

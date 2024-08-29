@@ -1,15 +1,16 @@
 package model.game;
 
 import model.game.enums.Actions;
-import model.game.models.player.HumanPlayer;
 import model.game.models.player.Player;
 import model.game.models.standalones.Dealer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.Observer;
 
 import static misc.Updates.*;
+import static model.game.utils.Constants.BLACKJACK;
 
 public class Turn extends Observable {
 
@@ -23,11 +24,20 @@ public class Turn extends Observable {
         this.player = player;
         this.playedActions = new ArrayList<>();
 
+        if (player.getHand().softTotal() >= BLACKJACK){
+            this.terminate();
+            return;
+        }
+
         start();
     }
 
     private void start(){
         isActive = true;
+    }
+
+    public void startWithObserver(Observer observer){
+        addObserver(observer);
 
         setChanged();
         notifyObservers(TURN_START);
@@ -47,17 +57,13 @@ public class Turn extends Observable {
      */
     public void manageAction(Actions action){
         if (isActive) {
-            setChanged();
-
             if (player.canMakeAction(action)) {
                 playAction(action);
                 playedActions.add(action);
-                notifyObservers(action);
             } else {
                 // Perform a Stand action to terminate the turn
                 playAction(Actions.STAND);
                 playedActions.add(Actions.STAND);
-                notifyObservers(Actions.STAND);
             }
         }
     }
@@ -69,6 +75,10 @@ public class Turn extends Observable {
              */
             case HIT:
                 Dealer.getInstance().dealCard(player);
+
+                if (player.getHand().softTotal() >= BLACKJACK){
+                    this.terminate();
+                }
                 break;
 
             /**
@@ -96,4 +106,10 @@ public class Turn extends Observable {
     public Player getPlayer() {
         return player;
     }
+
+    @Override
+    public String toString() {
+        return player.getName() + " turn is active playing: " + isActive;
+    }
+
 }
