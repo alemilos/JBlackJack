@@ -100,6 +100,8 @@ public class UserInterfacePanel extends JPanel implements Observer {
         actionButtons.forEach(actionBtn -> {
             if (actions.contains(actionBtn.getAction())){
                 actionBtn.getIconButton().setEnabled(true);
+            }else{
+                actionBtn.getIconButton().setEnabled(false);
             }
         });
     }

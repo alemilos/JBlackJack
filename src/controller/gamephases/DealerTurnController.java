@@ -1,15 +1,11 @@
 package controller.gamephases;
 
 import controller.GameController;
-import model.game.models.player.AIPlayer;
 import model.game.models.standalones.Dealer;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static misc.Constants.AI_TURN_MS;
 import static model.game.utils.Constants.DEALER_STANDS_AT;
 
 public class DealerTurnController extends GamePhaseManager implements Manageable{
@@ -23,7 +19,7 @@ public class DealerTurnController extends GamePhaseManager implements Manageable
 
     @Override
     public void manage() {
-        System.out.println("Card revealed!");
+        gameController.getGamePage().getNotificationsPanel().addTextNotification("Revealing Card");
         Dealer.getInstance().revealHiddenCard();
 
         while(Dealer.getInstance().getHand().softTotal() < DEALER_STANDS_AT){

@@ -66,7 +66,10 @@ public abstract class Player extends Observable{
      * @return
      */
     private boolean canDoubleDown(){
-        return bankroll.canPay(bet.total() * 2) && hand.size() == 2 && Utils.between(hand.softTotal(), DOUBLE_DOWN_MIN,DOUBLE_DOWN_MAX);
+        System.out.println("Can Double down ? -----");
+        System.out.println("hand size: " + (hand.size() == 2));
+        System.out.println("------------------------");
+        return (bankroll.canPay(bet.total() * 2)) && (hand.size() == 2) && (Utils.between(hand.softTotal(), DOUBLE_DOWN_MIN,DOUBLE_DOWN_MAX));
     }
 
     /**
@@ -152,6 +155,10 @@ public abstract class Player extends Observable{
        return hand;
     }
 
+    public Bankroll getBankroll() {
+        return bankroll;
+    }
+
     public void receiveCard(Card card){
         hand.add(card);
 
@@ -160,7 +167,32 @@ public abstract class Player extends Observable{
 
     @Override
     public String toString() {
-        return name + "\nHAND: " + hand + "\nBET: " + bet.total() + '\n';
+        return name + "\nHAND: " + hand + "\nBET: " + bet.total() + "\nHAND SOFT: " + hand.softTotal();
+    }
+
+    /**
+     * Functions to manage payments
+     */
+
+    /**
+     * Player earns double the initial bet amount. This happens when his hand is bigger than the dealer's or when the dealer busts.
+     */
+    public void doEarn(){
+        bankroll.receive(bet.total() * 2);
+    }
+
+    /**
+     * Player pays the amount bet at the beginning. This happens when he busts.
+     */
+    public void doPay(){
+        bet.delete();
+    }
+
+    /**
+     * The player earns the amount he bet at the beginning. This happens when dealer's hand total is equal to the player one.
+     */
+    public void doPush(){
+        bankroll.receive(bet.total());
     }
 
     /**

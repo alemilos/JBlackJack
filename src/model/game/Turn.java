@@ -60,10 +60,12 @@ public class Turn extends Observable {
             if (player.canMakeAction(action)) {
                 playAction(action);
                 playedActions.add(action);
+
+                setChanged();
+                notifyObservers(TURN_UPDATE);
             } else {
                 // Perform a Stand action to terminate the turn
-                playAction(Actions.STAND);
-                playedActions.add(Actions.STAND);
+                this.terminate();
             }
         }
     }

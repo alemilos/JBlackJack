@@ -5,8 +5,6 @@ import model.game.enums.Ranks;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Observable;
 
 import static model.game.utils.Constants.BLACKJACK;
 
@@ -93,6 +91,14 @@ public class Hand{
             total += card.lookupRank().getValue();
         }
         return total;
+    }
+
+    public boolean isBusted(){
+        return softTotal() > BLACKJACK;
+    }
+
+    public boolean isBlackjack(){
+        return softTotal() == BLACKJACK;
     }
 
     @Override

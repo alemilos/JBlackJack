@@ -35,6 +35,11 @@ public class Bankroll {
         chipsLeft += amount * n;
     }
 
+    @Override
+    public String toString() {
+        return "BANKROLL: " + chipsLeft;
+    }
+
     public int getChipsLeft() {
         return chipsLeft;
     }
