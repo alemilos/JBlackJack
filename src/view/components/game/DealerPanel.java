@@ -54,6 +54,7 @@ public class DealerPanel extends JPanel implements Observer {
 
             Hand hand = Dealer.getInstance().getHand();
 
+            System.out.println(hand);
             hand.getCards().forEach(card -> {
                         addDealerCard(card.lookupValue(), card.lookupSuit().toString());
             });

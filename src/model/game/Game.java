@@ -4,7 +4,6 @@ import model.db.Database;
 import model.game.enums.Actions;
 import model.global.User;
 import model.game.models.standalones.Dealer;
-import model.game.models.standalones.Sabot;
 import model.game.utils.Utils;
 import model.game.models.player.AIPlayer;
 import model.game.models.player.HumanPlayer;
@@ -66,11 +65,11 @@ public class Game extends Observable {
     }
 
     public void finishGame(){
-        // TODO: save game information to the user DB
-
         this.getDealer().resetInstance();
-        instance = null;
+        instance = null; // reset this instance of game.
         this.endedAt = new Date();
+
+        Database.getInstance().addGameToUser(user);
     }
 
     /**
@@ -142,5 +141,16 @@ public class Game extends Observable {
 
     public Turn getTurn() {
         return turn;
+    }
+
+    /**
+     * Make sure all the game state is set back to the round start
+     */
+    public void clearRound(){
+        players = players.stream().filter(player -> player.getBankroll().getChipsLeft() > 0).toList();
+        players.forEach(Player::reset);
+        dealer.reset();
+
+        this.turn = null;
     }
 }

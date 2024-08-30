@@ -15,7 +15,6 @@ public class Dealer extends Observable {
     private static Dealer instance;
 
     private Sabot sabot;
-    private DiscardDeck discardDeck;
 
     protected final String name = "Dealer";
     private Hand hand;
@@ -28,7 +27,6 @@ public class Dealer extends Observable {
     private Dealer() {
         this.hand = new Hand();
         this.sabot = Sabot.getInstance(6);
-        this.discardDeck = new DiscardDeck();
     }
 
     /**
@@ -108,6 +106,10 @@ public class Dealer extends Observable {
     private void notifyCardUpdate(){
         setChanged();
         notifyObservers(CARD_ADD);
+    }
+
+    public void reset(){
+        this.hand = new Hand();
     }
 
 }

@@ -155,8 +155,9 @@ public class Database {
         return null;
     }
 
-    public void addGameToUser(){
+    public void addGameToUser(User user){
 
+        System.out.println("Addning game to database...");
     }
 
     /**

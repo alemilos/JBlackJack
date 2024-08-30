@@ -8,9 +8,10 @@ import java.util.TimerTask;
 
 import static model.game.utils.Constants.DEALER_STANDS_AT;
 
-public class DealerTurnController extends GamePhaseManager implements Manageable{
+public class DealerTurnController extends GamePhaseManager{
 
     private final GameController gameController;
+
     private Timer timer;
 
     public DealerTurnController(GameController gameController){

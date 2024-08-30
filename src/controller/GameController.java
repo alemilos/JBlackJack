@@ -34,9 +34,7 @@ public class GameController {
 
     private GamePhaseManager gamePhaseManager;
 
-    private GameController(){
-        gamePage = new GamePage();
-
+    private GameController() {
         User user = Controller.getUser();
 
         // Game Model initialization
@@ -46,16 +44,48 @@ public class GameController {
         humanPlayer = game.getHumanPlayer();
         game.startGame(); // Game starts
 
+        startNewRound();
+    }
+
+    public void startNewRound(){
+        game.clearRound();
+
+        if (!canGameContinue()){
+            manageGameLoss();
+            return;
+        }
+
+        if (gamePage != null){
+           gamePage.dispose();
+        }
+
+        gamePage = new GamePage();
+
         initPlayerPanelsAndAddObservers();
 
         gamePage.drawInitialGameState(playerPanels);
 
         addActionListeners();
 
-         /** Assemble the game flow steps */
+        /** Assemble the game flow steps */
 
         gamePhaseManager = new GamePhaseManager(this);
         gamePhaseManager.manageNextPhase(); // Start the flow
+    }
+
+    private boolean canGameContinue(){
+        return !(game.getHumanPlayer().getBankroll().getChipsLeft() <= 0);
+    }
+
+    private void manageGameLoss(){
+            System.out.println("Should Popup LOSS on screen");
+
+            gamePhaseManager.terminate();
+            gamePhaseManager = null;
+            game.finishGame();
+            gamePage.dispose();
+            resetInstance();
+            Controller.getInstance().goToHome();
     }
 
     public static GameController getInstance() {
@@ -77,10 +107,13 @@ public class GameController {
             public void actionPerformed(ActionEvent e) {
                 System.err.println("Should save game state to DB");
 
+                gamePhaseManager.terminate();
+                gamePhaseManager = null;
                 game.finishGame();
                 gamePage.dispose();
                 resetInstance();
                 Controller.getInstance().goToHome();
+
             }
         });
 
@@ -91,8 +124,6 @@ public class GameController {
                     // If the turn is played by HumanPlayer, perform the clicked action.
                     if (Game.getInstance().getTurn().getPlayer() instanceof HumanPlayer) {
                         Game.getInstance().getTurn().manageAction(actionBtn.getAction());
-                        // System.out.println("Played Actions: " + Game.getInstance().getTurn().getPlayedActions().toString());
-                        // System.out.println("Turn active: " + Game.getInstance().getTurn().isActive());
                         if (!Game.getInstance().getTurn().isActive()){
                             gamePhaseManager.getUsersActionsController().terminateHumanTurn();
 
@@ -139,7 +170,7 @@ public class GameController {
 
     public void initPlayerPanelsAndAddObservers(){
         playerPanels = new ArrayList<>();
-       game.getPlayers().forEach(player -> {
+        game.getPlayers().forEach(player -> {
            PlayerPanel playerPanel = new PlayerPanel(player);
             playerPanels.add(playerPanel);
 

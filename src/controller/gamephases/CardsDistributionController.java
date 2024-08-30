@@ -9,12 +9,12 @@ import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class CardsDistributionController extends GamePhaseManager implements Manageable{
+public class CardsDistributionController extends GamePhaseManager{
 
     private final GameController gameController;
 
     public CardsDistributionController (GameController gameController){
-        this.gameController =gameController;
+        this.gameController = gameController;
     }
 
     @Override

@@ -15,12 +15,13 @@ import static misc.Constants.AI_TURN_MS;
 import static misc.Constants.USER_TURN_MS;
 import static model.game.utils.Constants.BLACKJACK;
 
-public class UsersActionsController extends GamePhaseManager implements Manageable{
+public class UsersActionsController extends GamePhaseManager{
 
-    private final GameController gameController;
     private Timer timer;
 
     private Iterator<Player> playingPlayers;
+
+    private final GameController gameController;
 
     public UsersActionsController(GameController gameController){
         this.gameController = gameController;

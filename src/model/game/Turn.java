@@ -61,6 +61,12 @@ public class Turn extends Observable {
                 playAction(action);
                 playedActions.add(action);
 
+                // Stand should block the turn update
+                if (action == Actions.STAND){
+                    this.terminate();
+                    return;
+                }
+
                 setChanged();
                 notifyObservers(TURN_UPDATE);
             } else {

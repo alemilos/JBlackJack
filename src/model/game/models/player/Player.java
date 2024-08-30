@@ -66,9 +66,6 @@ public abstract class Player extends Observable{
      * @return
      */
     private boolean canDoubleDown(){
-        System.out.println("Can Double down ? -----");
-        System.out.println("hand size: " + (hand.size() == 2));
-        System.out.println("------------------------");
         return (bankroll.canPay(bet.total() * 2)) && (hand.size() == 2) && (Utils.between(hand.softTotal(), DOUBLE_DOWN_MIN,DOUBLE_DOWN_MAX));
     }
 
@@ -215,6 +212,11 @@ public abstract class Player extends Observable{
         notifyObservers(BET_DOUBLE);
     }
 
+
+    public void reset(){
+        this.bet = new Bet();
+        this.hand = new Hand();
+    }
 }
 
 

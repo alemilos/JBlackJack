@@ -11,8 +11,7 @@ import javax.swing.*;
 
 import static misc.Constants.BET_TIME_MS;
 
-public class BetPhaseController extends GamePhaseManager implements Manageable{
-
+public class BetPhaseController extends GamePhaseManager{
     private final GameController gameController;
 
     public BetPhaseController(GameController gameController){
@@ -21,6 +20,7 @@ public class BetPhaseController extends GamePhaseManager implements Manageable{
 
     @Override
     public void manage(){
+        System.out.println("managing bet phase");
         Game game = Game.getInstance();
         game.setBetPhase(true);
 
@@ -48,6 +48,5 @@ public class BetPhaseController extends GamePhaseManager implements Manageable{
         });
 
     }
-
 
 }
