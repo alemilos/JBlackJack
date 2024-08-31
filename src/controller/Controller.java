@@ -30,7 +30,6 @@ public class Controller {
      **********************************************************************/
 
     public void goToHome(){
-        AudioManager.getInstance().play("./assets/sounds/homesound.wav");
         homeController = HomeController.getInstance();
     }
 

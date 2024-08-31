@@ -2,6 +2,7 @@ package controller.gamephases;
 
 import controller.GameController;
 import misc.AudioManager;
+import misc.Sounds;
 import model.game.models.standalones.Dealer;
 
 import java.awt.event.ActionEvent;
@@ -48,9 +49,11 @@ public class DealerTurnController extends GamePhaseManager{
                 javax.swing.Timer revealAfter  = new javax.swing.Timer(1000, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        AudioManager.getInstance().play("./assets/sounds/carddeal.wav");
-                        dealer.revealHiddenCard();
-                        dealCardsUntilStandingOrBustOrManageNextPhase();
+                        if(!isTerminated) {
+                            AudioManager.getInstance().play(Sounds.CARD_DEAL);
+                            dealer.revealHiddenCard();
+                            dealCardsUntilStandingOrBustOrManageNextPhase();
+                        }
                     }
                 });
                 revealAfter.setRepeats(false);
@@ -69,9 +72,11 @@ public class DealerTurnController extends GamePhaseManager{
                 javax.swing.Timer dealAfter = new javax.swing.Timer(1000, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        AudioManager.getInstance().play("./assets/sounds/carddeal.wav");
-                        dealer.dealDealerCard(false);
-                        dealCardsUntilStandingOrBustOrManageNextPhase();
+                        if(!isTerminated) {
+                            AudioManager.getInstance().play(Sounds.CARD_DEAL);
+                            dealer.dealDealerCard(false);
+                            dealCardsUntilStandingOrBustOrManageNextPhase();
+                        }
                     }
                 });
 

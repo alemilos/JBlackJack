@@ -2,6 +2,7 @@ package controller.gamephases;
 
 import controller.GameController;
 import misc.AudioManager;
+import misc.Sounds;
 import model.game.Game;
 import model.game.models.hand.Hand;
 import model.game.models.player.Player;
@@ -26,8 +27,6 @@ public class PaymentsPhaseController extends GamePhaseManager{
 
     public PaymentsPhaseController(GameController gameController){
         this.gameController = gameController;
-
-        System.out.println("Game controller from payments: " + gameController);
     }
 
     @Override
@@ -52,8 +51,10 @@ public class PaymentsPhaseController extends GamePhaseManager{
                         Timer paymentTimer = new Timer(2000, new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                managePayment(player);
-                                managePaymentOrManageNextPhase();
+                                if(!isTerminated) {
+                                    managePayment(player);
+                                    managePaymentOrManageNextPhase();
+                                }
                             }
                         });
 
@@ -73,7 +74,7 @@ public class PaymentsPhaseController extends GamePhaseManager{
         Hand playerHand = player.getHand();
         NotificationsPanel notificationPanel = gameController.getGamePage().getNotificationsPanel();
 
-        AudioManager.getInstance().play("./assets/sounds/bankrollreceive.wav");
+        AudioManager.getInstance().play(Sounds.MONEY);
         if (playerHand.isBlackjack()){
             if (dealerHand.isBlackjack()){
                 notificationPanel.addTextNotification(player.getName() + " ha un Push");
@@ -95,6 +96,10 @@ public class PaymentsPhaseController extends GamePhaseManager{
                 if (playerHand.softTotal() > dealerHand.softTotal()){
                     notificationPanel.addTextNotification(player.getName() + " Guadagna");
                     player.doEarn();
+                }else if (playerHand.softTotal() == dealerHand.softTotal()){
+                    // Dealer has same cards
+                    notificationPanel.addTextNotification(player.getName() + " ha un Push");
+                    player.doPush();
                 }else{
                     notificationPanel.addTextNotification(player.getName() + " Paga");
                     player.doPay();

@@ -65,11 +65,12 @@ public class Game extends Observable {
     }
 
     public void finishGame(){
-        this.getDealer().resetInstance();
-        instance = null; // reset this instance of game.
         this.endedAt = new Date();
 
-        Database.getInstance().addGameToUser(user);
+        Database.getInstance().addGameToUser(this, user);
+
+        this.getDealer().resetInstance();
+        instance = null; // reset this instance of game.
     }
 
     /**
@@ -152,5 +153,12 @@ public class Game extends Observable {
         dealer.reset();
 
         this.turn = null;
+    }
+
+    public String calculateTimePlayed(){
+        Date now = new Date();
+        long timePlayed = now.getTime() - startedAt.getTime();
+
+        return ""   + timePlayed;
     }
 }

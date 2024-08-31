@@ -1,6 +1,7 @@
 package controller;
 
 import misc.AudioManager;
+import misc.Sounds;
 import model.global.User;
 import view.pages.HomePage;
 
@@ -14,7 +15,6 @@ public class HomeController {
 
     private HomeController(){
         User user = Controller.getUser();
-        AudioManager.getInstance().play("./assets/sounds/homesound.wav");
         this.homePage = new HomePage(user.getUsername(), user.getElo().toString(),  user.getWallet().getBalance());
         addActionListeners();
     }
@@ -23,6 +23,8 @@ public class HomeController {
         if (instance == null){
             instance = new HomeController();
         }
+
+        AudioManager.getInstance().play(Sounds.HOME);
         return instance;
     }
 

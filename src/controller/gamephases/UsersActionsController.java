@@ -1,9 +1,10 @@
 package controller.gamephases;
 
 import controller.GameController;
+import misc.AudioManager;
+import misc.Sounds;
 import model.game.Game;
 import model.game.enums.Actions;
-import model.game.models.player.AIPlayer;
 import model.game.models.player.HumanPlayer;
 import model.game.models.player.Player;
 
@@ -13,7 +14,7 @@ import java.util.*;
 
 import static misc.Constants.AI_TURN_MS;
 import static misc.Constants.USER_TURN_MS;
-import static model.game.utils.Constants.BLACKJACK;
+import static model.game.utils.Constants.DEALER_STANDS_AT;
 
 public class UsersActionsController extends GamePhaseManager{
 
@@ -55,8 +56,11 @@ public class UsersActionsController extends GamePhaseManager{
                 javax.swing.Timer aiTimer = new javax.swing.Timer(randomDelay, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        ((AIPlayer) player).simulateActions();
-                        playNextTurnOrManageNextPhase();
+                        if(!isTerminated) {
+                            simulateAiAction(player);
+                            // ((AIPlayer) player).simulateActions();
+                            playNextTurnOrManageNextPhase();
+                        }
                     }
                 });
                 aiTimer.setRepeats(false);
@@ -68,6 +72,29 @@ public class UsersActionsController extends GamePhaseManager{
 
     }
 
+    private void simulateAiAction(Player player){
+        Random rand = new Random();
+        int probability;
+
+        probability = rand.nextInt(0, 100);
+
+        if (player.getHand().softTotal() > DEALER_STANDS_AT) {
+            if (probability > 95) {
+                // Risky action
+                Game.getInstance().getTurn().manageAction(Actions.HIT);
+                AudioManager.getInstance().play(Sounds.CARD_DEAL);
+            } else {
+                // Safe play
+                Game.getInstance().getTurn().manageAction(Actions.STAND);
+                AudioManager.getInstance().play(Sounds.KNOCK);
+            }
+        } else {
+            Game.getInstance().getTurn().manageAction(Actions.HIT);
+            AudioManager.getInstance().play(Sounds.CARD_DEAL);
+        }
+
+
+    }
 
     /**
      * If another player's turn can be played, play it. Go to the next phase otherwise.
@@ -78,8 +105,6 @@ public class UsersActionsController extends GamePhaseManager{
 
         if (playingPlayers.hasNext()){
             Player player = playingPlayers.next();
-            // System.out.println(player.getName() + " TURN");
-
             Game.getInstance().playTurn(player);
 
             // Turn could be terminated due to a blackjack.
@@ -87,7 +112,6 @@ public class UsersActionsController extends GamePhaseManager{
                 if (player instanceof HumanPlayer) {
                     Game.getInstance().getTurn().startWithObserver(gameController.getGamePage().getTablePanel().getUserInterfacePanel());
                     manageHumanPlayerTurn();
-                    // Game.getInstance().deleteObserver(gameController.getGamePage().getTablePanel().getUserInterfacePanel());
                 } else {
                     manageAITurn(player);
                 }
@@ -107,8 +131,7 @@ public class UsersActionsController extends GamePhaseManager{
             @Override
             public void run() {
                 if (Game.getInstance().getTurn().getPlayer() == Game.getInstance().getHumanPlayer()) {
-                    Game.getInstance().finishTurn();
-                    terminateHumanTurn();
+                    makeAutoStand();
                 }
             }
         });
@@ -120,9 +143,15 @@ public class UsersActionsController extends GamePhaseManager{
         gameController.getGamePage().getNotificationsPanel().addTimer("Affrattati a compiere la tua azione!", (int)USER_TURN_MS, new Runnable() {
             @Override
             public void run() {
-
+                makeAutoStand();
             }
         });
+    }
+
+    private void makeAutoStand(){
+        Game.getInstance().finishTurn();
+        terminateHumanTurn();
+        AudioManager.getInstance().play(Sounds.KNOCK);
     }
 
     public void terminateHumanTurn(){

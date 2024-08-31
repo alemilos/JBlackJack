@@ -2,6 +2,7 @@ package controller;
 
 import controller.gamephases.GamePhaseManager;
 import misc.AudioManager;
+import misc.Sounds;
 import model.game.Game;
 import model.game.enums.Actions;
 import model.game.models.player.HumanPlayer;
@@ -76,13 +77,14 @@ public class GameController {
 
     private void manageGameLoss(){
             System.out.println("Should Popup LOSS on screen");
+            AudioManager.getInstance().play(Sounds.LOSE);
 
-            gamePhaseManager.terminate();
-            gamePhaseManager = null;
-            game.finishGame();
-            gamePage.dispose();
-            resetInstance();
-            Controller.getInstance().goToHome();
+            //gamePhaseManager.terminate();
+            //gamePhaseManager = null;
+            //game.finishGame();
+            //gamePage.dispose();
+            //resetInstance();
+            //Controller.getInstance().goToHome();
     }
 
     public static GameController getInstance() {
@@ -120,8 +122,10 @@ public class GameController {
                 public void actionPerformed(ActionEvent e) {
                     // If the turn is played by HumanPlayer, perform the clicked action.
                     if (Game.getInstance().getTurn().getPlayer() instanceof HumanPlayer) {
-                        if (actionBtn.getAction() == Actions.HIT){
-                            AudioManager.getInstance().play("./assets/sounds/carddeal.wav");
+                        if (actionBtn.getAction() == Actions.HIT || actionBtn.getAction() == Actions.DOUBLE_DOWN){
+                            AudioManager.getInstance().play(Sounds.CARD_DEAL);
+                        }else if(actionBtn.getAction() == Actions.STAND){
+                            AudioManager.getInstance().play(Sounds.KNOCK);
                         }
 
                         Game.getInstance().getTurn().manageAction(actionBtn.getAction());
@@ -130,11 +134,12 @@ public class GameController {
                             gamePhaseManager.getUsersActionsController().terminateHumanTurn();
 
                             if (humanPlayer.getHand().softTotal() > BLACKJACK){ // Busted
-                                AudioManager.getInstance().play("./assets/sounds/lose.wav");
+                                AudioManager.getInstance().play(Sounds.BUSTED);
                             }else if(humanPlayer.getHand().softTotal() == BLACKJACK){  // Blackjack
-                                AudioManager.getInstance().play("./assets/sounds/blackjack.wav");
+                                AudioManager.getInstance().play(Sounds.BLACKJACK);
                             }
                         } else{  // Can make another action
+                            System.out.println("Restarting Human Timer");
                             gamePhaseManager.getUsersActionsController().restartHumanTimer();
                         }
                     }
@@ -148,7 +153,7 @@ public class GameController {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if(humanPlayer.canBet(chipBtn.getChip())){
-                        AudioManager.getInstance().play("./assets/sounds/betchip.wav");
+                        AudioManager.getInstance().play(Sounds.CHIPS_BET);
                         humanPlayer.addToBet(chipBtn.getChip());
                     }
                 }

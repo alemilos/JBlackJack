@@ -1,5 +1,6 @@
 package model.db;
 
+import model.game.Game;
 import model.global.User;
 
 import java.io.*;
@@ -155,9 +156,13 @@ public class Database {
         return null;
     }
 
-    public void addGameToUser(User user){
-
+    public void addGameToUser(Game game, User user){
         System.out.println("Addning game to database...");
+
+        System.out.println("Duration: "  + game.calculateTimePlayed());
+        System.out.println("Blackjacks: ");
+
+
     }
 
     /**

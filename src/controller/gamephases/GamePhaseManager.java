@@ -24,6 +24,7 @@ public class GamePhaseManager implements Manageable{
     }
 
     private void init(){
+        isTerminated = false;
         /** BET PHASE **/
         betPhaseController = new BetPhaseController(gameController);
         /** CARDS DISTRIBUTIONS PHASE **/

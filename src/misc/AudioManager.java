@@ -16,10 +16,12 @@ public class AudioManager {
 
     private AudioManager(){}
 
-    public void play(String filename){
+    public void play(Sounds sound){
         if (clip != null){
             stop();
         }
+
+        String filename = getSoundFilename(sound);
 
         try {
             InputStream in = new BufferedInputStream(new FileInputStream(filename));
@@ -39,9 +41,24 @@ public class AudioManager {
         }
     }
 
-    public void stop(){
-        if (clip.isRunning()){
-            clip.stop();
+    private String getSoundFilename(Sounds sound){
+        String path = "./assets/sounds/";
+
+        switch (sound){
+            case HOME -> {return path + "homesound.wav";}
+            case BUSTED -> {return path + "busted.wav";}
+            case LOSE -> { return path + "lose.wav" ;}
+            case KNOCK -> { return path + "knock.wav";}
+            case MONEY -> { return path + "money.wav";}
+            case BLACKJACK -> { return path +"blackjack.wav";}
+            case CARD_DEAL -> { return path + "carddeal.wav";}
+            case CHIPS_BET -> { return path + "betchip.wav";}
+            default -> {return "";}
         }
+    }
+
+    public void stop(){
+        clip.flush();
+        clip.stop();
     }
 }

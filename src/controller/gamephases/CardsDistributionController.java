@@ -2,6 +2,7 @@ package controller.gamephases;
 
 import controller.GameController;
 import misc.AudioManager;
+import misc.Sounds;
 import model.game.Game;
 import model.game.models.player.HumanPlayer;
 import model.game.models.player.Player;
@@ -70,9 +71,17 @@ public class CardsDistributionController extends GamePhaseManager{
                 javax.swing.Timer dealAfter = new javax.swing.Timer(500, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        AudioManager.getInstance().play("./assets/sounds/carddeal.wav");
-                        dealer.dealCard(player);
-                        distributeCardsOrManageNextPhase();
+                        if(!isTerminated) {
+                            AudioManager.getInstance().play(Sounds.CARD_DEAL);
+                            dealer.dealCard(player);
+
+                            if (player instanceof HumanPlayer) {
+                               if(player.getHand().isBlackjack()) {
+                                   AudioManager.getInstance().play(Sounds.BLACKJACK);
+                               }
+                            }
+                            distributeCardsOrManageNextPhase();
+                        }
                     }
                 });
 
@@ -94,9 +103,11 @@ public class CardsDistributionController extends GamePhaseManager{
                javax.swing.Timer dealAfter = new javax.swing.Timer(500, new ActionListener() {
                    @Override
                    public void actionPerformed(ActionEvent e) {
-                       AudioManager.getInstance().play("./assets/sounds/carddeal.wav");
-                       dealer.dealDealerCard(isHidden);
-                       distributeCardsOrManageNextPhase();
+                       if(!isTerminated) {
+                           AudioManager.getInstance().play(Sounds.CARD_DEAL);
+                           dealer.dealDealerCard(isHidden);
+                           distributeCardsOrManageNextPhase();
+                       }
                    }
                });
 
@@ -106,6 +117,5 @@ public class CardsDistributionController extends GamePhaseManager{
        };
 
        timer.schedule(timerTask, 500);
-
     }
 }
