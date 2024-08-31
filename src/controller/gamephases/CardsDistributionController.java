@@ -4,7 +4,10 @@ import controller.GameController;
 import model.game.Game;
 import model.game.models.player.HumanPlayer;
 import model.game.models.player.Player;
+import model.game.models.standalones.Dealer;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,6 +15,15 @@ import java.util.TimerTask;
 public class CardsDistributionController extends GamePhaseManager{
 
     private final GameController gameController;
+    private Dealer dealer;
+
+    private Iterator<Player> playingPlayersFirst;
+    private Iterator<Player> playingPlayersSecond;
+    private boolean distributedToDealerHidden;
+    private boolean distributedToDealerVisible;
+
+    private Timer timer;
+
 
     public CardsDistributionController (GameController gameController){
         this.gameController = gameController;
@@ -23,32 +35,74 @@ public class CardsDistributionController extends GamePhaseManager{
 
         gameController.getGamePage().getNotificationsPanel().addTextNotification("Il mazziere distribuisce le carte...");
 
-        game.getDealer().distributeCards();
+        playingPlayersFirst = game.getPlayingPlayers().iterator();
+        playingPlayersSecond = game.getPlayingPlayers().iterator();
 
+        dealer = Dealer.getInstance();
 
-        Iterator<Player> iterator = game.getPlayingPlayers().iterator();
+        distributeCardsOrManageNextPhase();
+    }
 
-        int i = 0;
-        Timer timer = new Timer();
-
-        while(iterator.hasNext()){
-            Player player = iterator.next();
-            int currentIndex = i;
-
-            TimerTask task = new TimerTask() {
-                @Override
-                public void run() {
-
-                    // On last player go to the next controller manager
-                    if (currentIndex >= game.getPlayingPlayers().size()-1){
-                        manageNextPhase();
-                    }
-                }
-            };
-
-            timer.schedule(task, 1000 * i++);
+    private void distributeCardsOrManageNextPhase(){
+        if(playingPlayersFirst.hasNext()){
+            Player player = playingPlayersFirst.next();
+            manageDealerToPlayerDistribution(player);
+        }else if (!distributedToDealerHidden){
+            manageDealerToHimselfDistribution(true);
+            distributedToDealerHidden = true;
+        }else if(playingPlayersSecond.hasNext()){
+           Player player = playingPlayersSecond.next();
+           manageDealerToPlayerDistribution(player);
+        }else if(!distributedToDealerVisible){
+            manageDealerToHimselfDistribution(false);
+            distributedToDealerVisible = true;
+        }else{
+            manageNextPhase();
         }
+    }
 
+    private void manageDealerToPlayerDistribution(Player player){
+        timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                javax.swing.Timer dealAfter = new javax.swing.Timer(500, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dealer.dealCard(player);
+                        distributeCardsOrManageNextPhase();
+                    }
+                });
+
+                dealAfter.setRepeats(false);
+                dealAfter.start();
+            }
+        };
+
+        timer.schedule(timerTask, 500);
+
+    }
+
+    private void manageDealerToHimselfDistribution(boolean isHidden){
+       timer = new Timer();
+
+       TimerTask timerTask = new TimerTask() {
+           @Override
+           public void run() {
+               javax.swing.Timer dealAfter = new javax.swing.Timer(500, new ActionListener() {
+                   @Override
+                   public void actionPerformed(ActionEvent e) {
+                       dealer.dealDealerCard(isHidden);
+                       distributeCardsOrManageNextPhase();
+                   }
+               });
+
+               dealAfter.setRepeats(false);
+               dealAfter.start();
+           }
+       };
+
+       timer.schedule(timerTask, 500);
 
     }
 }

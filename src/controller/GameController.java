@@ -1,12 +1,7 @@
 package controller;
 
-import controller.gamephases.BetPhaseController;
-import controller.gamephases.CardsDistributionController;
 import controller.gamephases.GamePhaseManager;
-import controller.gamephases.UsersActionsController;
 import model.game.Game;
-import model.game.enums.Actions;
-import model.game.enums.Suits;
 import model.game.models.player.HumanPlayer;
 import model.game.models.standalones.Dealer;
 import model.global.User;

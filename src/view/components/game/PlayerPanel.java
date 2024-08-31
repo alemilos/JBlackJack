@@ -16,8 +16,9 @@ import static misc.Updates.*;
 
 public class PlayerPanel extends JPanel implements Observer{
 
-    private JPanel totalChipsPanel;
+    private TotalChipsPanel totalChipsPanel;
     private JLayeredPane cardsLayeredPane;
+    private BankrollPanel bankrollPanel;
 
     private int cardsNumber;
     private int lastCardX;
@@ -35,9 +36,13 @@ public class PlayerPanel extends JPanel implements Observer{
         setLayout(new BorderLayout());
         setBackground(null);
 
-        totalChipsPanel = new JPanel();
+        totalChipsPanel = new TotalChipsPanel();
+
         JPanel chipContainer= new JPanel();
         chipContainer.setBackground(null);
+
+        bankrollPanel = new BankrollPanel();
+        bankrollPanel.updateBankroll(player.getBankroll().getChipsLeft()); // init with current bankroll
 
         // Based on Player Type the UI will be bigger or smaller (AI Players)
         if (player instanceof AIPlayer) {
@@ -57,10 +62,6 @@ public class PlayerPanel extends JPanel implements Observer{
         chipLabel.setIcon(chipPlaceholder);
 
         chipContainer.add(chipLabel);
-
-        JLabel totalChipsLbl = new JLabel();
-        totalChipsLbl.setText(0+"");
-        totalChipsPanel.add(totalChipsLbl);
 
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
@@ -88,16 +89,17 @@ public class PlayerPanel extends JPanel implements Observer{
         container.add(chipContainer);
         container.add(Box.createRigidArea(new Dimension(0,10)));
         container.add(nameLabel);
+        container.add(Box.createRigidArea(new Dimension(0,10)));
+        container.add(bankrollPanel);
 
         add(container, BorderLayout.SOUTH);
     }
 
-    public void updateTotalChipsPanel(int value){
-        JLabel totalLabel = (JLabel)totalChipsPanel.getComponent(0);
-        totalLabel.setText(value+"");
+    private void updateTotalChipsPanel(int value){
+        totalChipsPanel.updateTotalChips(value);
     }
 
-    public void updateLastChipPanel(String chipName){
+    private void updateLastChipPanel(String chipName){
         if (chipName == null){
             chipLabel.setIcon(chipPlaceholder);
             return;
@@ -127,6 +129,10 @@ public class PlayerPanel extends JPanel implements Observer{
             Chips chip = player.getBet().peek();
             updateLastChipPanel(chip != null ? chip.toString() : null);
             updateTotalChipsPanel(player.getBet().total());
+        }
+
+        if (arg == BANKROLL_UPDATE){
+            bankrollPanel.updateBankroll(player.getBankroll().getChipsLeft());
         }
 
         if (arg == CARD_ADD){

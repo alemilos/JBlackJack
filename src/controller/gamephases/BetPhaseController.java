@@ -20,7 +20,6 @@ public class BetPhaseController extends GamePhaseManager{
 
     @Override
     public void manage(){
-        System.out.println("managing bet phase");
         Game game = Game.getInstance();
         game.setBetPhase(true);
 

@@ -19,6 +19,8 @@ public class Dealer extends Observable {
     protected final String name = "Dealer";
     private Hand hand;
 
+    private boolean cardRevealed;
+
     /**
      * The Dealer is the Player that manages the game.
      * He controls the Sabot and Discard Deck instances,
@@ -51,41 +53,13 @@ public class Dealer extends Observable {
 
     public void dealDealerCard(boolean isHidden){
         if (isHidden) {
+            cardRevealed = false;
            hand.add(sabot.dealHiddenCard());
         }else{
             hand.add(sabot.dealCard());
         }
 
         notifyCardUpdate();
-    }
-
-    /**
-     * Distribute 2 cards to each player that has made a Bet.
-     */
-    public void distributeCards(){
-        System.out.println("Improve game ui by making this manged by controller");
-
-        List<Player> players = Game.getInstance().getPlayers();
-
-        // First Distribution
-       for (Player player: players) {
-            if (!player.getBet().isEmpty()){
-               dealCard(player);
-            }
-       }
-
-       // Deal a visible card to the Dealer himself.
-       dealDealerCard(false);
-
-       // Second distribution
-       for (Player player: players){
-           if (!player.getBet().isEmpty()){
-               dealCard(player);
-           }
-       }
-
-       // Deal a hidden card to the Dealer himself
-       dealDealerCard(true);
     }
 
     public Hand getHand() {
@@ -98,7 +72,8 @@ public class Dealer extends Observable {
     }
 
     public void revealHiddenCard(){
-        hand.get(1).setHidden(false); // The hidden card is always the second dealt
+        cardRevealed = true;
+        hand.get(0).setHidden(false); // The hidden card is always the first dealt
         setChanged();
         notifyObservers(CARD_REVEAL);
     }
@@ -112,4 +87,7 @@ public class Dealer extends Observable {
         this.hand = new Hand();
     }
 
+    public boolean isCardRevealed() {
+        return cardRevealed;
+    }
 }

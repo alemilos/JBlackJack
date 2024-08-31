@@ -16,13 +16,10 @@ public class Turn extends Observable {
 
     private Player player;
 
-    private List<Actions> playedActions;
-
     private boolean isActive;
 
     public Turn(Player player){
         this.player = player;
-        this.playedActions = new ArrayList<>();
 
         if (player.getHand().softTotal() >= BLACKJACK){
             this.terminate();
@@ -59,10 +56,9 @@ public class Turn extends Observable {
         if (isActive) {
             if (player.canMakeAction(action)) {
                 playAction(action);
-                playedActions.add(action);
 
                 // Stand should block the turn update
-                if (action == Actions.STAND){
+                if (action == Actions.STAND || action == Actions.DOUBLE_DOWN){
                     this.terminate();
                     return;
                 }

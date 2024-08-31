@@ -60,11 +60,12 @@ public class Hand{
         int aceInHand = 0;
 
         for (Card card: cards){
-            if (card.lookupRank() == Ranks.ACE){
-                aceInHand += 1;
-            }
-            else{
-                total += card.lookupRank().getValue();
+            if(card.lookupRank() != null) {
+                if (card.lookupRank() == Ranks.ACE) {
+                    aceInHand += 1;
+                } else {
+                    total += card.lookupRank().getValue();
+                }
             }
         }
 

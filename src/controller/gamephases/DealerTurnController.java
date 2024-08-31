@@ -3,6 +3,8 @@ package controller.gamephases;
 import controller.GameController;
 import model.game.models.standalones.Dealer;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,6 +13,7 @@ import static model.game.utils.Constants.DEALER_STANDS_AT;
 public class DealerTurnController extends GamePhaseManager{
 
     private final GameController gameController;
+    private Dealer dealer;
 
     private Timer timer;
 
@@ -21,39 +24,62 @@ public class DealerTurnController extends GamePhaseManager{
     @Override
     public void manage() {
         gameController.getGamePage().getNotificationsPanel().addTextNotification("Revealing Card");
-        Dealer.getInstance().revealHiddenCard();
+        dealer = Dealer.getInstance();
+        dealCardsUntilStandingOrBustOrManageNextPhase();
 
-        while(Dealer.getInstance().getHand().softTotal() < DEALER_STANDS_AT){
-            Dealer.getInstance().dealDealerCard(false);
-        }
-        // dealCardsUntilStandingOrBust();
-        manageNextPhase();
     }
 
-    private void dealCardsUntilStandingOrBust(){
-        if (Dealer.getInstance().getHand().softTotal() >=DEALER_STANDS_AT) {
-            System.out.println("Recursion terminates");
-            manageNextPhase();
-            return;
-        }
+    private void dealCardsUntilStandingOrBustOrManageNextPhase(){
+            if (!dealer.isCardRevealed()) {
+                manageCardReveal();
+            } else if (dealer.getHand().softTotal() >= DEALER_STANDS_AT){
+                manageNextPhase();
+            } else {
+                manageCardDeal();
+            }
+    }
 
+    private void manageCardReveal(){
         timer = new Timer();
-
-        TimerTask task = new TimerTask() {
+        TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-
-                javax.swing.Timer revealCardTimer= new javax.swing.Timer(1000, e -> {
-                    System.out.println("Dealing dealer's card");
-                    Dealer.getInstance().dealDealerCard(false);
-                    dealCardsUntilStandingOrBust();
+                javax.swing.Timer revealAfter  = new javax.swing.Timer(1000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dealer.revealHiddenCard();
+                        dealCardsUntilStandingOrBustOrManageNextPhase();
+                    }
                 });
-
-                revealCardTimer.setRepeats(false);
-                revealCardTimer.start();
+                revealAfter.setRepeats(false);
+                revealAfter.start();
             }
         };
 
-        timer.schedule(task, 1000);
-   }
+        timer.schedule(timerTask,1000);
+    }
+
+    private void manageCardDeal(){
+        timer = new Timer();
+        TimerTask timerTask  = new TimerTask() {
+            @Override
+            public void run() {
+                javax.swing.Timer dealAfter = new javax.swing.Timer(1000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dealer.dealDealerCard(false);
+                        dealCardsUntilStandingOrBustOrManageNextPhase();
+                    }
+                });
+
+                dealAfter.setRepeats(false);
+                dealAfter.start();
+            }
+        };
+
+        timer.schedule(timerTask,1000);
+    }
+
+
+
 }

@@ -87,6 +87,7 @@ public abstract class Player extends Observable{
             bankroll.pay(chip.getValue());
 
             notifyBet();
+            notifyBankroll();
         }
     }
 
@@ -96,6 +97,7 @@ public abstract class Player extends Observable{
             bankroll.receive(removedChip.getValue());
 
             notifyBet();
+            notifyBankroll();
         }
     }
 
@@ -114,6 +116,7 @@ public abstract class Player extends Observable{
         bet.delete();
 
         notifyBet();
+        notifyBankroll();
     }
 
     /**
@@ -125,6 +128,7 @@ public abstract class Player extends Observable{
             bet.x2();
 
             notifyDoubleBet();
+            notifyBankroll();
         }
     }
 
@@ -176,6 +180,7 @@ public abstract class Player extends Observable{
      */
     public void doEarn(){
         bankroll.receive(bet.total() * 2);
+        notifyBankroll();
     }
 
     /**
@@ -190,6 +195,7 @@ public abstract class Player extends Observable{
      */
     public void doPush(){
         bankroll.receive(bet.total());
+        notifyBankroll();
     }
 
     /**
@@ -210,6 +216,10 @@ public abstract class Player extends Observable{
     private void notifyDoubleBet(){
         setChanged();
         notifyObservers(BET_DOUBLE);
+    }
+    private void notifyBankroll(){
+        setChanged();
+        notifyObservers(BANKROLL_UPDATE);
     }
 
 
