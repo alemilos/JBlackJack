@@ -1,6 +1,7 @@
 package controller.gamephases;
 
 import controller.GameController;
+import misc.AudioManager;
 import model.game.Game;
 import model.game.models.player.HumanPlayer;
 import model.game.models.player.Player;
@@ -69,6 +70,7 @@ public class CardsDistributionController extends GamePhaseManager{
                 javax.swing.Timer dealAfter = new javax.swing.Timer(500, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        AudioManager.getInstance().play("./assets/sounds/carddeal.wav");
                         dealer.dealCard(player);
                         distributeCardsOrManageNextPhase();
                     }
@@ -92,6 +94,7 @@ public class CardsDistributionController extends GamePhaseManager{
                javax.swing.Timer dealAfter = new javax.swing.Timer(500, new ActionListener() {
                    @Override
                    public void actionPerformed(ActionEvent e) {
+                       AudioManager.getInstance().play("./assets/sounds/carddeal.wav");
                        dealer.dealDealerCard(isHidden);
                        distributeCardsOrManageNextPhase();
                    }

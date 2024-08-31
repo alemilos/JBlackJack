@@ -1,6 +1,7 @@
 package controller.gamephases;
 
 import controller.GameController;
+import misc.AudioManager;
 import model.game.Game;
 import model.game.models.player.AIPlayer;
 import model.game.models.player.HumanPlayer;
@@ -38,6 +39,7 @@ public class BetPhaseController extends GamePhaseManager{
                 Timer aiTimer = new Timer(randomDelay, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        AudioManager.getInstance().play("./assets/sounds/betchip.wav");
                         ((AIPlayer) player).simulateBet();
                     }
                 });

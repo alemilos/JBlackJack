@@ -1,5 +1,6 @@
 package controller;
 
+import misc.AudioManager;
 import model.global.User;
 
 public class Controller {
@@ -29,6 +30,7 @@ public class Controller {
      **********************************************************************/
 
     public void goToHome(){
+        AudioManager.getInstance().play("./assets/sounds/homesound.wav");
         homeController = HomeController.getInstance();
     }
 
@@ -37,6 +39,7 @@ public class Controller {
     }
 
     public void goToGame(){
+        AudioManager.getInstance().stop();
         gameController = GameController.getInstance();
     }
 

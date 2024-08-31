@@ -1,7 +1,9 @@
 package controller;
 
 import controller.gamephases.GamePhaseManager;
+import misc.AudioManager;
 import model.game.Game;
+import model.game.enums.Actions;
 import model.game.models.player.HumanPlayer;
 import model.game.models.standalones.Dealer;
 import model.global.User;
@@ -118,14 +120,19 @@ public class GameController {
                 public void actionPerformed(ActionEvent e) {
                     // If the turn is played by HumanPlayer, perform the clicked action.
                     if (Game.getInstance().getTurn().getPlayer() instanceof HumanPlayer) {
+                        if (actionBtn.getAction() == Actions.HIT){
+                            AudioManager.getInstance().play("./assets/sounds/carddeal.wav");
+                        }
+
                         Game.getInstance().getTurn().manageAction(actionBtn.getAction());
+
                         if (!Game.getInstance().getTurn().isActive()){
                             gamePhaseManager.getUsersActionsController().terminateHumanTurn();
 
                             if (humanPlayer.getHand().softTotal() > BLACKJACK){ // Busted
-                                System.out.println("BUSTED (show in the ui)");
+                                AudioManager.getInstance().play("./assets/sounds/lose.wav");
                             }else if(humanPlayer.getHand().softTotal() == BLACKJACK){  // Blackjack
-                                System.out.println("BLACKJACK! (show in the ui)");
+                                AudioManager.getInstance().play("./assets/sounds/blackjack.wav");
                             }
                         } else{  // Can make another action
                             gamePhaseManager.getUsersActionsController().restartHumanTimer();
@@ -141,6 +148,7 @@ public class GameController {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if(humanPlayer.canBet(chipBtn.getChip())){
+                        AudioManager.getInstance().play("./assets/sounds/betchip.wav");
                         humanPlayer.addToBet(chipBtn.getChip());
                     }
                 }

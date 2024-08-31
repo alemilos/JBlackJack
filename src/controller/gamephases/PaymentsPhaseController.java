@@ -1,6 +1,7 @@
 package controller.gamephases;
 
 import controller.GameController;
+import misc.AudioManager;
 import model.game.Game;
 import model.game.models.hand.Hand;
 import model.game.models.player.Player;
@@ -72,6 +73,7 @@ public class PaymentsPhaseController extends GamePhaseManager{
         Hand playerHand = player.getHand();
         NotificationsPanel notificationPanel = gameController.getGamePage().getNotificationsPanel();
 
+        AudioManager.getInstance().play("./assets/sounds/bankrollreceive.wav");
         if (playerHand.isBlackjack()){
             if (dealerHand.isBlackjack()){
                 notificationPanel.addTextNotification(player.getName() + " ha un Push");
