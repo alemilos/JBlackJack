@@ -19,11 +19,15 @@ public abstract class Player extends Observable{
     protected Bankroll bankroll; // For each chip, how many does the user have.
     protected Bet bet;
 
+    protected int buyIn;
+    protected int blackjacksCount;
+
     public Player(String name, int buyIn){
         this.name = name;
         this.hand = new Hand();// Empty Hand to get started.
         this.bankroll= new Bankroll(buyIn);
         this.bet = new Bet();
+        this.buyIn = buyIn;
     }
 
     public List<Actions> getAvailableActions(){
@@ -163,6 +167,10 @@ public abstract class Player extends Observable{
     public void receiveCard(Card card){
         hand.add(card);
 
+        if (hand.isBlackjack()){
+            blackjacksCount++;
+        }
+
         notifyCardAdd();
     }
 
@@ -222,10 +230,25 @@ public abstract class Player extends Observable{
         notifyObservers(BANKROLL_UPDATE);
     }
 
+    /**
+     * To be called by a Turn instance
+     */
+    public void notifyTurnFinish(){
+        setChanged();
+        notifyObservers(TURN_FINISH);
+    }
 
     public void reset(){
         this.bet = new Bet();
         this.hand = new Hand();
+    }
+
+    public int getBuyIn() {
+        return buyIn;
+    }
+
+    public int getBlackjacksCount() {
+        return blackjacksCount;
     }
 }
 

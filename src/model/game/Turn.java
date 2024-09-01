@@ -42,6 +42,7 @@ public class Turn extends Observable {
 
     private void terminate(){
         isActive = false;
+        player.notifyTurnFinish();
 
         setChanged();
         notifyObservers(TURN_FINISH);

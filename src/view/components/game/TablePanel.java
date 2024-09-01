@@ -37,7 +37,19 @@ public class TablePanel extends JPanel {
         return userInterfacePanel;
     }
 
+    public void clearForLoss() {
+        removeAll();
 
+        JLabel defeatLabel = new JLabel();
+        defeatLabel.setIcon(new ImageIcon(new ImageIcon("./assets/ui/defeat.png").getImage().getScaledInstance(1000, 800, Image.SCALE_SMOOTH)));
+        defeatLabel.setHorizontalAlignment(JLabel.CENTER);
+        defeatLabel.setVerticalAlignment(JLabel.CENTER);
+
+        add(defeatLabel);
+
+        repaint();
+        revalidate();
+    }
 
     public JPanel getUsersPanel() {
         return usersPanel;

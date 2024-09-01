@@ -1,9 +1,12 @@
 package model.db;
 
 import model.game.Game;
+import model.game.models.player.HumanPlayer;
+import model.game.models.player.Player;
 import model.global.User;
 
 import java.io.*;
+import java.util.Date;
 
 import static misc.Constants.STARTING_BALANCE;
 
@@ -160,9 +163,10 @@ public class Database {
         System.out.println("Addning game to database...");
 
         System.out.println("Duration: "  + game.calculateTimePlayed());
-        System.out.println("Blackjacks: ");
-
-
+        System.out.println("Buy In: " + calculatePlayerEarnings(game.getHumanPlayer()));
+        System.out.println("Blackjacks: " + getBlackjacksCount(game.getHumanPlayer()));
+        System.out.println("Busted Counts: ");
+        System.out.println("Won Hands: ");
     }
 
     /**
@@ -174,5 +178,17 @@ public class Database {
         return entry.split(",")[UNAME_IDX].trim();
     }
 
+
+
+    private int calculatePlayerEarnings(Player player){
+        if(player.getBankroll().getChipsLeft() > player.getBuyIn()){
+            return player.getBankroll().getChipsLeft() - player.getBuyIn();
+        }
+        return 0;
+    }
+
+    private int getBlackjacksCount(Player player){
+        return player.getBlackjacksCount();
+    }
 
 }

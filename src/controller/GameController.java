@@ -76,15 +76,35 @@ public class GameController {
     }
 
     private void manageGameLoss(){
-            System.out.println("Should Popup LOSS on screen");
             AudioManager.getInstance().play(Sounds.LOSE);
 
-            //gamePhaseManager.terminate();
-            //gamePhaseManager = null;
-            //game.finishGame();
-            //gamePage.dispose();
-            //resetInstance();
-            //Controller.getInstance().goToHome();
+            gamePage.getTablePanel().clearForLoss();
+
+            Timer timer = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    javax.swing.Timer endAfter   = new javax.swing.Timer(1000, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            handleGameLeave();
+                        }
+                    });
+                    endAfter.setRepeats(false);
+                    endAfter.start();
+                }
+            };
+
+            timer.schedule(timerTask, 8000 );
+   }
+
+   private void handleGameLeave(){
+       gamePhaseManager.terminate();
+       gamePhaseManager = null;
+       game.finishGame();
+       gamePage.dispose();
+       resetInstance();
+       Controller.getInstance().goToHome();
     }
 
     public static GameController getInstance() {
@@ -104,15 +124,7 @@ public class GameController {
         gamePage.getLeaveBtn().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.err.println("Should save game state to DB");
-
-                gamePhaseManager.terminate();
-                gamePhaseManager = null;
-                game.finishGame();
-                gamePage.dispose();
-                resetInstance();
-                Controller.getInstance().goToHome();
-
+                handleGameLeave();
             }
         });
 

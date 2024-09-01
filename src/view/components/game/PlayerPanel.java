@@ -1,6 +1,7 @@
 package view.components.game;
 
 import model.game.enums.Chips;
+import model.game.models.hand.Hand;
 import model.game.models.player.AIPlayer;
 import model.game.models.player.Player;
 import model.game.models.standalones.Card;
@@ -20,11 +21,13 @@ public class PlayerPanel extends JPanel implements Observer{
     private JLayeredPane cardsLayeredPane;
     private BankrollPanel bankrollPanel;
 
+
     private int cardsNumber;
     private int lastCardX;
 
     private JLabel chipLabel;
     private JLabel cardsTotalValueLabel;
+    private JLabel turnStateLabel;
 
     private ImageIcon chipPlaceholder;
 
@@ -80,6 +83,15 @@ public class PlayerPanel extends JPanel implements Observer{
         cardsTotalValueLabel.setFont(BASE_FONT);
         cardsTotalValueLabel.setForeground(Color.white);
 
+        JPanel turnStatePanel = new JPanel();
+        turnStatePanel.setBackground(null);
+        turnStateLabel = new JLabel();
+        turnStateLabel.setForeground(Color.RED);
+        turnStatePanel.add(turnStateLabel);
+
+
+        container.add(turnStatePanel);
+        container.add(Box.createRigidArea(new Dimension(0,20)));
         container.add(cardsTotalValueLabel);
         container.add(Box.createRigidArea(new Dimension(0,20)));
         container.add(cardsLayeredPane);
@@ -107,7 +119,7 @@ public class PlayerPanel extends JPanel implements Observer{
         chipLabel.setIcon(new ImageIcon(new ImageIcon("./assets/icons/chips/" + chipName.toLowerCase() + ".png").getImage().getScaledInstance(chipSize,chipSize,Image.SCALE_SMOOTH)));
     }
 
-    public void addCard(String value, String suit){
+    private void addCard(String value, String suit){
         JLabel card = new JLabel();
         card.setIcon(new ImageIcon (new ImageIcon("./assets/cards/" + suit + value + ".png").getImage().getScaledInstance(cardWidth,cardHeight, 0)));
         card.setBounds(lastCardX,0,cardWidth,cardHeight);
@@ -116,8 +128,28 @@ public class PlayerPanel extends JPanel implements Observer{
         cardsLayeredPane.add(card, cardsNumber++);
     }
 
-    public void updateCardsTotalValue(int value){
+    private void updateCardsTotalValue(int value){
         cardsTotalValueLabel.setText("Tot: " + value);
+    }
+
+    /**
+     * Write RED busted or BLACKJACK or put a thumb in case of normal round
+     */
+    private void updateHandState(Hand hand){
+        turnStateLabel.setText("");
+        if (hand.isBlackjack()){
+            turnStateLabel.setText("BLACKJACK");
+            turnStateLabel.setForeground(Color.MAGENTA);
+            turnStateLabel.setFont(new Font("Arial", Font.BOLD, 22));
+        }
+        else if(hand.isBusted()){
+            turnStateLabel.setText("BUSTED");
+            turnStateLabel.setForeground(Color.RED);
+            turnStateLabel.setFont(new Font("Arial", Font.BOLD, 22));
+        }else {
+            // Thump UP
+            turnStateLabel.setIcon(new ImageIcon(new ImageIcon("./assets/icons/thumbup.png").getImage().getScaledInstance(30,30, Image.SCALE_SMOOTH)));
+        }
     }
 
 
@@ -139,6 +171,11 @@ public class PlayerPanel extends JPanel implements Observer{
             Card card = player.getHand().peek();
             addCard(card.lookupValue(), card.lookupSuit().toString());
             updateCardsTotalValue(player.getHand().softTotal());
+        }
+
+        if (arg == TURN_FINISH){
+            System.out.println(player);
+            updateHandState(player.getHand());
         }
     }
 }

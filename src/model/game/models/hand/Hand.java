@@ -82,18 +82,6 @@ public class Hand{
         return total;
     }
 
-    /**
-     * This counts the minimum total of the hand, if there are ACES, the softValue is never counted
-     * @return
-     */
-    public int total(){
-        int total = 0;
-        for (Card card: cards){
-            total += card.lookupRank().getValue();
-        }
-        return total;
-    }
-
     public boolean isBusted(){
         return softTotal() > BLACKJACK;
     }

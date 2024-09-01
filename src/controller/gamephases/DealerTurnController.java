@@ -35,6 +35,8 @@ public class DealerTurnController extends GamePhaseManager{
             if (!dealer.isCardRevealed()) {
                 manageCardReveal();
             } else if (dealer.getHand().softTotal() >= DEALER_STANDS_AT){
+                // Update Dealer state
+                gameController.getGamePage().getTablePanel().getDealerPanel().updateDealerHandState(dealer.getHand());
                 manageNextPhase();
             } else {
                 manageCardDeal();

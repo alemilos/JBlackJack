@@ -1,7 +1,6 @@
 package view.components.game;
 
 import misc.Constants;
-import model.game.Game;
 import model.game.models.hand.Hand;
 import model.game.models.standalones.Card;
 import model.game.models.standalones.Dealer;
@@ -41,6 +40,7 @@ public class DealerPanel extends JPanel implements Observer {
 
        dealerCardsPanel = new JPanel(new FlowLayout());
        dealerCardsPanel.setBackground(null);
+
        add(dealerCardsPanel, BorderLayout.CENTER);
        add(cardTotalPanel, BorderLayout.SOUTH);
     }
@@ -62,6 +62,20 @@ public class DealerPanel extends JPanel implements Observer {
         cardTotalLbl.setText(value+"");
         cardTotalLbl.setVisible(true);
         totalText.setVisible(true);
+    }
+
+    public void updateDealerHandState(Hand dealerHand){
+        if (dealerHand.isBusted()){
+            totalText.setText("");
+            cardTotalLbl.setText("DEALER BUSTED");
+            cardTotalLbl.setFont(new Font("Arial", Font.BOLD, 22));
+            cardTotalLbl.setForeground(Color.RED);
+        }else if (dealerHand.isBlackjack()){
+            totalText.setText("");
+            cardTotalLbl.setText("DEALER BLACKJACK");
+            cardTotalLbl.setFont(new Font("Arial", Font.BOLD, 22));
+            cardTotalLbl.setForeground(Color.MAGENTA);
+        }
     }
 
     @Override

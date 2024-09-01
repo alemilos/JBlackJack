@@ -32,7 +32,6 @@ public class Game extends Observable {
     private Dealer dealer;
 
     private Date startedAt;
-    private Date endedAt;
 
     private Turn turn;
 
@@ -65,8 +64,6 @@ public class Game extends Observable {
     }
 
     public void finishGame(){
-        this.endedAt = new Date();
-
         Database.getInstance().addGameToUser(this, user);
 
         this.getDealer().resetInstance();
@@ -155,10 +152,21 @@ public class Game extends Observable {
         this.turn = null;
     }
 
+    /**
+     * Calculate time played from the beginning of the game to the current moment.
+     * The return format is hh:mm:ss
+     * @return
+     */
     public String calculateTimePlayed(){
         Date now = new Date();
         long timePlayed = now.getTime() - startedAt.getTime();
 
-        return ""   + timePlayed;
+        // Convert to hours:minutes:seconds from milliseconds
+        long hours = timePlayed / 3600000;
+        long minutes = (timePlayed % 3600000) / 60000;
+        long seconds = (timePlayed % 60000) / 1000;
+
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
+
 }

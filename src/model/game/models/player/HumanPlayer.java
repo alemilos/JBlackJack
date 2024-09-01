@@ -13,5 +13,4 @@ public class HumanPlayer extends Player{
         super(user.getUsername(), buyIn);
         this.user = user;
     }
-
 }
