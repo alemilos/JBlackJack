@@ -57,7 +57,7 @@ public class GamePage extends JFrame {
             Image img = ImageIO.read(new File("./assets/icons/leaveBtn.png"));
             leaveBtn.setIcon(new ImageIcon(img));
         }catch(IOException ioe){
-            System.out.println("Image not found");
+            System.err.println("Image not found");
             System.exit(1);
         }
 
@@ -72,7 +72,7 @@ public class GamePage extends JFrame {
             Image img = ImageIO.read(new File("./assets/icons/musicBtn.png"));
             musicBtn.setIcon(new ImageIcon(img));
         }catch(IOException ioe){
-            System.out.println("Image not found");
+            System.err.println("Image not found");
             System.exit(1);
         }
 

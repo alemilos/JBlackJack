@@ -4,9 +4,6 @@ import model.db.Database;
 import model.db.InvalidUsernameException;
 import model.global.User;
 
-import java.util.List;
-
-
 public class Authentication {
 
     private User currentUser;

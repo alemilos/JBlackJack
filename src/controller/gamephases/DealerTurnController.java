@@ -77,6 +77,9 @@ public class DealerTurnController extends GamePhaseManager{
                         if(!isTerminated) {
                             AudioManager.getInstance().play(Sounds.CARD_DEAL);
                             dealer.dealDealerCard(false);
+                            if (dealer.getHand().isBusted()){
+                                AudioManager.getInstance().play(Sounds.DEALER_BUSTED);
+                            }
                             dealCardsUntilStandingOrBustOrManageNextPhase();
                         }
                     }

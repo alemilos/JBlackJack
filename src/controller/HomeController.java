@@ -15,7 +15,7 @@ public class HomeController {
 
     private HomeController(){
         User user = Controller.getUser();
-        this.homePage = new HomePage(user.getUsername(), user.getElo().toString(),  user.getWallet().getBalance());
+        this.homePage = new HomePage(user.getUsername(), user.getElo().toString());
         addActionListeners();
     }
 

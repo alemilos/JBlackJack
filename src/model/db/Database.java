@@ -6,6 +6,7 @@ import model.game.models.player.Player;
 import model.global.User;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Date;
 
 import static misc.Constants.STARTING_BALANCE;
@@ -22,12 +23,12 @@ import static misc.Constants.STARTING_BALANCE;
 public class Database {
 
     private static Database instance;
-    private File db;
+    private File users;
+    private File games;
 
     // Fields Indexes
     private final int UNAME_IDX= 0;
     private final int BALANCE_IDX= 1;
-    private final int GAMES_IDX= 2;
 
     private Database(){
         createRequiredFiles();
@@ -49,28 +50,37 @@ public class Database {
         File resourceDir = new File("./resources");
         if (!resourceDir.exists()){
             if (!resourceDir.mkdir()) {
-                System.out.println("Could not create a non existing dir.");
+                System.err.println("Could not create a non existing dir.");
                 System.exit(1);
             }
         }
 
-        File db = new File("./resources/db");
-        if (!db.exists()){
+        File users = new File("./resources/users");
+        File games = new File("./resources/games");
+        if (!users.exists()){
             try {
-                db.createNewFile();
+                users.createNewFile();
             }
             catch(IOException ioe){
                 System.exit(1);
             }
             }
+        if (!games.exists()){
+            try{
+                games.createNewFile();
+            }catch(IOException ioe){
+                System.exit(1);
+            }
+        }
 
 
-        this.db = db;
+        this.users = users;
+        this.games = games;
     }
 
     public boolean usernameExists(String username){
         try {
-            BufferedReader br = new BufferedReader(new FileReader(this.db.toString()));
+            BufferedReader br = new BufferedReader(new FileReader(this.users.toString()));
 
             String entry;
             while ((entry= br.readLine()) != null) {
@@ -93,7 +103,7 @@ public class Database {
             throw new InvalidUsernameException();
         }
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(this.db.toString(),true));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(this.users.toString(),true));
 
             String dbEntry = username.trim() +  "," + STARTING_BALANCE + "," + System.lineSeparator();
             bw.write(dbEntry);
@@ -114,7 +124,7 @@ public class Database {
             return;
         }
         try{
-            BufferedReader br = new BufferedReader(new FileReader(this.db.toString()));
+            BufferedReader br = new BufferedReader(new FileReader(this.users.toString()));
 
             String entry;
             StringBuilder updatedFile = new StringBuilder();
@@ -125,12 +135,12 @@ public class Database {
             }
             br.close();
 
-            BufferedWriter bw = new BufferedWriter(new FileWriter(this.db.toString()));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(this.users.toString()));
             bw.write(updatedFile.toString());
 
             bw.close();
         }catch(IOException ioe){
-            System.out.println("DB not found!");
+            System.err.println("DB not found!");
             System.exit(1);
         }
     }
@@ -138,7 +148,7 @@ public class Database {
     public User getUser(String username) {
         // Take the fist element of the DB line. That's the username
         try {
-            BufferedReader br = new BufferedReader(new FileReader(this.db.toString()));
+            BufferedReader br = new BufferedReader(new FileReader(this.users.toString()));
 
             String entry;
             while((entry= br.readLine()) != null){
@@ -160,13 +170,85 @@ public class Database {
     }
 
     public void addGameToUser(Game game, User user){
-        System.out.println("Addning game to database...");
+        // Format the game info with semicolon as game field separator.
+        String duration = game.calculateTimePlayed();
+        int earnings = calculatePlayerEarnings(game.getHumanPlayer());
+        int blackjacks = getBlackjacksCount(game.getHumanPlayer());
+        int bustedCount = getBustedCount(game.getHumanPlayer());
+        int wonHands = getWonHandsCount(game.getHumanPlayer());
+        String gameField = duration + ";" + earnings + ";" + blackjacks + ";" + bustedCount + ";" + wonHands + ",";
 
-        System.out.println("Duration: "  + game.calculateTimePlayed());
-        System.out.println("Buy In: " + calculatePlayerEarnings(game.getHumanPlayer()));
-        System.out.println("Blackjacks: " + getBlackjacksCount(game.getHumanPlayer()));
-        System.out.println("Busted Counts: ");
-        System.out.println("Won Hands: ");
+        try {
+            // Find the correct line
+            BufferedReader br = new BufferedReader(new FileReader(this.games.toString()));
+
+            String entry;
+            String updatedEntry;
+            StringBuilder updatedFile = new StringBuilder();
+
+            boolean userFound = false;
+
+            while((entry = br.readLine()) != null) {
+                if (getUsername(entry).equals(user.getUsername())){
+                    userFound = true;
+                    updatedEntry = entry + gameField;
+                    updatedFile.append(updatedEntry).append(System.lineSeparator());
+                }else{
+                    updatedFile.append(entry).append(System.lineSeparator());
+                }
+            }
+
+            // Create the first game entry for given user
+            if (!userFound){
+                String newEntry = user.getUsername() + "," + gameField;
+                updatedFile.append(newEntry).append(System.lineSeparator());
+            }
+
+            BufferedWriter bw = new BufferedWriter(new FileWriter(this.games.toString(),false));
+
+            bw.write(updatedFile.toString());
+
+            br.close();
+            bw.close();
+        } catch(RuntimeException | IOException ioe){
+            // Database does not exist or could not instantiate a BufferedWriter
+            System.exit(1);
+        }
+    }
+
+    public void updateBalance(Game game, User user){
+        int earnings = calculatePlayerEarnings(game.getHumanPlayer());
+
+        try {
+            // Find user in db
+            BufferedReader br = new BufferedReader(new FileReader(this.users));
+            String entry;
+            StringBuilder updatedFile = new StringBuilder();
+
+            while((entry = br.readLine()) != null){
+               if (getUsername(entry).equals(user.getUsername())){
+                   int newBalance = getBalance(entry) + earnings;
+                   String newEntry;
+                    if (newBalance >= STARTING_BALANCE) {
+                        newEntry = getUsername(entry) + "," + newBalance;
+                    }else{
+                        newEntry = getUsername(entry) + "," + STARTING_BALANCE;
+                    }
+                    updatedFile.append(newEntry).append(System.lineSeparator());
+               }else{
+                    updatedFile.append(entry).append(System.lineSeparator());
+               }
+            }
+
+            BufferedWriter bw = new BufferedWriter(new FileWriter(this.users.toString(), false));
+            bw.write(updatedFile.toString());
+
+            br.close();
+            bw.close();
+
+        }catch(RuntimeException | IOException e){
+            System.exit(1);
+        }
     }
 
     /**
@@ -179,16 +261,52 @@ public class Database {
     }
 
 
+    /**
+     * Get the balance in the users db by the username.
+     * @param username
+     * @return
+     */
+    public int getBalanceByUsername(String username) {
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(this.users));
+
+            String entry;
+            while((entry = br.readLine()) != null){
+                if (getUsername(entry).equals(username)){
+
+                    br.close();
+                    return getBalance(entry);
+                }
+            }
+
+            throw new IOException("user not found");
+
+        }catch(RuntimeException | IOException e){
+            System.exit(1);
+        }
+
+        return 0; // should be never reached
+    }
+
+    private int getBalance(String entry){
+        return Integer.parseInt(entry.split(",")[BALANCE_IDX].trim());
+    }
+
 
     private int calculatePlayerEarnings(Player player){
-        if(player.getBankroll().getChipsLeft() > player.getBuyIn()){
-            return player.getBankroll().getChipsLeft() - player.getBuyIn();
-        }
-        return 0;
+        return player.getBankroll().getChipsLeft() - player.getBuyIn();
     }
 
     private int getBlackjacksCount(Player player){
         return player.getBlackjacksCount();
+    }
+
+    private int getBustedCount(Player player){
+        return player.getBustedHands();
+    }
+
+    private int getWonHandsCount(Player player){
+        return player.getWonHands();
     }
 
 }

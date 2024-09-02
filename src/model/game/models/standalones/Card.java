@@ -18,6 +18,10 @@ public class Card {
         isHidden = hidden;
     }
 
+    public boolean isHidden() {
+        return isHidden;
+    }
+
     /**
      * A Card Rank lookup can be done only if the card is visible
      * @return

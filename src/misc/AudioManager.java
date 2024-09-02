@@ -46,7 +46,9 @@ public class AudioManager {
 
         switch (sound){
             case HOME -> {return path + "homesound.wav";}
+            case SHUFFLE -> {return path + "shuffle.wav";}
             case BUSTED -> {return path + "busted.wav";}
+            case DEALER_BUSTED -> {return path + "dealerbusted.wav";}
             case LOSE -> { return path + "lose.wav" ;}
             case KNOCK -> { return path + "knock.wav";}
             case MONEY -> { return path + "money.wav";}

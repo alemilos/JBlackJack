@@ -45,6 +45,30 @@ public class GameController {
         startNewRound();
     }
 
+    public void handleReshuffling(){
+        if (Dealer.getInstance().getSabot().mustReshuffle()) {
+            Timer timer = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    AudioManager.getInstance().play(Sounds.SHUFFLE);
+                    javax.swing.Timer shuffleTimer = new javax.swing.Timer(3000, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            gamePage.getNotificationsPanel().addTextNotification("Il mazziere rimescola il Deck");
+                           Dealer.getInstance().getSabot().reshuffle();
+                        }
+                    });
+                    shuffleTimer.setRepeats(false);
+                    shuffleTimer.start();
+
+                }
+            };
+
+            timer.schedule(timerTask, 0);
+        }
+    }
+
     public void startNewRound(){
         game.clearRound();
 
@@ -151,7 +175,6 @@ public class GameController {
                                 AudioManager.getInstance().play(Sounds.BLACKJACK);
                             }
                         } else{  // Can make another action
-                            System.out.println("Restarting Human Timer");
                             gamePhaseManager.getUsersActionsController().restartHumanTimer();
                         }
                     }
@@ -164,9 +187,11 @@ public class GameController {
             chipBtn.getIconBtn().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if(humanPlayer.canBet(chipBtn.getChip())){
-                        AudioManager.getInstance().play(Sounds.CHIPS_BET);
-                        humanPlayer.addToBet(chipBtn.getChip());
+                    if (game.isBetPhase()) {
+                        if (humanPlayer.canBet(chipBtn.getChip())) {
+                            AudioManager.getInstance().play(Sounds.CHIPS_BET);
+                            humanPlayer.addToBet(chipBtn.getChip());
+                        }
                     }
                 }
             });

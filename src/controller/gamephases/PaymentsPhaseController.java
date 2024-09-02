@@ -37,6 +37,8 @@ public class PaymentsPhaseController extends GamePhaseManager{
 
         dealerHand = Dealer.getInstance().getHand();
 
+        Game.getInstance().updatePlayerStats();
+
         managePaymentOrManageNextPhase();
 
     }
@@ -65,7 +67,7 @@ public class PaymentsPhaseController extends GamePhaseManager{
 
                     timer.schedule(timerTask, 1000);
             }else{
-                System.out.println("add timer before restarting round");
+                gameController.handleReshuffling();
                 gameController.startNewRound();
             }
     }

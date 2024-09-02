@@ -13,6 +13,7 @@ public enum Updates {
     TURN_FINISH,
 
     CARD_ADD,
+    CARD_REVEAL,
 
-    CARD_REVEAL;
+    SHUFFLE;
 }

@@ -37,7 +37,6 @@ public class Bet {
      */
     public Chips pop(){
         if(!chipAddedQueue.isEmpty()){
-            System.out.println(chipAddedQueue.size());
         Chips removedChip = chipAddedQueue.remove(chipAddedQueue.size()-1);
 
         if (chips.get(removedChip) > 1){

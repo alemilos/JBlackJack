@@ -1,14 +1,21 @@
 package model.game.models.standalones;
 
+import misc.Updates;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
 
 public class Sabot {
 
     private static Sabot instance;
 
     private List<Card> cards;
+
+    private final int CUT_CARD;
+
+    private final int k;
 
     /**
      * A sabot is a big deck of cards, it usually contains k * decks (52 cards decks).
@@ -18,6 +25,7 @@ public class Sabot {
      * @param k the number of decks
      */
     private Sabot(int k){
+        this.k = k;
         cards = new ArrayList<>();
 
         // Create k decks and merge them together to form k * 52 cards ArrayList.
@@ -27,6 +35,7 @@ public class Sabot {
         }
         shuffle();
 
+        CUT_CARD = k*52 / 2;
     }
 
     public static Sabot getInstance(int k){
@@ -40,13 +49,33 @@ public class Sabot {
         Collections.shuffle(cards);
     }
 
+    /**
+     * Recreate a sabot and shuffle it.
+     */
+    public void reshuffle(){
+        cards = new ArrayList<>();
+        // Create k decks and merge them together to form k * 52 cards ArrayList.
+        for (int i = 0; i < k; i++){
+            Deck deck = new Deck();
+            cards.addAll(deck.getCards());
+        }
+        shuffle();
+    }
+
+    /**
+     * Sabot must be reshuffled when CUT_CARD is reached.
+     * @return
+     */
+    public boolean mustReshuffle(){
+        return size() < CUT_CARD;
+    }
 
     /**
      * Extract the last card from the Sabot and make it visible.
      * @return
      */
     public Card dealCard(){
-       Card card = cards.remove(cards.size()-1);
+        Card card = cards.remove(cards.size()-1);
         return card;
     }
 
@@ -67,4 +96,5 @@ public class Sabot {
     public void resetInstance(){
         instance = null;
     }
+
 }

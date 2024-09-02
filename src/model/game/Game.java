@@ -65,6 +65,7 @@ public class Game extends Observable {
 
     public void finishGame(){
         Database.getInstance().addGameToUser(this, user);
+        Database.getInstance().updateBalance(this, user);
 
         this.getDealer().resetInstance();
         instance = null; // reset this instance of game.
@@ -167,6 +168,25 @@ public class Game extends Observable {
         long seconds = (timePlayed % 60000) / 1000;
 
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    /**
+     * Must be called before the round is reinitialized.
+     */
+    public void updatePlayerStats(){
+        getPlayingPlayers().forEach(player -> {
+            if(player.getHand().isBlackjack()){
+                player.incrementBlackjacks();
+            }
+            if (player.getHand().isBusted()){
+                player.incrementBustedHands();
+            }
+            else{
+                if (dealer.getHand().isBusted() || player.getHand().softTotal() > dealer.getHand().softTotal()){
+                    player.incrementWonHands();
+                }
+            }
+        });
     }
 
 }

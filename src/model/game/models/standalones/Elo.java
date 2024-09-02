@@ -8,7 +8,6 @@ public class Elo {
     private Leagues league;
 
     public Elo(int balance){
-        System.out.println(balance);
         if (balance < 3000){
             league = Leagues.BROKE;
         }

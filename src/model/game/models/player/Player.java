@@ -21,6 +21,8 @@ public abstract class Player extends Observable{
 
     protected int buyIn;
     protected int blackjacksCount;
+    protected int bustedHands;
+    protected int wonHands;
 
     public Player(String name, int buyIn){
         this.name = name;
@@ -167,10 +169,6 @@ public abstract class Player extends Observable{
     public void receiveCard(Card card){
         hand.add(card);
 
-        if (hand.isBlackjack()){
-            blackjacksCount++;
-        }
-
         notifyCardAdd();
     }
 
@@ -196,6 +194,7 @@ public abstract class Player extends Observable{
      */
     public void doPay(){
         bet.delete();
+        notifyBet();
     }
 
     /**
@@ -243,12 +242,29 @@ public abstract class Player extends Observable{
         this.hand = new Hand();
     }
 
+    public void incrementWonHands() {
+        wonHands++;
+    }
+    public void incrementBustedHands(){
+        bustedHands++;
+    }
+    public void incrementBlackjacks(){
+        blackjacksCount++;
+    }
+
     public int getBuyIn() {
         return buyIn;
     }
 
     public int getBlackjacksCount() {
         return blackjacksCount;
+    }
+    public int getBustedHands(){
+        return bustedHands;
+    }
+
+    public int getWonHands() {
+        return wonHands;
     }
 }
 

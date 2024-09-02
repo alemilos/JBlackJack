@@ -1,5 +1,6 @@
 package view.pages;
 
+import model.db.Database;
 import view.components.home.BalanceDisplay;
 import view.components.home.EloBox;
 import view.components.home.ProfileButton;
@@ -12,7 +13,9 @@ public class HomePage extends JFrame{
     private JButton playBtn;
     private ProfileButton profileBtn;
 
-    public HomePage(String username, String elo, int balance){
+    public HomePage(String username, String elo){
+        int balance = Database.getInstance().getBalanceByUsername(username);
+
         setTitle("Home");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setResizable(false);
@@ -46,7 +49,6 @@ public class HomePage extends JFrame{
         playBtn.setBorderPainted(false);
         playBtn.setFocusPainted(false);
         playBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
 
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

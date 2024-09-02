@@ -7,5 +7,8 @@ public enum Sounds {
     CARD_DEAL,
     KNOCK,
     LOSE,
-    HOME, BUSTED;
+    SHUFFLE,
+    HOME,
+    BUSTED,
+    DEALER_BUSTED;
 }

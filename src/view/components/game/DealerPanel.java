@@ -10,8 +10,7 @@ import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
 
-import static misc.Updates.CARD_ADD;
-import static misc.Updates.CARD_REVEAL;
+import static misc.Updates.*;
 
 public class DealerPanel extends JPanel implements Observer {
 
@@ -84,6 +83,7 @@ public class DealerPanel extends JPanel implements Observer {
             Card card = Dealer.getInstance().getHand().peek(); // View the last added card
             addDealerCard(card.lookupValue(), card.lookupSuit() != null ? card.lookupSuit().name() : null);
             updateCardTotal(Dealer.getInstance().getHand().softTotal());
+
         }
 
         // Redraw the Dealer Hand
@@ -94,6 +94,7 @@ public class DealerPanel extends JPanel implements Observer {
             hand.getCards().forEach(card -> {
                         addDealerCard(card.lookupValue(), card.lookupSuit().toString());
             });
+
             updateCardTotal(Dealer.getInstance().getHand().softTotal());
         }
     }

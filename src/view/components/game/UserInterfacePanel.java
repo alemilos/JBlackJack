@@ -127,12 +127,14 @@ public class UserInterfacePanel extends JPanel implements Observer {
     private void enableBetButtons(){
         HumanPlayer player = Game.getInstance().getHumanPlayer();
 
-        chipButtons.forEach(chipBtn -> {
-            chipBtn.getIconBtn().setEnabled(player.canBet(chipBtn.getChip()));
-        });
+        if(Game.getInstance().isBetPhase()) {
+            chipButtons.forEach(chipBtn -> {
+                chipBtn.getIconBtn().setEnabled(player.canBet(chipBtn.getChip()));
+            });
 
-        deleteBetBtn.setEnabled(!player.getBet().isEmpty());
-        undoBtn.setEnabled(!player.getBet().isChipAddedQueueEmpty());
+            deleteBetBtn.setEnabled(!player.getBet().isEmpty());
+            undoBtn.setEnabled(!player.getBet().isChipAddedQueueEmpty());
+        }
     }
 
     @Override

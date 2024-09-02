@@ -4,9 +4,6 @@ import model.authentication.Authentication;
 import model.global.User;
 import view.pages.AuthPage;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 public class AuthController {
 
     private AuthPage authPage;

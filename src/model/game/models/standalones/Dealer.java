@@ -90,4 +90,8 @@ public class Dealer extends Observable {
     public boolean isCardRevealed() {
         return cardRevealed;
     }
+
+    public Sabot getSabot() {
+        return sabot;
+    }
 }

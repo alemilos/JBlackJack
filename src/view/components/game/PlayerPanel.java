@@ -174,7 +174,6 @@ public class PlayerPanel extends JPanel implements Observer{
         }
 
         if (arg == TURN_FINISH){
-            System.out.println(player);
             updateHandState(player.getHand());
         }
     }
