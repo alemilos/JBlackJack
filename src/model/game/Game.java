@@ -37,6 +37,8 @@ public class Game extends Observable {
 
     private boolean isBetPhase;
 
+    private int roundNumber;
+
     /**
      * Create a Game with given AI Players Number.
      * A Game is made up of players, dealer.
@@ -147,6 +149,7 @@ public class Game extends Observable {
      * Make sure all the game state is set back to the round start
      */
     public void clearRound(){
+        roundNumber++;
         players = players.stream().filter(player -> player.getBankroll().getChipsLeft() > 0).toList();
         players.forEach(Player::reset);
         dealer.reset();
@@ -190,4 +193,7 @@ public class Game extends Observable {
         });
     }
 
+    public int getRoundNumber() {
+        return roundNumber;
+    }
 }

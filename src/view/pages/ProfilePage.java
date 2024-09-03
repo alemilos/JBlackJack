@@ -4,7 +4,6 @@ import controller.Controller;
 import model.db.Database;
 import model.global.User;
 import view.components.profile.LastGames;
-import view.components.profile.Path;
 import view.components.profile.UserInformations;
 import view.components.shared.BalanceDisplay;
 import view.ui.IconButton;
@@ -20,7 +19,6 @@ public class ProfilePage extends JFrame {
 
     private IconButton goBackBtn;
     private UserInformations userInformations;
-    private Path path;
     private LastGames lastGames;
 
     public ProfilePage() {
@@ -60,12 +58,10 @@ public class ProfilePage extends JFrame {
         innerContainer.setBorder(new EmptyBorder(60,60,10,60));
 
         userInformations = new UserInformations(user);
-        path = new Path(user);
         lastGames = new LastGames(user);
 
         innerContainer.add(userInformations, BorderLayout.NORTH);
-        innerContainer.add(path, BorderLayout.CENTER);
-        innerContainer.add(lastGames, BorderLayout.SOUTH);
+        innerContainer.add(lastGames, BorderLayout.CENTER);
 
         container.add(northContainer, BorderLayout.NORTH);
         container.add(innerContainer, BorderLayout.CENTER);

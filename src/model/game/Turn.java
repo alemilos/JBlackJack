@@ -13,7 +13,6 @@ import static misc.Updates.*;
 import static model.game.utils.Constants.BLACKJACK;
 
 public class Turn extends Observable {
-
     private Player player;
 
     private boolean isActive;

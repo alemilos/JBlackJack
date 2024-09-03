@@ -190,7 +190,9 @@ public class Database {
         int blackjacks = getBlackjacksCount(game.getHumanPlayer());
         int bustedCount = getBustedCount(game.getHumanPlayer());
         int wonHands = getWonHandsCount(game.getHumanPlayer());
-        String gameField = duration + ";" + earnings + ";" + blackjacks + ";" + bustedCount + ";" + wonHands + ",";
+        int gameRounds= game.getRoundNumber();
+
+        String gameField = duration + ";" + earnings + ";" + blackjacks + ";" + bustedCount + ";" + wonHands + ";" + gameRounds + ",";
 
         try {
             // Find the correct line

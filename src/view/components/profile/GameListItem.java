@@ -24,6 +24,7 @@ public class GameListItem extends JPanel {
         int blackjacksCount  = Integer.parseInt(fields.get(2));
         int bustedHandsCount = Integer.parseInt(fields.get(3));
         int wonHandsCount = Integer.parseInt(fields.get(4));
+        int gameRounds = Integer.parseInt(fields.get(5));
 
         JPanel container = new JPanel(new BorderLayout());
         container.setBackground(BG_COLOR);
@@ -48,6 +49,10 @@ public class GameListItem extends JPanel {
         bjLabel.setFont(BOLD_FONT);
         bjLabel.setForeground(Color.white);
 
+        JLabel roundsPlayed= new JLabel("Turni Giocati");
+        roundsPlayed.setFont(BOLD_FONT);
+        roundsPlayed.setForeground(Color.white);
+
         JLabel wonHandsLabel= new JLabel("Mani Vinte");
         wonHandsLabel.setFont(BOLD_FONT);
         wonHandsLabel.setForeground(Color.white);
@@ -58,12 +63,17 @@ public class GameListItem extends JPanel {
 
         infosPanel.add(earningsLabel);
         infosPanel.add(bjLabel);
+        infosPanel.add(roundsPlayed);
         infosPanel.add(wonHandsLabel);
         infosPanel.add(bustedHandsLabel);
 
         JLabel blackjacksCountLabel = new JLabel(""+blackjacksCount);
         blackjacksCountLabel.setForeground(Color.white);
         blackjacksCountLabel.setFont(BOLD_FONT);
+
+        JLabel roundsPlayedLabel= new JLabel(""+gameRounds);
+        roundsPlayedLabel.setForeground(Color.white);
+        roundsPlayedLabel.setFont(BOLD_FONT);
 
         JLabel wonHandsCountLabel = new JLabel(""+wonHandsCount);
         wonHandsCountLabel.setForeground(Color.white);
@@ -75,6 +85,7 @@ public class GameListItem extends JPanel {
 
         infosPanel.add(new BalanceDisplay(earnings));
         infosPanel.add(blackjacksCountLabel);
+        infosPanel.add(roundsPlayedLabel);
         infosPanel.add(wonHandsCountLabel);
         infosPanel.add(bustedHandsCountLabel);
 
