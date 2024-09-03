@@ -29,6 +29,8 @@ public class ProfileController {
         profilePage.getGoBackBtn().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                profilePage.dispose();
+                resetInstance();
                Controller.getInstance().goToHome();
             }
         });

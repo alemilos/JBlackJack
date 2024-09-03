@@ -8,7 +8,13 @@ public class BalanceDisplay extends JPanel {
         setLayout(new FlowLayout());
 
         JLabel moneyLbl = new JLabel();
-        ImageIcon moneyIcon = new ImageIcon("./assets/icons/money.png");
+        ImageIcon moneyIcon;
+        if (balance>0){
+            moneyIcon = new ImageIcon("./assets/icons/money.png");
+        }else{
+            moneyIcon = new ImageIcon("./assets/icons/moneyred.png");
+        }
+
         moneyLbl.setIcon(new ImageIcon(moneyIcon.getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH)));
 
 

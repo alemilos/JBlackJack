@@ -16,6 +16,7 @@ import java.util.List;
 import java.io.File;
 import java.io.IOException;
 
+import static misc.Constants.BG_COLOR;
 import static misc.Constants.PRIMARY_COLOR;
 
 public class GamePage extends JFrame {
@@ -83,8 +84,7 @@ public class GamePage extends JFrame {
         gameTitle.setBackground(null);
 
         JPanel background = new JPanel(new BorderLayout());
-        background.setBackground(PRIMARY_COLOR);
-        background.setBorder(new EmptyBorder(10,60,60,60));
+        background.setBackground(BG_COLOR);
 
         tablePanel= new TablePanel();
 

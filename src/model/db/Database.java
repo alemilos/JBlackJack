@@ -171,6 +171,18 @@ public class Database {
         return null;
     }
 
+    /**
+     * Add a game to the games db, on the entry of the given user username.
+     * A game entry is composed by:
+     * - duration of the game
+     * - earnings on the game
+     * - blackjacks count
+     * - busted hands count
+     * - won hands count
+     *
+     * @param game
+     * @param user
+     */
     public void addGameToUser(Game game, User user){
         // Format the game info with semicolon as game field separator.
         String duration = game.calculateTimePlayed();
@@ -254,14 +266,17 @@ public class Database {
     }
 
     public List<String> getUserGames(String username){
+        System.out.println("Looking for games of: " + username);
         try{
             BufferedReader br = new BufferedReader(new FileReader(this.games));
 
             String entry;
             while((entry = br.readLine()) != null){
                 if (getUsername(entry).equals(username)){
+                    String[] splitEntry = entry.split(",");
+
                     br.close();
-                    return Arrays.asList(entry.split(",")).subList(1, entry.split(",").length-1);
+                    return Arrays.asList(splitEntry).subList(1, splitEntry.length);
                 }
             }
 

@@ -19,11 +19,10 @@ public class NotificationsPanel extends JPanel {
 
     public NotificationsPanel(){
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
         createTimerContainer();
 
         setBorder(new EmptyBorder(0,300,0,300));
-        setBackground(PRIMARY_COLOR);
+        setBackground(BG_COLOR);
 
         notificationTitle= new JLabel();
         notificationTitle.setForeground(Color.white);

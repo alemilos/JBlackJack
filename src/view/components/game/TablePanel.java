@@ -16,7 +16,6 @@ public class TablePanel extends JPanel {
 
     public TablePanel(){
         setLayout(new BorderLayout());
-        setBorder(new LineBorder(Color.darkGray));
         setBackground(TABLE_COLOR);
 
         dealerPanel = new DealerPanel();

@@ -1,29 +1,45 @@
 package view.components.profile;
 import model.db.Database;
 import model.global.User;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class LastGames extends JPanel {
+import static misc.Constants.BG_COLOR;
 
-    public LastGames(User user){
+
+public class LastGames extends JPanel {
+    private Box list;  // Assuming you're using a Box to hold the list items
+
+    public LastGames(User user) {
         setBackground(null);
 
-        JPanel container = new JPanel();
-        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+        // Initialize the list container
+        list = Box.createVerticalBox();  // Use a vertical BoxLayout to stack items
+        list.setBackground(BG_COLOR);
 
+        // Retrieve the games for the user
         List<String> games = Database.getInstance().getUserGames(user.getUsername());
 
-        if (games.isEmpty()){
-            System.out.println("No games for given user");
+        if (games.isEmpty()) {
+            return;
         }
 
+        // Add each game to the list
         games.forEach(game -> {
-            container.add(new GameListItem(game));
-            container.add(Box.createRigidArea(new Dimension(0,10)));
+            list.add(new GameListItem(game));  // Adding game item
         });
 
-        add(container);
+        JScrollPane scrollPane = new JScrollPane(list);
+        scrollPane.setBackground(BG_COLOR);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setPreferredSize(new Dimension(800, 400)); // Set preferred size as needed
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.getVerticalScrollBar().setBlockIncrement(50);
+
+        // Add the scroll pane to this panel
+        add(scrollPane, BorderLayout.CENTER);  // Add scroll pane to the center
     }
 }
+

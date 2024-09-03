@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import static misc.Constants.BG_COLOR;
 import static misc.Updates.*;
 
 public class UserInterfacePanel extends JPanel implements Observer {
@@ -28,6 +29,7 @@ public class UserInterfacePanel extends JPanel implements Observer {
 
     public UserInterfacePanel(){
         setLayout(new BorderLayout());
+
         actionsContainer = new JPanel(new BorderLayout());
         chipsContainer = new JPanel(new BorderLayout());
 
@@ -43,7 +45,7 @@ public class UserInterfacePanel extends JPanel implements Observer {
 
     private void drawUserActions(){
         JPanel container = new JPanel(new FlowLayout());
-        container.setBackground(Color.black);
+        container.setBackground(BG_COLOR);
 
         List<Actions> actions = new ArrayList<>(List.of(Actions.values()));
 
@@ -59,7 +61,7 @@ public class UserInterfacePanel extends JPanel implements Observer {
 
     private void drawUserChips(){
         JPanel container = new JPanel(new FlowLayout());
-        container.setBackground(Color.black);
+        container.setBackground(BG_COLOR);
 
         List<Chips> chips = new ArrayList<>(List.of(Chips.values()));
 
