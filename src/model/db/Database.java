@@ -266,7 +266,6 @@ public class Database {
     }
 
     public List<String> getUserGames(String username){
-        System.out.println("Looking for games of: " + username);
         try{
             BufferedReader br = new BufferedReader(new FileReader(this.games));
 
