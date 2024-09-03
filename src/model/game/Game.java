@@ -64,6 +64,7 @@ public class Game extends Observable {
     }
 
     public void finishGame(){
+        user.updateAfterGame(this);
         Database.getInstance().addGameToUser(this, user);
         Database.getInstance().updateBalance(this, user);
 

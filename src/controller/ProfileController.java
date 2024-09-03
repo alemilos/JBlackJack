@@ -2,6 +2,9 @@ package controller;
 
 import view.pages.ProfilePage;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 public class ProfileController {
 
     private static ProfileController instance;
@@ -10,6 +13,7 @@ public class ProfileController {
 
     private ProfileController(){
         profilePage = new ProfilePage();
+        addActionListeners();
     }
 
     public static ProfileController getInstance() {
@@ -22,7 +26,12 @@ public class ProfileController {
     public void resetInstance(){instance = null;}
 
     private void addActionListeners(){
-
+        profilePage.getGoBackBtn().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               Controller.getInstance().goToHome();
+            }
+        });
     }
 
 }

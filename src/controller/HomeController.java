@@ -14,8 +14,7 @@ public class HomeController {
     private HomePage homePage;
 
     private HomeController(){
-        User user = Controller.getUser();
-        this.homePage = new HomePage(user.getUsername(), user.getElo().toString());
+        this.homePage = new HomePage(Controller.getUser());
         addActionListeners();
     }
 
@@ -24,7 +23,7 @@ public class HomeController {
             instance = new HomeController();
         }
 
-        AudioManager.getInstance().play(Sounds.HOME);
+        AudioManager.getInstance().playHomeSongOnRepeat();
         return instance;
     }
 

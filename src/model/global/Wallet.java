@@ -21,4 +21,8 @@ public class Wallet {
     public int getBalance(){
         return this.balance;
     }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
 }

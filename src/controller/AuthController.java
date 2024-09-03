@@ -1,5 +1,6 @@
 package controller;
 
+import misc.AudioManager;
 import model.authentication.Authentication;
 import model.global.User;
 import view.pages.AuthPage;
@@ -22,6 +23,8 @@ public class AuthController {
         if (instance == null){
            instance = new AuthController();
         }
+
+        AudioManager.getInstance().playHomeSongOnRepeat();
         return instance;
     }
 

@@ -6,8 +6,10 @@ import model.game.models.player.Player;
 import model.global.User;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import static misc.Constants.STARTING_BALANCE;
 
@@ -251,6 +253,27 @@ public class Database {
         }
     }
 
+    public List<String> getUserGames(String username){
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(this.games));
+
+            String entry;
+            while((entry = br.readLine()) != null){
+                if (getUsername(entry).equals(username)){
+                    br.close();
+                    return Arrays.asList(entry.split(",")).subList(1, entry.split(",").length-1);
+                }
+            }
+
+            br.close();
+
+        }catch(RuntimeException | IOException e){
+           System.exit(1);
+        }
+
+        return new ArrayList<>(); // no games found
+    }
+
     /**
      * Get the username from the database entry (a line)
      * @param entry
@@ -261,37 +284,9 @@ public class Database {
     }
 
 
-    /**
-     * Get the balance in the users db by the username.
-     * @param username
-     * @return
-     */
-    public int getBalanceByUsername(String username) {
-        try{
-            BufferedReader br = new BufferedReader(new FileReader(this.users));
-
-            String entry;
-            while((entry = br.readLine()) != null){
-                if (getUsername(entry).equals(username)){
-
-                    br.close();
-                    return getBalance(entry);
-                }
-            }
-
-            throw new IOException("user not found");
-
-        }catch(RuntimeException | IOException e){
-            System.exit(1);
-        }
-
-        return 0; // should be never reached
-    }
-
     private int getBalance(String entry){
         return Integer.parseInt(entry.split(",")[BALANCE_IDX].trim());
     }
-
 
     private int calculatePlayerEarnings(Player player){
         return player.getBankroll().getChipsLeft() - player.getBuyIn();

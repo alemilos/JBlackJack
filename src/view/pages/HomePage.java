@@ -1,20 +1,22 @@
 package view.pages;
 
-import model.db.Database;
-import view.components.home.BalanceDisplay;
-import view.components.home.EloBox;
+import model.global.User;
+import view.components.shared.BalanceDisplay;
+import view.components.shared.EloBox;
 import view.components.home.ProfileButton;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class HomePage extends JFrame{
 
     private JButton playBtn;
     private ProfileButton profileBtn;
 
-    public HomePage(String username, String elo){
-        int balance = Database.getInstance().getBalanceByUsername(username);
+    public HomePage(User user){
+        String elo = user.getElo().getLeague().toString();
+        int balance = user.getWallet().getBalance();
 
         setTitle("Home");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -56,7 +58,15 @@ public class HomePage extends JFrame{
 
         EloBox elobox = new EloBox(new ImageIcon("./assets/levels/" + elo + ".png"),elo);
 
-        profileBtn = new ProfileButton(new ImageIcon("./assets/avatars/defaultavatar.png"), username);
+        File avatarImage = new File("./assets/avatars/" + user.getUsername() + "avatar.png");
+        ImageIcon avatarIcon;
+        if (avatarImage.exists()){
+            avatarIcon = new ImageIcon(avatarImage.getPath());
+        }else{
+            avatarIcon = new ImageIcon("./assets/avatars/defaultavatar.png");
+        }
+
+        profileBtn = new ProfileButton(avatarIcon, user.getUsername());
 
         container.add(northContainer, BorderLayout.NORTH);
         container.add(southContainer, BorderLayout.SOUTH);

@@ -7,6 +7,8 @@ public class AudioManager {
     private static AudioManager instance;
     private Clip clip;
 
+    private boolean homeSongPlaying;
+
     public static AudioManager getInstance() {
         if (instance == null){
             instance = new AudioManager();
@@ -16,7 +18,34 @@ public class AudioManager {
 
     private AudioManager(){}
 
+    /**
+     * Loop the home song so that it never ends until another clip is created.
+     */
+    public void playHomeSongOnRepeat(){
+        if(!homeSongPlaying) {
+            try {
+                InputStream in = new BufferedInputStream(new FileInputStream("./assets/sounds/homesound.wav"));
+                AudioInputStream audioIn = AudioSystem.getAudioInputStream(in);
+                clip = AudioSystem.getClip();
+                clip.open(audioIn);
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
+
+                homeSongPlaying = true;
+
+            } catch (FileNotFoundException fnfe) {
+                fnfe.printStackTrace();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            } catch (UnsupportedAudioFileException uafe) {
+                uafe.printStackTrace();
+            } catch (LineUnavailableException lue) {
+                lue.printStackTrace();
+            }
+        }
+    }
+
     public void play(Sounds sound){
+        homeSongPlaying = false;
         if (clip != null){
             stop();
         }
@@ -45,7 +74,6 @@ public class AudioManager {
         String path = "./assets/sounds/";
 
         switch (sound){
-            case HOME -> {return path + "homesound.wav";}
             case SHUFFLE -> {return path + "shuffle.wav";}
             case BUSTED -> {return path + "busted.wav";}
             case DEALER_BUSTED -> {return path + "dealerbusted.wav";}

@@ -11,6 +11,7 @@ public class Constants {
     public static final long USER_TURN_MS = 15000; // 15 sec
     public static final long AI_TURN_MS = 2000;
 
+    public static final Color BG_COLOR = Color.decode("#120F0F");
     public static final Color TABLE_COLOR = Color.decode("#054312");
     public static final Color PRIMARY_COLOR = Color.black;
 

@@ -22,8 +22,7 @@ public class Elo {
 
     }
 
-    @Override
-    public String toString() {
-        return league.toString();
+    public Leagues getLeague() {
+        return league;
     }
 }
