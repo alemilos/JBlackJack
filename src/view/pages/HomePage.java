@@ -54,7 +54,7 @@ public class HomePage extends JFrame{
 
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        playBtn.setBounds((int)((dim.getWidth()-400) / 2),(int)(dim.getHeight() - 150 - 80), 400,150);
+        playBtn.setBounds((int)((dim.getWidth()-400) / 2),(int)(dim.getHeight() - 150 - 80 - 100), 400,150);
 
         EloBox elobox = new EloBox(new ImageIcon("./assets/levels/" + elo + ".png"),elo);
 
