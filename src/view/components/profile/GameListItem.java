@@ -35,6 +35,7 @@ public class GameListItem extends JPanel {
         durationPanel.setBackground(BG_COLOR);
         JLabel durationLabel = new JLabel("Tempo di gioco " + duration);
         durationLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        durationLabel.setForeground(Color.darkGray);
 
         durationPanel.add(durationLabel);
 

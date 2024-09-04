@@ -1,7 +1,6 @@
 package controller;
 
 import view.pages.ProfilePage;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,6 +10,9 @@ public class ProfileController {
 
     private ProfilePage profilePage;
 
+    /**
+     * Create a profile page and add listeners to it.
+     */
     private ProfileController(){
         profilePage = new ProfilePage();
         addActionListeners();
@@ -25,6 +27,9 @@ public class ProfileController {
 
     public void resetInstance(){instance = null;}
 
+    /**
+     * Add Listeners to the Profile Page components
+     */
     private void addActionListeners(){
         profilePage.getGoBackBtn().addActionListener(new ActionListener() {
             @Override

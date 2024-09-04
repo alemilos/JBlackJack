@@ -3,6 +3,9 @@ package view.ui;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * A Custom button with an icon.
+ */
 public class IconButton extends JButton {
     public IconButton(ImageIcon icon){
         super();

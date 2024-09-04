@@ -3,7 +3,6 @@ package view.components.game;
 import view.ui.JustifyBetweenFlowLayout;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 
 import static misc.Constants.TABLE_COLOR;

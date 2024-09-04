@@ -2,10 +2,10 @@ package model.game.models.player;
 
 import model.game.enums.Actions;
 import model.game.enums.Chips;
-import model.game.models.hand.Hand;
-import model.game.models.standalones.Bankroll;
-import model.game.models.standalones.Bet;
-import model.game.models.standalones.Card;
+import model.game.models.Hand;
+import model.game.models.Bankroll;
+import model.game.models.Bet;
+import model.game.models.Card;
 import model.game.utils.Utils;
 
 import java.util.*;
@@ -19,6 +19,7 @@ public abstract class Player extends Observable{
     protected Bankroll bankroll; // For each chip, how many does the user have.
     protected Bet bet;
 
+    // Stats
     protected int buyIn;
     protected int blackjacksCount;
     protected int bustedHands;
@@ -32,6 +33,10 @@ public abstract class Player extends Observable{
         this.buyIn = buyIn;
     }
 
+    /**
+     * Get a List of available actions for the user.
+     * @return
+     */
     public List<Actions> getAvailableActions(){
         List<Actions> availableActions = new ArrayList<>();
 
@@ -50,10 +55,6 @@ public abstract class Player extends Observable{
         return availableActions;
     }
 
-
-    public Bet getBet() {
-        return bet;
-    }
 
     /**
      * Can the player make a bet with given chip?
@@ -97,6 +98,9 @@ public abstract class Player extends Observable{
         }
     }
 
+    /**
+     * Remove a chip from the bet and reassign its value the bankroll
+     */
     public void popBet(){
         Chips removedChip = bet.pop();
         if(removedChip != null){
@@ -138,6 +142,11 @@ public abstract class Player extends Observable{
         }
     }
 
+    /**
+     * Can an action be made ?
+     * @param action
+     * @return
+     */
     public boolean canMakeAction(Actions action){
         if (action == Actions.HIT){
             return this.canHit();
@@ -154,32 +163,15 @@ public abstract class Player extends Observable{
         return false;
     }
 
+
     /**
-     * Get the default Player hand
-     * @return
+     * Handle the card receiving from the dealer.
+     * @param card
      */
-    public Hand getHand(){
-       return hand;
-    }
-
-    public Bankroll getBankroll() {
-        return bankroll;
-    }
-
     public void receiveCard(Card card){
         hand.add(card);
-
         notifyCardAdd();
     }
-
-    @Override
-    public String toString() {
-        return name + "\nHAND: " + hand + "\nBET: " + bet.total() + "\nHAND SOFT: " + hand.softTotal();
-    }
-
-    /**
-     * Functions to manage payments
-     */
 
     /**
      * Player earns double the initial bet amount. This happens when his hand is bigger than the dealer's or when the dealer busts.
@@ -205,25 +197,35 @@ public abstract class Player extends Observable{
         notifyBankroll();
     }
 
-    /**
-     * GETTERS
-     */
-    public String getName() {
-        return name;
-    }
 
+
+    /**
+     * Notify observers of a bet update
+     */
     private void notifyBet(){
         setChanged();
         notifyObservers(BET_UPDATE);
     }
+
+    /**
+     * Notify observers of a card add
+     */
     private void notifyCardAdd(){
         setChanged();
         notifyObservers(CARD_ADD);
     }
+
+    /**
+     * Notify observers of a double bet
+     */
     private void notifyDoubleBet(){
         setChanged();
         notifyObservers(BET_DOUBLE);
     }
+
+    /**
+     * Notify observers of a bankroll change
+      */
     private void notifyBankroll(){
         setChanged();
         notifyObservers(BANKROLL_UPDATE);
@@ -242,6 +244,7 @@ public abstract class Player extends Observable{
         this.hand = new Hand();
     }
 
+    // Increment stats
     public void incrementWonHands() {
         wonHands++;
     }
@@ -252,17 +255,30 @@ public abstract class Player extends Observable{
         blackjacksCount++;
     }
 
+    public String getName() {
+        return name;
+    }
+
+
+
+    public Bet getBet() {
+        return bet;
+    }
+    public Hand getHand(){
+        return hand;
+    }
+    public Bankroll getBankroll() {
+        return bankroll;
+    }
     public int getBuyIn() {
         return buyIn;
     }
-
     public int getBlackjacksCount() {
         return blackjacksCount;
     }
     public int getBustedHands(){
         return bustedHands;
     }
-
     public int getWonHands() {
         return wonHands;
     }

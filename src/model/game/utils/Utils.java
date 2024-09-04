@@ -6,6 +6,33 @@ import java.util.Random;
 
 // final -> the class cannott be subclassed
 public final class Utils {
+    private final static List<String> playerNames = Arrays.asList(
+            // Movie Characters
+            "Harry Potter", "Vader", "Frodo",
+            "Hermione", "Luke", "Sherlock", "Wolverine", "Neo",
+            "Joker", "Gandalf", "Dobby",
+            "Bilbo", "Batman", "Peter Parker",
+            "Gollum", "Woody",
+
+            // Game Characters
+            "Mario",  "Kratos", "Geralt",
+            "Lara", "Sonic",
+            "Nathan", "Elena", "Sully", "Chloe",
+            "Dante", "Ezio",
+            "Pikachu", "Luigi", "Mario",
+            "Crash", "Joel", "Ellie", "Bowser", "Yoshi",
+
+            // League of Legends Characters
+            "Darius", "Garen", "Rumble", "Blitzcrank",
+            "Yasuo", "Zed", "Irelia", "Katarina", "Riven", "Vayne", "Morgana",
+            "Lee Sin", "Thresh", "Jhin", "Kayn", "Aatrox",
+            "Sett", "Fiora", "Orianna", "Rengar", "Janna",
+
+            // Famous Programmers
+            "Turing", "Linus Torvalds", "Knuth",
+            "George Hotz", "James Gosling", "Terry A.Davis",
+            "Wozniak", "Dijkstra", "Aaron Swartz"
+    );
 
     /**
      * The Utils Class provides static methods that can be used all around the app.
@@ -16,19 +43,10 @@ public final class Utils {
     }
 
     /**
-     * TODO: Read from a file where all AI Players Names are located, choose randomly one.
+     * Generate random player names.
      * @return
      */
     public static String createRandomPlayer(){
-        List<String> playerNames = Arrays.asList(
-                "Emma", "Liam", "Olivia", "Noah", "Ava",
-                "Isabella", "William", "Sophia", "Mason", "Mia",
-                "Jacob", "Charlotte", "Ethan", "Amelia", "Alexander",
-                "Harper", "Benjamin", "Abigail", "Michael", "Emily",
-                "Elijah", "Elizabeth", "Daniel", "Avery", "Henry",
-                "Evelyn", "Lucas", "Isabella", "Oliver", "Ella"
-        );
-
         Random random = new Random();
         int index = random.nextInt(playerNames.size());
         return playerNames.get(index);
@@ -36,10 +54,10 @@ public final class Utils {
 
     /**
      * Check weather a value is included in a given range.
-     * @param value
-     * @param min
-     * @param max
-     * @return
+     * @param value the input value
+     * @param min the min included
+     * @param max the max included
+     * @return true if value is in the range, otherwise false.
      */
     public static boolean between(int value, int min, int max){
         return value >= min && value <= max;

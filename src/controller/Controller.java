@@ -8,13 +8,9 @@ public class Controller {
 
     private static Controller instance;
 
-    private AuthController authController;
-    private HomeController homeController;
-    private GameController gameController;
-    private ProfileController profileController;
 
     public Controller(){
-        authController = AuthController.getInstance();
+        AuthController.getInstance();
     }
 
     public static Controller getInstance(){
@@ -30,16 +26,16 @@ public class Controller {
      **********************************************************************/
 
     public void goToHome(){
-        homeController = HomeController.getInstance();
+        HomeController.getInstance();
     }
 
     public void goToProfile(){
-        profileController = ProfileController.getInstance();
+        ProfileController.getInstance();
     }
 
     public void goToGame(){
         AudioManager.getInstance().stop();
-        gameController = GameController.getInstance();
+        GameController.getInstance();
     }
 
     public static void setUser(User _user){

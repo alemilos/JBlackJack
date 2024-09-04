@@ -1,10 +1,5 @@
 package model.global;
 
-import model.db.Database;
-import model.game.Game;
-
-import javax.xml.crypto.Data;
-
 import static misc.Constants.STARTING_BALANCE;
 
 public class Wallet {

@@ -1,26 +1,28 @@
 package view.components.game;
 
 import model.game.enums.Chips;
-import model.game.models.hand.Hand;
+import model.game.models.Hand;
 import model.game.models.player.AIPlayer;
 import model.game.models.player.Player;
-import model.game.models.standalones.Card;
-
+import model.game.models.Card;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
-
 import static misc.Constants.BASE_FONT;
 import static misc.Constants.BOLD_FONT;
 import static misc.Updates.*;
 
+/**
+ * The player panel listens from changes made by the Observable.
+ * This Panel contains card updates, bet updates, bankroll updates, cards total number and bet total number.
+ * It also contains the turn state, which can be "Busted, Blackjack or a thump up icon"
+ */
 public class PlayerPanel extends JPanel implements Observer{
 
     private TotalChipsPanel totalChipsPanel;
     private JLayeredPane cardsLayeredPane;
     private BankrollPanel bankrollPanel;
-
 
     private int cardsNumber;
     private int lastCardX;

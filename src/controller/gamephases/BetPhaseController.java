@@ -3,7 +3,7 @@ package controller.gamephases;
 import controller.GameController;
 import misc.AudioManager;
 import misc.Sounds;
-import model.game.Game;
+import model.game.models.Game;
 import model.game.models.player.AIPlayer;
 import model.game.models.player.HumanPlayer;
 
@@ -20,6 +20,10 @@ public class BetPhaseController extends GamePhaseManager{
         this.gameController = gameController;
     }
 
+    /**
+     * Manage the Bet Phase.
+     * Each player can bet concurrently.
+     */
     @Override
     public void manage(){
         Game game = Game.getInstance();

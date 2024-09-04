@@ -8,9 +8,7 @@ import view.pages.AuthPage;
 public class AuthController {
 
     private AuthPage authPage;
-
     private static AuthController instance;
-
     private User user;
 
     private AuthController(){
@@ -23,7 +21,6 @@ public class AuthController {
         if (instance == null){
            instance = new AuthController();
         }
-
         AudioManager.getInstance().playHomeSongOnRepeat();
         return instance;
     }
@@ -36,6 +33,9 @@ public class AuthController {
         return this.user;
     }
 
+    /**
+     * Add listener to the auth page components.
+     */
     private void addActionListeners(){
         authPage.getSubmitBtn().addActionListener(e -> {
             user =  new Authentication().loginOrRegister(authPage.getUsernameInput().getText().trim());

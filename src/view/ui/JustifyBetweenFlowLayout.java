@@ -5,6 +5,9 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
+/**
+ * A Layout that resembles the behaviour of "diplay: flex; justify-content: space-between" of css
+ */
 public class JustifyBetweenFlowLayout extends FlowLayout {
 
     @Override

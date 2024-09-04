@@ -3,19 +3,13 @@ package view.components.shared;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * A box containing the Image and the name of the Elo of the user.
+ */
 public class EloBox extends JPanel{
 
     private JLabel imageHolder;
     private JLabel eloText;
-
-    public EloBox(ImageIcon icon, boolean active) {
-        setBackground(null);
-        imageHolder = new JLabel();
-        imageHolder.setIcon(new ImageIcon(icon.getImage().getScaledInstance(160,160,Image.SCALE_SMOOTH)));
-        imageHolder.setEnabled(active);
-
-        add(imageHolder, BorderLayout.SOUTH);
-    }
 
     public EloBox(ImageIcon icon, String elo){
         setLayout(new BorderLayout());

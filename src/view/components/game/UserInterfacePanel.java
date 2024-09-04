@@ -1,6 +1,6 @@
 package view.components.game;
 
-import model.game.Game;
+import model.game.models.Game;
 import model.game.enums.Actions;
 import model.game.enums.Chips;
 import model.game.models.player.HumanPlayer;
@@ -15,6 +15,11 @@ import java.util.Observer;
 import static misc.Constants.BG_COLOR;
 import static misc.Updates.*;
 
+/**
+ * The UserInterfacePanel extends JPanel and listens to changes made by observables.
+ * It manages the updates of bets and actions.
+ * When an action can be performed the corresponding button is lightened, and the same works for the bets.
+ */
 public class UserInterfacePanel extends JPanel implements Observer {
 
     private JPanel actionsContainer;

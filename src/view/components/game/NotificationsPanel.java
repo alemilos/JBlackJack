@@ -1,6 +1,5 @@
 package view.components.game;
 
-import javax.security.auth.callback.Callback;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -9,6 +8,9 @@ import java.awt.event.ActionListener;
 
 import static misc.Constants.*;
 
+/**
+ * A custom JPanel that can be used to add timers and text on the top of the page.
+ */
 public class NotificationsPanel extends JPanel {
 
     Timer timer;

@@ -3,13 +3,16 @@ package view.components.shared;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Custom component to show the Balance of a player. With a coin image and the balance.
+ */
 public class BalanceDisplay extends JPanel {
     public BalanceDisplay(int balance){
         setLayout(new FlowLayout());
 
         JLabel moneyLbl = new JLabel();
         ImageIcon moneyIcon;
-        if (balance>0){
+        if (balance>=0){
             moneyIcon = new ImageIcon("./assets/icons/money.png");
         }else{
             moneyIcon = new ImageIcon("./assets/icons/moneyred.png");

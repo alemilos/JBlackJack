@@ -6,7 +6,6 @@ import java.io.*;
 public class AudioManager {
     private static AudioManager instance;
     private Clip clip;
-
     private boolean homeSongPlaying;
 
     public static AudioManager getInstance() {
@@ -44,6 +43,10 @@ public class AudioManager {
         }
     }
 
+    /**
+     * Play a sound and stop the previous one if exists.
+     * @param sound
+     */
     public void play(Sounds sound){
         homeSongPlaying = false;
         if (clip != null){
@@ -70,6 +73,11 @@ public class AudioManager {
         }
     }
 
+    /**
+     * Map the sounds to their filepath
+     * @param sound
+     * @return
+     */
     private String getSoundFilename(Sounds sound){
         String path = "./assets/sounds/";
 
@@ -87,6 +95,9 @@ public class AudioManager {
         }
     }
 
+    /**
+     * Stop the sound
+     */
     public void stop(){
         clip.flush();
         clip.stop();

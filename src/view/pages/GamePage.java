@@ -1,23 +1,17 @@
 package view.pages;
 
-import misc.Constants;
-import view.components.game.ActionButton;
 import view.components.game.NotificationsPanel;
 import view.components.game.TablePanel;
 import view.components.game.PlayerPanel;
-import view.ui.IconButton;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 import java.io.IOException;
 
 import static misc.Constants.BG_COLOR;
-import static misc.Constants.PRIMARY_COLOR;
 
 public class GamePage extends JFrame {
     private JButton leaveBtn;

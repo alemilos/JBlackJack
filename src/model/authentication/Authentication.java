@@ -9,6 +9,12 @@ public class Authentication {
     private User currentUser;
     private boolean isAuthenticated;
 
+    /**
+     * Perform the user Authentication. If the username is present in the users database, log the user in.
+     * If the user is not in the db, register the user to the database.
+     * @param username
+     * @return
+     */
     public User loginOrRegister(String username) {
         if (!isAuthenticated) {
             Database db = Database.getInstance();
@@ -34,8 +40,4 @@ public class Authentication {
         return currentUser;
     }
 
-    public void logout(){
-        this.isAuthenticated = false;
-        this.currentUser = null;
-    }
 }

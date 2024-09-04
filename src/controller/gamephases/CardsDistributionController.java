@@ -3,10 +3,10 @@ package controller.gamephases;
 import controller.GameController;
 import misc.AudioManager;
 import misc.Sounds;
-import model.game.Game;
+import model.game.models.Game;
 import model.game.models.player.HumanPlayer;
 import model.game.models.player.Player;
-import model.game.models.standalones.Dealer;
+import model.game.models.Dealer;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +21,7 @@ public class CardsDistributionController extends GamePhaseManager{
 
     private Iterator<Player> playingPlayersFirst;
     private Iterator<Player> playingPlayersSecond;
+
     private boolean distributedToDealerHidden;
     private boolean distributedToDealerVisible;
 
@@ -31,11 +32,18 @@ public class CardsDistributionController extends GamePhaseManager{
         this.gameController = gameController;
     }
 
+    /**
+     * Manage the card distribution phase.
+     * Deal a first round of cards to all the players,
+     * then a card to himself in hidden state.
+     * Deal a second round of cards to all the players,
+     * then a card to himself, in visible state.
+     */
     @Override
     public void manage(){
         Game game = Game.getInstance();
 
-        gameController.getGamePage().getNotificationsPanel().addTextNotification("Il mazziere distribuisce le carte...");
+        gameController.getGamePage().getNotificationsPanel().addTextNotification("Il Dealer distribuisce le carte...");
 
         playingPlayersFirst = game.getPlayingPlayers().iterator();
         playingPlayersSecond = game.getPlayingPlayers().iterator();
@@ -45,6 +53,9 @@ public class CardsDistributionController extends GamePhaseManager{
         distributeCardsOrManageNextPhase();
     }
 
+    /**
+     * Control which card must be dealt.
+     */
     private void distributeCardsOrManageNextPhase(){
         if(playingPlayersFirst.hasNext()){
             Player player = playingPlayersFirst.next();
@@ -63,6 +74,10 @@ public class CardsDistributionController extends GamePhaseManager{
         }
     }
 
+    /**
+     * The Dealer deals to the input Player
+     * @param player
+     */
     private void manageDealerToPlayerDistribution(Player player){
         timer = new Timer();
         TimerTask timerTask = new TimerTask() {
@@ -94,6 +109,10 @@ public class CardsDistributionController extends GamePhaseManager{
 
     }
 
+    /**
+     * The Dealer deals to himself a card in "isHidden" state.
+     * @param isHidden
+     */
     private void manageDealerToHimselfDistribution(boolean isHidden){
        timer = new Timer();
 

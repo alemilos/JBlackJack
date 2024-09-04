@@ -3,10 +3,10 @@ package controller.gamephases;
 import controller.GameController;
 import misc.AudioManager;
 import misc.Sounds;
-import model.game.Game;
-import model.game.models.hand.Hand;
+import model.game.models.Game;
+import model.game.models.Hand;
 import model.game.models.player.Player;
-import model.game.models.standalones.Dealer;
+import model.game.models.Dealer;
 import view.components.game.NotificationsPanel;
 
 import javax.swing.*;
@@ -18,31 +18,29 @@ import java.util.TimerTask;
 public class PaymentsPhaseController extends GamePhaseManager{
 
     private final GameController gameController;
-
     private Iterator<Player> playingPlayers;
-
     private java.util.Timer timer;
-
     private Hand dealerHand;
 
     public PaymentsPhaseController(GameController gameController){
         this.gameController = gameController;
     }
 
+    /**
+     * Manage the Payments Phase
+     */
     @Override
     public void manage() {
         gameController.getGamePage().getNotificationsPanel().addTextNotification("Il banco gestisce i pagamenti...");
-
         playingPlayers = Game.getInstance().getPlayingPlayers().iterator();
-
         dealerHand = Dealer.getInstance().getHand();
-
         Game.getInstance().updatePlayerStats();
-
         managePaymentOrManageNextPhase();
-
     }
 
+    /**
+     * Check weather a payment or the next phase management should be performed.
+     */
     private void managePaymentOrManageNextPhase(){
             if (playingPlayers.hasNext()) {
                     Player player = playingPlayers.next();
@@ -72,6 +70,10 @@ public class PaymentsPhaseController extends GamePhaseManager{
             }
     }
 
+    /**
+     * Check if player should pay, receive or push.
+     * @param player
+     */
     private void managePayment(Player player ){
         Hand playerHand = player.getHand();
         NotificationsPanel notificationPanel = gameController.getGamePage().getNotificationsPanel();

@@ -1,9 +1,9 @@
 package view.components.game;
 
 import misc.Constants;
-import model.game.models.hand.Hand;
-import model.game.models.standalones.Card;
-import model.game.models.standalones.Dealer;
+import model.game.models.Hand;
+import model.game.models.Card;
+import model.game.models.Dealer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +12,10 @@ import java.util.Observer;
 
 import static misc.Updates.*;
 
+/**
+ * A Custom JPanel that observes changes made by the observables.
+ * It manages updates regarding dealer cards and dealer hand state.
+ */
 public class DealerPanel extends JPanel implements Observer {
 
     private JPanel dealerCardsPanel;

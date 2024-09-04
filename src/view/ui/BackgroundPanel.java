@@ -3,6 +3,9 @@ package view.ui;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * A JComponent that has a background image.
+ */
 public class BackgroundPanel extends JComponent{
     private Image image;
     private double width;
@@ -10,7 +13,6 @@ public class BackgroundPanel extends JComponent{
     public BackgroundPanel(Image image, double width) {
         this.image = image;
         this.width = width;
-
     }
 
     @Override

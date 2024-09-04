@@ -1,13 +1,10 @@
 package model.game.models.player;
 
 
-import model.game.Game;
-import model.game.enums.Actions;
+import model.game.models.Game;
 import model.game.enums.Chips;
 
 import java.util.*;
-
-import static model.game.utils.Constants.DEALER_STANDS_AT;
 
 public class AIPlayer extends Player{
 
@@ -25,7 +22,6 @@ public class AIPlayer extends Player{
      */
     public void simulateBet() {
         if (Game.getInstance().isBetPhase()){
-            // TODO: make this based on wins/loss
             Random rand = new Random();
             // Just a random betting strategy
             int probability = rand.nextInt(0, 100);
@@ -68,32 +64,6 @@ public class AIPlayer extends Player{
             }
             }
         }
-    }
-
-    /**
-     * Make simulated actions
-     * The AI Player has a high probability of playing following game rules, meaning
-     * playing safe.
-     */
-    public void simulateActions(){
-        Random rand = new Random();
-        int probability;
-
-        probability = rand.nextInt(0,100);
-
-        if(hand.softTotal() > DEALER_STANDS_AT){
-            if (probability > 95){
-                // Risky action
-                Game.getInstance().getTurn().manageAction(Actions.HIT);
-            }else{
-                // Safe play
-                Game.getInstance().getTurn().manageAction(Actions.STAND);
-            }
-        }else{
-            Game.getInstance().getTurn().manageAction(Actions.HIT);
-        }
-
-
     }
 
 }

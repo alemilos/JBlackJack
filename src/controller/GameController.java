@@ -3,16 +3,15 @@ package controller;
 import controller.gamephases.GamePhaseManager;
 import misc.AudioManager;
 import misc.Sounds;
-import model.game.Game;
+import model.game.models.Game;
 import model.game.enums.Actions;
 import model.game.models.player.HumanPlayer;
-import model.game.models.standalones.Dealer;
-import model.global.User;
+import model.game.models.Dealer;
 import view.components.game.ChipButton;
 import view.components.game.PlayerPanel;
 import view.pages.GamePage;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
@@ -21,23 +20,16 @@ import static model.game.utils.Constants.BLACKJACK;
 public class GameController {
 
     private static GameController instance;
-
     private GamePage gamePage;
-
     private Game game;
-
     private HumanPlayer humanPlayer;
-
     private List<PlayerPanel> playerPanels;
-
     private GamePhaseManager gamePhaseManager;
 
     private GameController() {
-        User user = Controller.getUser();
-
         // Game Model initialization
         game = Game.getInstance();
-        game.init(user, 2000);
+        game.init(Controller.getUser(), 2000);
 
         humanPlayer = game.getHumanPlayer();
         game.startGame(); // Game starts
@@ -45,6 +37,9 @@ public class GameController {
         startNewRound();
     }
 
+    /**
+     * If the Sabot needs to be reshuffled, perform a reshuffle.
+     */
     public void handleReshuffling(){
         if (Dealer.getInstance().getSabot().mustReshuffle()) {
             Timer timer = new Timer();
@@ -55,7 +50,7 @@ public class GameController {
                     javax.swing.Timer shuffleTimer = new javax.swing.Timer(3000, new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            gamePage.getNotificationsPanel().addTextNotification("Il mazziere rimescola il Deck");
+                            gamePage.getNotificationsPanel().addTextNotification("Il Dealer rimescola il Deck");
                            Dealer.getInstance().getSabot().reshuffle();
                         }
                     });
@@ -69,6 +64,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Start a new round if it can be done, otherwise terminate the game with a loss.
+     */
     public void startNewRound(){
         game.clearRound();
 
@@ -89,16 +87,21 @@ public class GameController {
 
         addActionListeners();
 
-        /** Assemble the game flow steps */
-
         gamePhaseManager = new GamePhaseManager(this);
         gamePhaseManager.manageNextPhase(); // Start the flow
     }
 
+    /**
+     * If human player's bankroll contains chips, the game can continue.
+     * @return
+     */
     private boolean canGameContinue(){
         return !(game.getHumanPlayer().getBankroll().getChipsLeft() <= 0);
     }
 
+    /**
+     * Perform a game loss, handling the game leaving and sound playing.
+     */
     private void manageGameLoss(){
             AudioManager.getInstance().play(Sounds.LOSE);
 
@@ -122,13 +125,16 @@ public class GameController {
             timer.schedule(timerTask, 8000 );
    }
 
+    /**
+     * Clear the game state and leave it
+     */
    private void handleGameLeave(){
        gamePhaseManager.terminate();
        gamePhaseManager = null;
-       game.finishGame();
+       game.finishGame(); // save informations on db.
        gamePage.dispose();
        resetInstance();
-       Controller.getInstance().goToHome();
+       System.exit(1);
     }
 
     public static GameController getInstance() {
@@ -138,12 +144,13 @@ public class GameController {
         return instance;
     }
 
-
     private void resetInstance(){
         instance = null;
     }
 
-
+    /**
+     * Add listeners to the game page.
+     */
     public void addActionListeners(){
         gamePage.getLeaveBtn().addActionListener(new ActionListener() {
             @Override
@@ -152,6 +159,7 @@ public class GameController {
             }
         });
 
+        // ACTION BUTTONS
         gamePage.getTablePanel().getUserInterfacePanel().getActionButtons().forEach(actionBtn-> {
             actionBtn.getIconButton().addActionListener(new ActionListener() {
                 @Override
@@ -182,6 +190,7 @@ public class GameController {
             });
         });
 
+        // CHIP BUTTONS
         for (int i = 0; i < gamePage.getTablePanel().getUserInterfacePanel().getChipButtons().size(); i++) {
             ChipButton chipBtn = gamePage.getTablePanel().getUserInterfacePanel().getChipButtons().get(i);
             chipBtn.getIconBtn().addActionListener(new ActionListener() {
@@ -197,6 +206,7 @@ public class GameController {
             });
         }
 
+        // UNDO BUTTON
         gamePage.getTablePanel().getUserInterfacePanel().getUndoBtn().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -204,6 +214,7 @@ public class GameController {
             }
         });
 
+        // DELETE BUTTON
         gamePage.getTablePanel().getUserInterfacePanel().getDeleteBetBtn().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -213,6 +224,9 @@ public class GameController {
     }
 
 
+    /**
+     * Connect Observers and Observables and initialize player panels.
+     */
     public void initPlayerPanelsAndAddObservers(){
         playerPanels = new ArrayList<>();
         game.getPlayers().forEach(player -> {

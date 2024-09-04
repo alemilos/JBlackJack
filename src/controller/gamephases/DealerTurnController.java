@@ -3,7 +3,7 @@ package controller.gamephases;
 import controller.GameController;
 import misc.AudioManager;
 import misc.Sounds;
-import model.game.models.standalones.Dealer;
+import model.game.models.Dealer;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,14 +23,20 @@ public class DealerTurnController extends GamePhaseManager{
         this.gameController = gameController;
     }
 
+    /**
+     * Manage the Dealer Turn Phase.
+     * The Dealer must keep dealing cards to himself until a soft total of 17 is reached.
+     */
     @Override
     public void manage() {
-        gameController.getGamePage().getNotificationsPanel().addTextNotification("Revealing Card");
+        gameController.getGamePage().getNotificationsPanel().addTextNotification("Il Dealer rivela la carta");
         dealer = Dealer.getInstance();
         dealCardsUntilStandingOrBustOrManageNextPhase();
-
     }
 
+    /**
+     * Control which operation must be performed.
+     */
     private void dealCardsUntilStandingOrBustOrManageNextPhase(){
             if (!dealer.isCardRevealed()) {
                 manageCardReveal();
@@ -43,6 +49,9 @@ public class DealerTurnController extends GamePhaseManager{
             }
     }
 
+     /**
+      * Reveal the hidden card.
+      * */
     private void manageCardReveal(){
         timer = new Timer();
         TimerTask timerTask = new TimerTask() {
@@ -66,6 +75,9 @@ public class DealerTurnController extends GamePhaseManager{
         timer.schedule(timerTask,1000);
     }
 
+    /**
+     * Dealer deals a card to himself.
+     */
     private void manageCardDeal(){
         timer = new Timer();
         TimerTask timerTask  = new TimerTask() {

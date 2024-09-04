@@ -1,27 +1,20 @@
 package model.db;
 
-import model.game.Game;
-import model.game.models.player.HumanPlayer;
+import model.game.models.Game;
 import model.game.models.player.Player;
 import model.global.User;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import static misc.Constants.STARTING_BALANCE;
 
-/* The Database's scope is to provide a simple way to access User information.
-*  Each line is assigned to a different user.
-*  Each User field is separated by a "," (comma).
-*
-*  The fields are:
-*  - username
-*  - wallet count
-*  - ...games -> Each game field is separated by a "|" ()
-*/
+/**
+ * Database manages the 2 databases of users and games.
+ * - Users contains all the users registered to the game, along with their balance.
+ * - Games contains all the games performed by each user.
+ */
 public class Database {
 
     private static Database instance;
@@ -46,7 +39,8 @@ public class Database {
     /**
      * When first running the application, create the files if they are not present.
      * 1) Create (or access) the /resources folder
-     * 2) Create (or access) the db file.
+     * 2) Create (or access) the users file.
+     * 3) Create (or access) the games file
       */
     private void createRequiredFiles() {
         File resourceDir = new File("./resources");
@@ -80,14 +74,24 @@ public class Database {
         this.games = games;
     }
 
+    /**
+     * Check if the username is already present in the users database.
+     * @param username
+     * @return
+     */
     public boolean usernameExists(String username){
         try {
             BufferedReader br = new BufferedReader(new FileReader(this.users.toString()));
 
             String entry;
             while ((entry= br.readLine()) != null) {
-                if (username.equals(getUsername(entry))) return true;
+                if (username.equals(getUsername(entry))) {
+                    br.close();
+                    return true;
+                }
             }
+
+            br.close();
         }catch(IOException ioe){
             // Database does not exist
             System.exit(1);
@@ -118,35 +122,10 @@ public class Database {
     }
 
     /**
-     * Remove the line containing the input username, if it does exist.
+     * Get a User instance by providing a username.
      * @param username
+     * @return
      */
-    public void deleteUser(String username){
-        if (username == null || username.length()<1){
-            return;
-        }
-        try{
-            BufferedReader br = new BufferedReader(new FileReader(this.users.toString()));
-
-            String entry;
-            StringBuilder updatedFile = new StringBuilder();
-            while((entry= br.readLine()) != null){
-                if (!username.equals(getUsername(entry))){
-                    updatedFile.append(entry).append(System.lineSeparator());
-                }
-            }
-            br.close();
-
-            BufferedWriter bw = new BufferedWriter(new FileWriter(this.users.toString()));
-            bw.write(updatedFile.toString());
-
-            bw.close();
-        }catch(IOException ioe){
-            System.err.println("DB not found!");
-            System.exit(1);
-        }
-    }
-
     public User getUser(String username) {
         // Take the fist element of the DB line. That's the username
         try {
@@ -179,17 +158,20 @@ public class Database {
      * - blackjacks count
      * - busted hands count
      * - won hands count
+     * - game rounds
      *
      * @param game
      * @param user
      */
     public void addGameToUser(Game game, User user){
+        Player player = game.getHumanPlayer();
         // Format the game info with semicolon as game field separator.
+
         String duration = game.calculateTimePlayed();
-        int earnings = calculatePlayerEarnings(game.getHumanPlayer());
-        int blackjacks = getBlackjacksCount(game.getHumanPlayer());
-        int bustedCount = getBustedCount(game.getHumanPlayer());
-        int wonHands = getWonHandsCount(game.getHumanPlayer());
+        int earnings = player.getBankroll().getChipsLeft() - player.getBuyIn();
+        int blackjacks = player.getBlackjacksCount();
+        int bustedCount = player.getBustedHands();
+        int wonHands = player.getWonHands();
         int gameRounds= game.getRoundNumber();
 
         String gameField = duration + ";" + earnings + ";" + blackjacks + ";" + bustedCount + ";" + wonHands + ";" + gameRounds + ",";
@@ -232,8 +214,13 @@ public class Database {
         }
     }
 
+    /**
+     * Update the user balance in the users database, by providing a game instance.
+     * @param game
+     * @param user
+     */
     public void updateBalance(Game game, User user){
-        int earnings = calculatePlayerEarnings(game.getHumanPlayer());
+        int earnings = game.getHumanPlayer().getBankroll().getChipsLeft() - game.getHumanPlayer().getBuyIn();
 
         try {
             // Find user in db
@@ -267,6 +254,11 @@ public class Database {
         }
     }
 
+    /**
+     * Get a List of user games.
+     * @param username
+     * @return
+     */
     public List<String> getUserGames(String username){
         try{
             BufferedReader br = new BufferedReader(new FileReader(this.games));
@@ -300,24 +292,14 @@ public class Database {
     }
 
 
+    /**
+     * Get the balance from the database entry
+     * @param entry
+     * @return
+     */
     private int getBalance(String entry){
         return Integer.parseInt(entry.split(",")[BALANCE_IDX].trim());
     }
 
-    private int calculatePlayerEarnings(Player player){
-        return player.getBankroll().getChipsLeft() - player.getBuyIn();
-    }
-
-    private int getBlackjacksCount(Player player){
-        return player.getBlackjacksCount();
-    }
-
-    private int getBustedCount(Player player){
-        return player.getBustedHands();
-    }
-
-    private int getWonHandsCount(Player player){
-        return player.getWonHands();
-    }
 
 }

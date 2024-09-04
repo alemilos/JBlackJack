@@ -3,7 +3,7 @@ package controller.gamephases;
 import controller.GameController;
 import misc.AudioManager;
 import misc.Sounds;
-import model.game.Game;
+import model.game.models.Game;
 import model.game.enums.Actions;
 import model.game.models.player.HumanPlayer;
 import model.game.models.player.Player;
@@ -28,6 +28,9 @@ public class UsersActionsController extends GamePhaseManager{
         this.gameController = gameController;
     }
 
+    /**
+     * Manage the users actions
+     */
     @Override
     public void manage(){
 
@@ -39,12 +42,16 @@ public class UsersActionsController extends GamePhaseManager{
         playNextTurnOrManageNextPhase();
     }
 
+    /**
+     * Manage the AI Turn
+     * @param player
+     */
     private void manageAITurn(Player player){
         // The AI player must perform actions in 15 seconds.
 
         // I calculate all the actions at first and give a random time between each of them.
         // Each action must take at least 2 seconds .
-        gameController.getGamePage().getNotificationsPanel().addTextNotification(player.getName() + " Turn");
+        gameController.getGamePage().getNotificationsPanel().addTextNotification("È il turno di " + player.getName());
 
         timer = new Timer();
         TimerTask task = new TimerTask() {
@@ -72,6 +79,10 @@ public class UsersActionsController extends GamePhaseManager{
 
     }
 
+    /**
+     * Simulate a move.
+     * @param player
+     */
     private void simulateAiAction(Player player){
         Random rand = new Random();
         int probability;
@@ -124,6 +135,9 @@ public class UsersActionsController extends GamePhaseManager{
         }
     }
 
+    /**
+     * Start the timer for the user action. If the user doesn't perform any action, make a Stand.
+     */
     private void manageHumanPlayerTurn(){
         // If no action is performed after 15 seconds, make a Stand Automatically.
         // For each played action otherwise, restart a 15 seconds timer if the player can make another action.
@@ -138,6 +152,9 @@ public class UsersActionsController extends GamePhaseManager{
 
     }
 
+    /**
+     * Restart the human timer (should be used after a user action performed in the ui)
+     */
     public void restartHumanTimer(){
         gameController.getGamePage().getNotificationsPanel().abortTimer(); // abort previous timer
         gameController.getGamePage().getNotificationsPanel().addTimer("Affrattati a compiere la tua azione!", (int)USER_TURN_MS, new Runnable() {
@@ -148,12 +165,18 @@ public class UsersActionsController extends GamePhaseManager{
         });
     }
 
+    /**
+     * Finish turn.
+     */
     private void makeAutoStand(){
         Game.getInstance().finishTurn();
         terminateHumanTurn();
         AudioManager.getInstance().play(Sounds.KNOCK);
     }
 
+    /**
+     * Force terminate the Human Player turn
+     */
     public void terminateHumanTurn(){
         gameController.getGamePage().getNotificationsPanel().abortTimer();
         playNextTurnOrManageNextPhase();

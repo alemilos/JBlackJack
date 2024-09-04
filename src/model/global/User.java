@@ -1,7 +1,7 @@
 package model.global;
 
-import model.game.Game;
-import model.game.models.standalones.Elo;
+import model.game.models.Game;
+import model.game.models.Elo;
 
 import static misc.Constants.STARTING_BALANCE;
 
@@ -22,24 +22,7 @@ public class User {
         this.elo = new Elo(balance);
     }
 
-    public Wallet getWallet() {
-        return wallet;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public String toString() {
-        return "Username: " + this.username + "\nBalance: " + this.wallet.getBalance();
-    }
-
-    public Elo getElo() {
-        return elo;
-    }
-
-    /**
+     /**
      * Update user data after the game.
      * - balance
      * - elo
@@ -49,6 +32,7 @@ public class User {
         int earnings = game.getHumanPlayer().getBankroll().getChipsLeft() - game.getHumanPlayer().getBuyIn();
         int newBalance= this.wallet.getBalance() + earnings;
 
+        // Update the balance if it doesn't go under the STARTING_BALANCE
         if (newBalance >= STARTING_BALANCE){
             this.wallet.setBalance(newBalance);
         }
@@ -57,4 +41,18 @@ public class User {
         this.elo = new Elo(this.wallet.getBalance());
 
     }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Elo getElo() {
+        return elo;
+    }
+
+
 }

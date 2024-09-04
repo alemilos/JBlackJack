@@ -14,6 +14,4 @@ public enum Updates {
 
     CARD_ADD,
     CARD_REVEAL,
-
-    SHUFFLE;
 }

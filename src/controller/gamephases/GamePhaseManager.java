@@ -7,13 +7,14 @@ public class GamePhaseManager implements Manageable{
     private GameController gameController;
     private GamePhaseManager nextPhase;
 
+    // All Phase Controllers
     private BetPhaseController betPhaseController;
     private CardsDistributionController cardsDistributionController;
     private UsersActionsController usersActionsController;
     private DealerTurnController dealerTurnController;
     private PaymentsPhaseController paymentsPhaseController;
 
-    public static boolean isTerminated;
+    public static boolean isTerminated; // A boolean to determine if the Game Phase Manager is terminated
 
     public GamePhaseManager(){
     }
@@ -23,6 +24,10 @@ public class GamePhaseManager implements Manageable{
         init();
     }
 
+    /**
+     * Hook the game phases together by initializing the Phases Instances and setting the next phases to each.
+     * Bet -> Card Distribution -> Users Actions -> Dealer Turn -> Payments
+     */
     private void init(){
         isTerminated = false;
         /** BET PHASE **/
@@ -44,10 +49,17 @@ public class GamePhaseManager implements Manageable{
         dealerTurnController.setNextPhase(paymentsPhaseController);
     }
 
+    /**
+     * Assign a next phase to a phase.
+     * @param nextPhase
+     */
     public void setNextPhase(GamePhaseManager nextPhase) {
         this.nextPhase = nextPhase;
     }
 
+    /**
+     * Manage the next phase of a previous phase.
+     */
     public void manageNextPhase(){
         if (!isTerminated) {
             nextPhase.manage();
@@ -60,6 +72,9 @@ public class GamePhaseManager implements Manageable{
         return usersActionsController;
     }
 
+    /**
+     * Terminate the Game Phase Manager.
+     */
     public void terminate(){
         isTerminated = true;
     }

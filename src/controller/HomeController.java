@@ -1,8 +1,6 @@
 package controller;
 
 import misc.AudioManager;
-import misc.Sounds;
-import model.global.User;
 import view.pages.HomePage;
 
 import java.awt.event.ActionEvent;
@@ -13,6 +11,9 @@ public class HomeController {
     private static HomeController instance;
     private HomePage homePage;
 
+    /**
+     * Create a new Home page and add listeners to it
+     */
     private HomeController(){
         this.homePage = new HomePage(Controller.getUser());
         addActionListeners();
@@ -31,6 +32,9 @@ public class HomeController {
         instance = null;
     }
 
+    /**
+     * Add listeners to the home page components
+     */
     private void addActionListeners(){
         homePage.getPlayBtn().addActionListener(new ActionListener() {
             @Override
