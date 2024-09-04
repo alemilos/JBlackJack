@@ -1,0 +1,17 @@
+unnamed package
+controller
+controller.gamephases
+misc
+model.authentication
+model.db
+model.game.enums
+model.game.models
+model.game.models.player
+model.game.utils
+model.global
+view.components.game
+view.components.home
+view.components.profile
+view.components.shared
+view.pages
+view.ui
