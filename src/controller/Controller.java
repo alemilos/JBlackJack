@@ -8,7 +8,7 @@ public class Controller {
     private static Controller instance;
 
 
-    public Controller(){
+    private Controller(){
         AuthController.getInstance();
     }
 

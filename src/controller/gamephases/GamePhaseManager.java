@@ -4,7 +4,7 @@ import controller.GameController;
 
 public class GamePhaseManager implements Manageable{
 
-    private GameController gameController;
+    protected GameController gameController;
     private GamePhaseManager nextPhase;
 
     // All Phase Controllers
@@ -16,7 +16,7 @@ public class GamePhaseManager implements Manageable{
 
     public static boolean isTerminated; // A boolean to determine if the Game Phase Manager is terminated
 
-    public GamePhaseManager(){
+    protected GamePhaseManager(){
     }
 
     public GamePhaseManager(GameController gameController){
@@ -53,7 +53,7 @@ public class GamePhaseManager implements Manageable{
      * Assign a next phase to a phase.
      * @param nextPhase
      */
-    public void setNextPhase(GamePhaseManager nextPhase) {
+    protected void setNextPhase(GamePhaseManager nextPhase) {
         this.nextPhase = nextPhase;
     }
 
