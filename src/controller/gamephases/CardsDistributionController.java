@@ -41,14 +41,14 @@ public class CardsDistributionController extends GamePhaseManager{
      */
     @Override
     public void manage(){
-        Game game = Game.getInstance();
+        Game game = gameController.getGame();
 
         gameController.getGamePage().getNotificationsPanel().addTextNotification("Il Dealer distribuisce le carte...");
 
         playingPlayersFirst = game.getPlayingPlayers().iterator();
         playingPlayersSecond = game.getPlayingPlayers().iterator();
 
-        dealer = Dealer.getInstance();
+        dealer = gameController.getGame().getDealer();
 
         distributeCardsOrManageNextPhase();
     }

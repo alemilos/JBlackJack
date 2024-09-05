@@ -30,7 +30,7 @@ public class DealerTurnController extends GamePhaseManager{
     @Override
     public void manage() {
         gameController.getGamePage().getNotificationsPanel().addTextNotification("Il Dealer rivela la carta");
-        dealer = Dealer.getInstance();
+        dealer = gameController.getGame().getDealer();
         dealCardsUntilStandingOrBustOrManageNextPhase();
     }
 

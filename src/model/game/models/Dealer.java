@@ -9,7 +9,6 @@ import static misc.Updates.CARD_REVEAL;
 
 public class Dealer extends Observable {
 
-    private static Dealer instance;
     private final Sabot sabot;
     private Hand hand;
     private boolean cardRevealed;
@@ -19,16 +18,9 @@ public class Dealer extends Observable {
      * He controls the Sabot, shuffles
      * deals cards to the players and to himself.
      */
-    private Dealer() {
+    public Dealer() {
         this.hand = new Hand();
-        this.sabot = Sabot.getInstance(6);
-    }
-
-    public static Dealer getInstance(){
-        if (instance ==null){
-            instance = new Dealer();
-        }
-        return instance;
+        this.sabot = new Sabot(6);
     }
 
     /**
@@ -59,10 +51,6 @@ public class Dealer extends Observable {
         return hand;
     }
 
-    public void resetInstance(){
-        instance = null;
-        sabot.resetInstance();
-    }
 
     /**
      * Reveal the first card and notify observers of a card reveal

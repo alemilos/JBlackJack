@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class Sabot {
-    private static Sabot instance;
     private List<Card> cards;
     private final int CUT_CARD;
     private final int k;
@@ -17,7 +16,7 @@ public class Sabot {
      * The JBlackJack rule is to reintegrate the Sabot with the discarded cards, when 75% of it has been dealt.
      * @param k the number of decks
      */
-    private Sabot(int k){
+    public Sabot(int k){
         this.k = k;
         cards = new ArrayList<>();
 
@@ -31,12 +30,6 @@ public class Sabot {
         CUT_CARD = k*52 / 2;
     }
 
-    public static Sabot getInstance(int k){
-        if (instance == null) {
-            instance = new Sabot(k);
-        }
-        return instance;
-    }
 
     /**
      * Shuffle the deck
@@ -88,9 +81,4 @@ public class Sabot {
     public int size(){
         return cards.size();
     }
-
-    public void resetInstance(){
-        instance = null;
-    }
-
 }

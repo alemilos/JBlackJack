@@ -26,7 +26,7 @@ public class BetPhaseController extends GamePhaseManager{
      */
     @Override
     public void manage(){
-        Game game = Game.getInstance();
+        Game game = gameController.getGame();
         game.setBetPhase(true);
 
         Runnable onTimerEnds = () -> {
@@ -45,8 +45,10 @@ public class BetPhaseController extends GamePhaseManager{
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if(!isTerminated) {
-                            AudioManager.getInstance().play(Sounds.CHIPS_BET);
-                            ((AIPlayer) player).simulateBet();
+                            if (game.isBetPhase()) {
+                                AudioManager.getInstance().play(Sounds.CHIPS_BET);
+                                ((AIPlayer) player).simulateBet();
+                            }
                         }
                     }
                 });

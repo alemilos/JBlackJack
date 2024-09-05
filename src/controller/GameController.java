@@ -6,7 +6,6 @@ import misc.Sounds;
 import model.game.models.Game;
 import model.game.enums.Actions;
 import model.game.models.player.HumanPlayer;
-import model.game.models.Dealer;
 import view.components.game.ChipButton;
 import view.components.game.PlayerPanel;
 import view.pages.GamePage;
@@ -19,21 +18,17 @@ import static model.game.utils.Constants.BLACKJACK;
 
 public class GameController {
 
-    private static GameController instance;
     private GamePage gamePage;
     private Game game;
     private HumanPlayer humanPlayer;
     private List<PlayerPanel> playerPanels;
     private GamePhaseManager gamePhaseManager;
 
-    private GameController() {
+    public GameController() {
         // Game Model initialization
-        game = Game.getInstance();
-        game.init(Controller.getUser(), 2000);
-
+        game = new Game(Controller.getUser(), 2000);
         humanPlayer = game.getHumanPlayer();
         game.startGame(); // Game starts
-
         startNewRound();
     }
 
@@ -41,7 +36,7 @@ public class GameController {
      * If the Sabot needs to be reshuffled, perform a reshuffle.
      */
     public void handleReshuffling(){
-        if (Dealer.getInstance().getSabot().mustReshuffle()) {
+        if (game.getDealer().getSabot().mustReshuffle()) {
             Timer timer = new Timer();
             TimerTask timerTask = new TimerTask() {
                 @Override
@@ -51,7 +46,7 @@ public class GameController {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             gamePage.getNotificationsPanel().addTextNotification("Il Dealer rimescola il Deck");
-                           Dealer.getInstance().getSabot().reshuffle();
+                            game.getDealer().getSabot().reshuffle();
                         }
                     });
                     shuffleTimer.setRepeats(false);
@@ -79,7 +74,7 @@ public class GameController {
            gamePage.dispose();
         }
 
-        gamePage = new GamePage();
+        gamePage = new GamePage(game);
 
         initPlayerPanelsAndAddObservers();
 
@@ -133,20 +128,9 @@ public class GameController {
        gamePhaseManager = null;
        game.finishGame(); // save informations on db.
        gamePage.dispose();
-       resetInstance();
-       System.exit(1);
+       Controller.getInstance().goToHome();
     }
 
-    public static GameController getInstance() {
-        if (instance == null){
-            instance = new GameController();
-        }
-        return instance;
-    }
-
-    private void resetInstance(){
-        instance = null;
-    }
 
     /**
      * Add listeners to the game page.
@@ -165,16 +149,16 @@ public class GameController {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // If the turn is played by HumanPlayer, perform the clicked action.
-                    if (Game.getInstance().getTurn().getPlayer() instanceof HumanPlayer) {
+                    if (game.getTurn().getPlayer() instanceof HumanPlayer) {
                         if (actionBtn.getAction() == Actions.HIT || actionBtn.getAction() == Actions.DOUBLE_DOWN){
                             AudioManager.getInstance().play(Sounds.CARD_DEAL);
                         }else if(actionBtn.getAction() == Actions.STAND){
                             AudioManager.getInstance().play(Sounds.KNOCK);
                         }
 
-                        Game.getInstance().getTurn().manageAction(actionBtn.getAction());
+                        game.getTurn().manageAction(actionBtn.getAction());
 
-                        if (!Game.getInstance().getTurn().isActive()){
+                        if (!game.getTurn().isActive()){
                             gamePhaseManager.getUsersActionsController().terminateHumanTurn();
 
                             if (humanPlayer.getHand().softTotal() > BLACKJACK){ // Busted
@@ -237,11 +221,11 @@ public class GameController {
             player.addObserver(playerPanel);
        });
 
-       // UserInterfacePanel observes the game
+        // UserInterfacePanel observes the game
         game.addObserver(gamePage.getTablePanel().getUserInterfacePanel());
 
         // DealerPanel observes the Dealer
-        Dealer.getInstance().addObserver(gamePage.getTablePanel().getDealerPanel());
+        game.getDealer().addObserver(gamePage.getTablePanel().getDealerPanel());
 
         // UserInterfacePanel observes HumanPlayer
         game.getHumanPlayer().addObserver(gamePage.getTablePanel().getUserInterfacePanel());
@@ -253,6 +237,10 @@ public class GameController {
 
     public GamePage getGamePage() {
         return gamePage;
+    }
+
+    public Game getGame() {
+        return game;
     }
 }
 

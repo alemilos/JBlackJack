@@ -1,5 +1,6 @@
 package view.pages;
 
+import model.game.models.Game;
 import view.components.game.NotificationsPanel;
 import view.components.game.TablePanel;
 import view.components.game.PlayerPanel;
@@ -14,15 +15,16 @@ import java.io.IOException;
 import static misc.Constants.BG_COLOR;
 
 public class GamePage extends JFrame {
+
+    private Game game;
     private JButton leaveBtn;
     private JButton musicBtn;
-
     private NotificationsPanel notificationsPanel;
-
     private TablePanel tablePanel;
 
+    public GamePage(Game game){
+        this.game = game;
 
-    public GamePage(){
         drawGameAmbient();
     }
 
@@ -80,7 +82,7 @@ public class GamePage extends JFrame {
         JPanel background = new JPanel(new BorderLayout());
         background.setBackground(BG_COLOR);
 
-        tablePanel= new TablePanel();
+        tablePanel= new TablePanel(game);
 
         notificationsPanel= new NotificationsPanel();
 

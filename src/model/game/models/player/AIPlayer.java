@@ -21,7 +21,6 @@ public class AIPlayer extends Player{
      * Make a simulated Bet.
      */
     public void simulateBet() {
-        if (Game.getInstance().isBetPhase()){
             Random rand = new Random();
             // Just a random betting strategy
             int probability = rand.nextInt(0, 100);
@@ -64,6 +63,5 @@ public class AIPlayer extends Player{
             }
             }
         }
-    }
 
 }

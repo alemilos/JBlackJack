@@ -32,9 +32,9 @@ public class PaymentsPhaseController extends GamePhaseManager{
     @Override
     public void manage() {
         gameController.getGamePage().getNotificationsPanel().addTextNotification("Il banco gestisce i pagamenti...");
-        playingPlayers = Game.getInstance().getPlayingPlayers().iterator();
-        dealerHand = Dealer.getInstance().getHand();
-        Game.getInstance().updatePlayerStats();
+        playingPlayers = gameController.getGame().getPlayingPlayers().iterator();
+        dealerHand = gameController.getGame().getDealer().getHand();
+        gameController.getGame().updatePlayerStats();
         managePaymentOrManageNextPhase();
     }
 

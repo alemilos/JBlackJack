@@ -35,23 +35,12 @@ public class Game extends Observable {
      * Create a Game with given AI Players Number.
      * A Game is made up of players, dealer.
      */
-    private Game(){
-    }
-
-    public static Game getInstance(){
-        if (instance == null){
-           instance = new Game();
-        }
-
-        return instance;
-    }
-
-    public void init(User user, int userBuyIn){
+    public Game(User user, int userBuyIn){
         this.user = user;
-
-        initializePlayers(user,  userBuyIn);
-        this.dealer = Dealer.getInstance();
+        initializePlayers(user, userBuyIn);
+        this.dealer = new Dealer();
     }
+
 
     /**
      * Save the date of the game start.
@@ -67,8 +56,6 @@ public class Game extends Observable {
         user.updateAfterGame(this);
         Database.getInstance().addGameToUser(this, user);
         Database.getInstance().updateBalance(this, user);
-        this.getDealer().resetInstance();
-        instance = null; // reset this instance of game.
     }
 
     /**
@@ -119,7 +106,7 @@ public class Game extends Observable {
      */
     public void playTurn(Player player){
         if (turn == null || !turn.isActive()){
-            turn = new Turn(player);
+            turn = new Turn(player, dealer);
         }
     }
 
@@ -142,7 +129,6 @@ public class Game extends Observable {
         players = players.stream().filter(player -> player.getBankroll().getChipsLeft() > 0).toList();
         players.forEach(Player::reset);
         dealer.clearHand();
-
         this.turn = null;
     }
 

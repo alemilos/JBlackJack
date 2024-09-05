@@ -18,11 +18,13 @@ import static misc.Updates.*;
  */
 public class DealerPanel extends JPanel implements Observer {
 
+    private Dealer dealer;
     private JPanel dealerCardsPanel;
     private JLabel totalText;
     private JLabel cardTotalLbl;
 
-    public DealerPanel(){
+    public DealerPanel(Dealer dealer){
+        this.dealer = dealer;
        setLayout(new BorderLayout());
        setBackground(null);
 
@@ -84,22 +86,22 @@ public class DealerPanel extends JPanel implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (arg == CARD_ADD){
-            Card card = Dealer.getInstance().getHand().peek(); // View the last added card
+            Card card = dealer.getHand().peek(); // View the last added card
             addDealerCard(card.lookupValue(), card.lookupSuit() != null ? card.lookupSuit().name() : null);
-            updateCardTotal(Dealer.getInstance().getHand().softTotal());
+            updateCardTotal(dealer.getHand().softTotal());
 
         }
 
         // Redraw the Dealer Hand
         if (arg == CARD_REVEAL){
             dealerCardsPanel.removeAll();
-            Hand hand = Dealer.getInstance().getHand();
+            Hand hand = dealer.getHand();
 
             hand.getCards().forEach(card -> {
                         addDealerCard(card.lookupValue(), card.lookupSuit().toString());
             });
 
-            updateCardTotal(Dealer.getInstance().getHand().softTotal());
+            updateCardTotal(dealer.getHand().softTotal());
         }
     }
 }

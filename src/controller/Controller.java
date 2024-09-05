@@ -5,7 +5,6 @@ import model.global.User;
 
 public class Controller {
     private static User user;
-
     private static Controller instance;
 
 
@@ -35,7 +34,7 @@ public class Controller {
 
     public void goToGame(){
         AudioManager.getInstance().stop();
-        GameController.getInstance();
+        new GameController();
     }
 
     public static void setUser(User _user){

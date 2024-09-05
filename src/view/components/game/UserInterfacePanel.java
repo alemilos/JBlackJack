@@ -31,8 +31,12 @@ public class UserInterfacePanel extends JPanel implements Observer {
     private JButton undoBtn;
     private JButton deleteBetBtn;
 
+    private HumanPlayer humanPlayer;
 
-    public UserInterfacePanel(){
+
+    public UserInterfacePanel(HumanPlayer humanPlayer){
+        this.humanPlayer = humanPlayer;
+
         setLayout(new BorderLayout());
 
         actionsContainer = new JPanel(new BorderLayout());
@@ -101,8 +105,7 @@ public class UserInterfacePanel extends JPanel implements Observer {
 
     /** Enable all action buttons that are in given list. */
     private void enableActionButtons(){
-        HumanPlayer player = Game.getInstance().getHumanPlayer();
-        List<Actions> actions = player.getAvailableActions();
+        List<Actions> actions = humanPlayer.getAvailableActions();
 
         actionButtons.forEach(actionBtn -> {
             if (actions.contains(actionBtn.getAction())){
@@ -132,16 +135,12 @@ public class UserInterfacePanel extends JPanel implements Observer {
     }
 
     private void enableBetButtons(){
-        HumanPlayer player = Game.getInstance().getHumanPlayer();
-
-        if(Game.getInstance().isBetPhase()) {
             chipButtons.forEach(chipBtn -> {
-                chipBtn.getIconBtn().setEnabled(player.canBet(chipBtn.getChip()));
+                chipBtn.getIconBtn().setEnabled(humanPlayer.canBet(chipBtn.getChip()));
             });
 
-            deleteBetBtn.setEnabled(!player.getBet().isEmpty());
-            undoBtn.setEnabled(!player.getBet().isChipAddedQueueEmpty());
-        }
+            deleteBetBtn.setEnabled(!humanPlayer.getBet().isEmpty());
+            undoBtn.setEnabled(!humanPlayer.getBet().isChipAddedQueueEmpty());
     }
 
     @Override

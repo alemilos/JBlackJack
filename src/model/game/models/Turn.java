@@ -8,11 +8,13 @@ import static misc.Updates.*;
 import static model.game.utils.Constants.BLACKJACK;
 
 public class Turn extends Observable {
+    private Dealer dealer;
     private Player player;
     private boolean isActive;
 
-    public Turn(Player player){
+    public Turn(Player player, Dealer dealer){
         this.player = player;
+        this.dealer = dealer;
 
         if (player.getHand().softTotal() >= BLACKJACK){
             this.terminate();
@@ -82,7 +84,7 @@ public class Turn extends Observable {
              * Hit a card. The turn doesn't terminate until a STAND is performed.
              */
             case HIT:
-                Dealer.getInstance().dealCard(player);
+                dealer.dealCard(player);
 
                 if (player.getHand().softTotal() >= BLACKJACK){
                     this.terminate();
@@ -101,7 +103,7 @@ public class Turn extends Observable {
              */
             case DOUBLE_DOWN:
                 player.doubleBet();
-                Dealer.getInstance().dealCard(player);
+                dealer.dealCard(player);
                 this.terminate();
                 break;
         }

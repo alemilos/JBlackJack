@@ -23,6 +23,7 @@ public class UsersActionsController extends GamePhaseManager{
     private Iterator<Player> playingPlayers;
 
     private final GameController gameController;
+    private Game game;
 
     public UsersActionsController(GameController gameController){
         this.gameController = gameController;
@@ -33,8 +34,7 @@ public class UsersActionsController extends GamePhaseManager{
      */
     @Override
     public void manage(){
-
-        Game game = Game.getInstance();
+        game = gameController.getGame();
 
         playingPlayers = game.getPlayingPlayers().iterator();
 
@@ -92,15 +92,15 @@ public class UsersActionsController extends GamePhaseManager{
         if (player.getHand().softTotal() > DEALER_STANDS_AT) {
             if (probability > 95) {
                 // Risky action
-                Game.getInstance().getTurn().manageAction(Actions.HIT);
+                game.getTurn().manageAction(Actions.HIT);
                 AudioManager.getInstance().play(Sounds.CARD_DEAL);
             } else {
                 // Safe play
-                Game.getInstance().getTurn().manageAction(Actions.STAND);
+                game.getTurn().manageAction(Actions.STAND);
                 AudioManager.getInstance().play(Sounds.KNOCK);
             }
         } else {
-            Game.getInstance().getTurn().manageAction(Actions.HIT);
+            game.getTurn().manageAction(Actions.HIT);
             AudioManager.getInstance().play(Sounds.CARD_DEAL);
         }
 
@@ -112,16 +112,16 @@ public class UsersActionsController extends GamePhaseManager{
      */
     private void playNextTurnOrManageNextPhase(){
         // Terminate previous turn.
-        Game.getInstance().finishTurn();
+        game.finishTurn();
 
         if (playingPlayers.hasNext()){
             Player player = playingPlayers.next();
-            Game.getInstance().playTurn(player);
+            game.playTurn(player);
 
             // Turn could be terminated due to a blackjack.
-            if (Game.getInstance().getTurn().isActive()) {
+            if (game.getTurn().isActive()) {
                 if (player instanceof HumanPlayer) {
-                    Game.getInstance().getTurn().startWithObserver(gameController.getGamePage().getTablePanel().getUserInterfacePanel());
+                    game.getTurn().startWithObserver(gameController.getGamePage().getTablePanel().getUserInterfacePanel());
                     manageHumanPlayerTurn();
                 } else {
                     manageAITurn(player);
@@ -144,7 +144,7 @@ public class UsersActionsController extends GamePhaseManager{
         gameController.getGamePage().getNotificationsPanel().addTimer("Affrattati a compiere la tua azione!", (int)USER_TURN_MS, new Runnable() {
             @Override
             public void run() {
-                if (Game.getInstance().getTurn().getPlayer() == Game.getInstance().getHumanPlayer()) {
+                if (game.getTurn().getPlayer() == game.getHumanPlayer()) {
                     makeAutoStand();
                 }
             }
@@ -169,7 +169,7 @@ public class UsersActionsController extends GamePhaseManager{
      * Finish turn.
      */
     private void makeAutoStand(){
-        Game.getInstance().finishTurn();
+        game.finishTurn();
         terminateHumanTurn();
         AudioManager.getInstance().play(Sounds.KNOCK);
     }

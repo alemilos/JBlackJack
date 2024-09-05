@@ -1,5 +1,8 @@
 package view.components.game;
 
+import controller.Controller;
+import controller.GameController;
+import model.game.models.Game;
 import view.ui.JustifyBetweenFlowLayout;
 
 import javax.swing.*;
@@ -13,13 +16,12 @@ public class TablePanel extends JPanel {
     private UserInterfacePanel userInterfacePanel;
     private JPanel usersPanel;
 
-    public TablePanel(){
+    public TablePanel(Game game){
         setLayout(new BorderLayout());
         setBackground(TABLE_COLOR);
 
-        dealerPanel = new DealerPanel();
-
-        userInterfacePanel = new UserInterfacePanel();
+        dealerPanel = new DealerPanel(game.getDealer());
+        userInterfacePanel = new UserInterfacePanel(game.getHumanPlayer());
 
         usersPanel= new JPanel(new JustifyBetweenFlowLayout());
         usersPanel.setBackground(null);
