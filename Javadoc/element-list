@@ -1,7 +1,7 @@
 unnamed package
 controller
+controller.enums
 controller.gamephases
-misc
 model.authentication
 model.db
 model.game.enums
