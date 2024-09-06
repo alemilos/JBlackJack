@@ -4,8 +4,8 @@ import model.game.models.player.Player;
 
 import java.util.Observable;
 
-import static misc.Updates.CARD_ADD;
-import static misc.Updates.CARD_REVEAL;
+import static controller.enums.Updates.CARD_ADD;
+import static controller.enums.Updates.CARD_REVEAL;
 
 public class Dealer extends Observable {
 

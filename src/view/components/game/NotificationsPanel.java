@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static misc.Constants.*;
+import static controller.Constants.*;
 
 /**
  * A custom JPanel that can be used to add timers and text on the top of the page.

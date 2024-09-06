@@ -1,12 +1,10 @@
 package controller.gamephases;
 
 import controller.GameController;
-import misc.AudioManager;
-import misc.Sounds;
-import model.game.models.Game;
+import controller.AudioManager;
+import controller.enums.Sounds;
 import model.game.models.Hand;
 import model.game.models.player.Player;
-import model.game.models.Dealer;
 import view.components.game.NotificationsPanel;
 
 import javax.swing.*;

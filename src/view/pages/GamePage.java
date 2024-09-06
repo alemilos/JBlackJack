@@ -12,7 +12,7 @@ import java.util.List;
 import java.io.File;
 import java.io.IOException;
 
-import static misc.Constants.BG_COLOR;
+import static controller.Constants.BG_COLOR;
 
 public class GamePage extends JFrame {
 

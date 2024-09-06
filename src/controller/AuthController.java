@@ -1,6 +1,5 @@
 package controller;
 
-import misc.AudioManager;
 import model.authentication.Authentication;
 import model.global.User;
 import view.pages.AuthPage;

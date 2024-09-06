@@ -1,8 +1,15 @@
 package controller;
 
+import model.db.Database;
+import org.w3c.dom.ls.LSOutput;
 import view.pages.ProfilePage;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class ProfileController {
 
@@ -37,6 +44,32 @@ public class ProfileController {
                 profilePage.dispose();
                 resetInstance();
                Controller.getInstance().goToHome();
+            }
+        });
+
+        profilePage.getUserInformations().getAvatar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileUpload = new JFileChooser();
+
+                int res = fileUpload.showOpenDialog(null);
+                if (res == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileUpload.getSelectedFile();
+
+                    File destinationFolder = new File("./assets/avatars");
+                    if (!destinationFolder.exists()) {
+                        System.exit(1); // broke assets
+                    }
+
+                    File destinationFile = new File(destinationFolder, Controller.getUser().getUsername() + "avatar.png");
+
+                    try {
+                        Files.copy(selectedFile.toPath(), destinationFile.toPath());
+                        profilePage.getUserInformations().updateImage();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
             }
         });
     }

@@ -1,6 +1,6 @@
 package model.global;
 
-import static misc.Constants.STARTING_BALANCE;
+import static controller.Constants.STARTING_BALANCE;
 
 public class Wallet {
     private int balance;

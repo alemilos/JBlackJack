@@ -4,7 +4,7 @@ import model.game.enums.Actions;
 import model.game.models.player.Player;
 import java.util.Observable;
 import java.util.Observer;
-import static misc.Updates.*;
+import static controller.enums.Updates.*;
 import static model.game.utils.Constants.BLACKJACK;
 
 public class Turn extends Observable {

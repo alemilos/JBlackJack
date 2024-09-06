@@ -6,27 +6,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-import static misc.Constants.BG_COLOR;
+import static controller.Constants.BG_COLOR;
 
 
 public class LastGames extends JPanel {
-    private Box list;  // Assuming you're using a Box to hold the list items
+    private Box list;
 
     public LastGames(User user) {
         setBackground(null);
 
-        // Initialize the list container
-        list = Box.createVerticalBox();  // Use a vertical BoxLayout to stack items
+        list = Box.createVerticalBox();
         list.setBackground(BG_COLOR);
 
-        // Retrieve the games for the user
         List<String> games = Database.getInstance().getUserGames(user.getUsername());
 
         if (games.isEmpty()) {
             return;
         }
 
-        // Add each game to the list
         games.forEach(game -> {
             list.add(new GameListItem(game));  // Adding game item
         });
@@ -34,12 +31,11 @@ public class LastGames extends JPanel {
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.setBackground(BG_COLOR);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setPreferredSize(new Dimension(800, 400)); // Set preferred size as needed
+        scrollPane.setPreferredSize(new Dimension(800, 400));
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.getVerticalScrollBar().setBlockIncrement(50);
 
-        // Add the scroll pane to this panel
-        add(scrollPane, BorderLayout.CENTER);  // Add scroll pane to the center
+        add(scrollPane, BorderLayout.CENTER);
     }
 }
 

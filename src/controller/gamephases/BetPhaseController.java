@@ -1,8 +1,8 @@
 package controller.gamephases;
 
 import controller.GameController;
-import misc.AudioManager;
-import misc.Sounds;
+import controller.AudioManager;
+import controller.enums.Sounds;
 import model.game.models.Game;
 import model.game.models.player.AIPlayer;
 import model.game.models.player.HumanPlayer;
@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-import static misc.Constants.BET_TIME_MS;
+import static controller.Constants.BET_TIME_MS;
 
 public class BetPhaseController extends GamePhaseManager{
     private final GameController gameController;

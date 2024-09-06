@@ -1,8 +1,7 @@
 package controller;
 
+import controller.enums.Sounds;
 import controller.gamephases.GamePhaseManager;
-import misc.AudioManager;
-import misc.Sounds;
 import model.game.models.Game;
 import model.game.enums.Actions;
 import model.game.models.player.HumanPlayer;
@@ -140,6 +139,13 @@ public class GameController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 handleGameLeave();
+            }
+        });
+
+        gamePage.getMusicBtn().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                AudioManager.getInstance().toggleMute();
             }
         });
 

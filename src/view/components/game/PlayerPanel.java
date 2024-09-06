@@ -9,9 +9,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
-import static misc.Constants.BASE_FONT;
-import static misc.Constants.BOLD_FONT;
-import static misc.Updates.*;
+import static controller.Constants.BASE_FONT;
+import static controller.Constants.BOLD_FONT;
+import static controller.enums.Updates.*;
 
 /**
  * The player panel listens from changes made by the Observable.

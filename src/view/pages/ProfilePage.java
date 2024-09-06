@@ -1,7 +1,6 @@
 package view.pages;
 
 import controller.Controller;
-import model.db.Database;
 import model.global.User;
 import view.components.profile.LastGames;
 import view.components.profile.UserInformations;
@@ -13,7 +12,7 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 
-import static misc.Constants.BG_COLOR;
+import static controller.Constants.BG_COLOR;
 
 public class ProfilePage extends JFrame {
 
@@ -72,5 +71,9 @@ public class ProfilePage extends JFrame {
 
     public IconButton getGoBackBtn() {
         return goBackBtn;
+    }
+
+    public UserInformations getUserInformations() {
+        return userInformations;
     }
 }

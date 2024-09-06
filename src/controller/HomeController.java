@@ -1,6 +1,5 @@
 package controller;
 
-import misc.AudioManager;
 import view.pages.HomePage;
 
 import java.awt.event.ActionEvent;

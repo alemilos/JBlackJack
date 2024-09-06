@@ -1,6 +1,6 @@
 package view.components.game;
 
-import misc.Constants;
+import controller.Constants;
 import model.game.models.Hand;
 import model.game.models.Card;
 import model.game.models.Dealer;
@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
 
-import static misc.Updates.*;
+import static controller.enums.Updates.*;
 
 /**
  * A Custom JPanel that observes changes made by the observables.

@@ -3,7 +3,7 @@ package model.global;
 import model.game.models.Game;
 import model.game.models.Elo;
 
-import static misc.Constants.STARTING_BALANCE;
+import static controller.Constants.STARTING_BALANCE;
 
 public class User {
     private String username;

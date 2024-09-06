@@ -1,4 +1,4 @@
-package misc;
+package controller.enums;
 
 public enum Sounds {
     BLACKJACK,

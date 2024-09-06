@@ -1,8 +1,8 @@
 package controller.gamephases;
 
 import controller.GameController;
-import misc.AudioManager;
-import misc.Sounds;
+import controller.AudioManager;
+import controller.enums.Sounds;
 import model.game.models.Game;
 import model.game.enums.Actions;
 import model.game.models.player.HumanPlayer;
@@ -12,8 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 
-import static misc.Constants.AI_TURN_MS;
-import static misc.Constants.USER_TURN_MS;
+import static controller.Constants.AI_TURN_MS;
+import static controller.Constants.USER_TURN_MS;
 import static model.game.utils.Constants.DEALER_STANDS_AT;
 
 public class UsersActionsController extends GamePhaseManager{

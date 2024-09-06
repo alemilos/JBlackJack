@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static misc.Constants.STARTING_BALANCE;
+import static controller.Constants.STARTING_BALANCE;
 
 /**
  * Database manages the 2 databases of users and games.

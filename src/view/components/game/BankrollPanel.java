@@ -1,6 +1,6 @@
 package view.components.game;
 
-import misc.Constants;
+import controller.Constants;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,8 +1,8 @@
 package controller.gamephases;
 
 import controller.GameController;
-import misc.AudioManager;
-import misc.Sounds;
+import controller.AudioManager;
+import controller.enums.Sounds;
 import model.game.models.Game;
 import model.game.models.player.HumanPlayer;
 import model.game.models.player.Player;

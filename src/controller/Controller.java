@@ -1,6 +1,5 @@
 package controller;
 
-import misc.AudioManager;
 import model.global.User;
 
 public class Controller {

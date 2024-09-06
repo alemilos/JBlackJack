@@ -1,14 +1,12 @@
 package view.components.game;
 
-import controller.Controller;
-import controller.GameController;
 import model.game.models.Game;
 import view.ui.JustifyBetweenFlowLayout;
 
 import javax.swing.*;
 import java.awt.*;
 
-import static misc.Constants.TABLE_COLOR;
+import static controller.Constants.TABLE_COLOR;
 
 public class TablePanel extends JPanel {
 

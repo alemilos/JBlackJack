@@ -1,6 +1,5 @@
 package view.components.game;
 
-import model.game.models.Game;
 import model.game.enums.Actions;
 import model.game.enums.Chips;
 import model.game.models.player.HumanPlayer;
@@ -12,8 +11,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import static misc.Constants.BG_COLOR;
-import static misc.Updates.*;
+import static controller.Constants.BG_COLOR;
+import static controller.enums.Updates.*;
 
 /**
  * The UserInterfacePanel extends JPanel and listens to changes made by observables.

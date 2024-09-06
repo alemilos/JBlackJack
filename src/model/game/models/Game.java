@@ -1,6 +1,5 @@
 package model.game.models;
 
-import jdk.jshell.execution.Util;
 import model.db.Database;
 import model.game.enums.Actions;
 import model.global.User;
@@ -15,8 +14,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.stream.Collectors;
 
-import static misc.Updates.BET_FINISH;
-import static misc.Updates.BET_START;
+import static controller.enums.Updates.BET_FINISH;
+import static controller.enums.Updates.BET_START;
 import static model.game.utils.Constants.AI_PLAYERS_NUMBER;
 import static model.game.utils.Constants.BUY_IN_AI_PLAYERS;
 

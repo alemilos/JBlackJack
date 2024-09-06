@@ -9,7 +9,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.List;
 
-import static misc.Constants.*;
+import static controller.Constants.*;
 
 public class GameListItem extends JPanel {
 

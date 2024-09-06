@@ -1,4 +1,6 @@
-package misc;
+package controller;
+
+import controller.enums.Sounds;
 
 import javax.sound.sampled.*;
 import java.io.*;
@@ -7,6 +9,7 @@ public class AudioManager {
     private static AudioManager instance;
     private Clip clip;
     private boolean homeSongPlaying;
+    private boolean isMuted;
 
     public static AudioManager getInstance() {
         if (instance == null){
@@ -21,6 +24,7 @@ public class AudioManager {
      * Loop the home song so that it never ends until another clip is created.
      */
     public void playHomeSongOnRepeat(){
+        isMuted = false;
         if(!homeSongPlaying) {
             try {
                 InputStream in = new BufferedInputStream(new FileInputStream("./assets/sounds/homesound.wav"));
@@ -53,24 +57,29 @@ public class AudioManager {
             stop();
         }
 
-        String filename = getSoundFilename(sound);
+        if (!isMuted) {
+            String filename = getSoundFilename(sound);
+            try {
+                InputStream in = new BufferedInputStream(new FileInputStream(filename));
+                AudioInputStream audioIn = AudioSystem.getAudioInputStream(in);
+                clip = AudioSystem.getClip();
+                clip.open(audioIn);
+                clip.start();
 
-        try {
-            InputStream in = new BufferedInputStream(new FileInputStream(filename));
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(in);
-            clip = AudioSystem.getClip();
-            clip.open(audioIn);
-            clip.start();
-
-        }catch (FileNotFoundException fnfe){
-           fnfe.printStackTrace();
-        } catch(IOException ioe){
-           ioe.printStackTrace();
-        } catch (UnsupportedAudioFileException uafe){
-           uafe.printStackTrace();
-        } catch (LineUnavailableException lue){
-           lue.printStackTrace();
+            } catch (FileNotFoundException fnfe) {
+                fnfe.printStackTrace();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            } catch (UnsupportedAudioFileException uafe) {
+                uafe.printStackTrace();
+            } catch (LineUnavailableException lue) {
+                lue.printStackTrace();
+            }
         }
+    }
+
+    public void toggleMute(){
+        isMuted = !isMuted;
     }
 
     /**

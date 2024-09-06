@@ -16,6 +16,5 @@ public class IconButton extends JButton {
         setBorderPainted(false);
         setContentAreaFilled(false);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
-
     }
 }

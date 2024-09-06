@@ -10,7 +10,7 @@ import model.game.utils.Utils;
 
 import java.util.*;
 
-import static misc.Updates.*;
+import static controller.enums.Updates.*;
 import static model.game.utils.Constants.*;
 
 public abstract class Player extends Observable{
