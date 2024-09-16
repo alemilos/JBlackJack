@@ -186,7 +186,8 @@ public abstract class Player extends Observable{
      */
     public void doPay(){
         bet.delete();
-        notifyBet();
+        notifyBankroll();
+        notifyBetPay();
     }
 
     /**
@@ -205,6 +206,11 @@ public abstract class Player extends Observable{
     private void notifyBet(){
         setChanged();
         notifyObservers(BET_UPDATE);
+    }
+
+    private void notifyBetPay(){
+        setChanged();
+        notifyObservers(BET_PAY);
     }
 
     /**

@@ -5,6 +5,7 @@ public enum Updates {
     BET_UPDATE,
     BET_FINISH,
     BET_DOUBLE,
+    BET_PAY,
 
     BANKROLL_UPDATE,
 
