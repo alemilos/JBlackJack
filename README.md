@@ -1,5 +1,24 @@
 # JBlackJack
 
+<table>
+  <tr>
+    <td align="center">
+      <img src="./readme_assets/home.png" alt="Home Page" width="350"/><br>
+      <b>Login Page</b>
+    </td>
+    <td align="center">
+      <img src="./readme_assets/played.png" alt="Games Played" width="350"/><br>
+      <b>Group Chat</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="./readme_assets/game.png" alt="Game View" width="100%"/><br>
+      <b>Private Chat</b>
+    </td>
+  </tr>
+</table>
+
 ## How to play
 
 ### IntelliJ
