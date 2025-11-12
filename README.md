@@ -1,18 +1,18 @@
 # JBlackJack
 
-<table>
+<table style="width:100%; table-layout:fixed;">
   <tr>
-    <td align="center">
-      <img src="./readme_assets/home.png" alt="Home Page" width="350"/><br>
+    <td align="center" style="width:50%;">
+      <img src="./readme_assets/home.png" alt="Home Page" width="100%"/><br>
       <b>Login Page</b>
     </td>
-    <td align="center">
-      <img src="./readme_assets/played.png" alt="Games Played" width="350"/><br>
+    <td align="center" style="width:50%;">
+      <img src="./readme_assets/played.png" alt="Games Played" width="100%"/><br>
       <b>Group Chat</b>
     </td>
   </tr>
   <tr>
-    <td align="center">
+    <td align="center" colspan="2">
       <img src="./readme_assets/game.png" alt="Game View" width="100%"/><br>
       <b>Private Chat</b>
     </td>
