@@ -4,17 +4,17 @@
   <tr>
     <td align="center" style="width:50%;">
       <img src="./readme_assets/home.png" alt="Home Page" width="100%"/><br>
-      <b>Login Page</b>
+      <b>Home Page</b>
     </td>
     <td align="center" style="width:50%;">
       <img src="./readme_assets/played.png" alt="Games Played" width="100%"/><br>
-      <b>Group Chat</b>
+      <b>Games Played</b>
     </td>
   </tr>
   <tr>
     <td align="center" colspan="2">
       <img src="./readme_assets/game.png" alt="Game View" width="100%"/><br>
-      <b>Private Chat</b>
+      <b>Game View</b>
     </td>
   </tr>
 </table>
