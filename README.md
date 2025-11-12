@@ -1,20 +1,14 @@
 # JBlackJack
 
-<table style="width:100%; table-layout:fixed;">
+<table style="width:100%; table-layout:fixed; border-collapse:collapse;">
   <tr>
-    <td align="center" style="width:50%;">
-      <img src="./readme_assets/home.png" alt="Home Page" width="100%"/><br>
-      <b>Home Page</b>
-    </td>
-    <td align="center" style="width:50%;">
-      <img src="./readme_assets/played.png" alt="Games Played" width="100%"/><br>
-      <b>Games Played</b>
+    <td style="width:100%; padding:0;">
+      <img src="./readme_assets/home.png" alt="Home Page" width="100%"/>
     </td>
   </tr>
   <tr>
-    <td align="center" colspan="2">
-      <img src="./readme_assets/game.png" alt="Game View" width="100%"/><br>
-      <b>Game View</b>
+    <td style="width:100%; padding:0;">
+      <img src="./readme_assets/game.png" alt="Game View" width="100%"/>
     </td>
   </tr>
 </table>
